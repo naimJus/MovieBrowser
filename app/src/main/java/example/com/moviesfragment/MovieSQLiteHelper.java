@@ -13,8 +13,9 @@ import android.util.Log;
 public class MovieSQLiteHelper extends SQLiteOpenHelper {
 
     private static MovieSQLiteHelper sInstance;
-    public static final String DATABASE_NAME = "movieDb";
-    public static final int DATABASE_VERSION = 2;
+
+    public static final String DATABASE_NAME = "movie.db";
+    public static final int DATABASE_VERSION = 1;
 
     public static final String TABLE_NAME = "movie";
 
@@ -54,8 +55,8 @@ public class MovieSQLiteHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE " + TABLE_NAME);
-        db.execSQL(CREATE_TABLE);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
+        onCreate(db);
         Log.v("SQL", "database created");
     }
 
@@ -67,7 +68,7 @@ public class MovieSQLiteHelper extends SQLiteOpenHelper {
         }
     }
 
-    public void createMovie(SQLiteDatabase db, long id, String name, String description, int year, String imageUrl, float rating) {
+    private float createMovie(SQLiteDatabase db, long id, String name, String description, int year, String imageUrl, float rating) {
         ContentValues values = new ContentValues();
         values.put(MovieSQLiteHelper.KEY_ID, id);
         values.put(MovieSQLiteHelper.KEY_NAME, name);
@@ -75,6 +76,7 @@ public class MovieSQLiteHelper extends SQLiteOpenHelper {
         values.put(MovieSQLiteHelper.KEY_YEAR, year);
         values.put(MovieSQLiteHelper.KEY_IMAGE_URL, imageUrl);
         values.put(MovieSQLiteHelper.KEY_RATING, rating);
-        db.insertOrThrow(MovieSQLiteHelper.TABLE_NAME, null, values);
+        float resultId = db.insertOrThrow(MovieSQLiteHelper.TABLE_NAME, null, values);
+        return resultId;
     }
 }

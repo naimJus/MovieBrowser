@@ -1,3 +1,6 @@
 <resources>
     <string name="app_name">MoviesFragment</string>
+    <string name="sortByName">Sort By Name</string>
+    <string name="sortByRating">Sort By Rating</string>
+    <string name="sortByYear">Sort By Year</string>
 </resources>

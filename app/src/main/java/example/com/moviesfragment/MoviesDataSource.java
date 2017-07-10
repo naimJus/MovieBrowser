@@ -5,7 +5,6 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,19 +29,38 @@ public class MoviesDataSource {
         dbHelper.close();
     }
 
-    public List<Movie> getAllMovies() {
-        List<Movie> movieList = new ArrayList<Movie>();
+    List<Movie> getAllMovies() {
         Cursor cursor = database.query(MovieSQLiteHelper.TABLE_NAME, null, null, null, null, null, null);
-        cursor.moveToFirst();
-        while (!cursor.isAfterLast()) {
-            Movie movie = cursorToMovie(cursor);
-            movieList.add(movie);
-            cursor.moveToNext();
-        }
-        return movieList;
+        List<Movie> movies = cursorToList(cursor);
+        return movies;
+
     }
 
-    public Movie createMovie(long id, String name, String description, int year, String imageUrl, float rating) {
+    List<Movie> sortBy(String orderBy) {
+
+        Cursor cursor = database.query(MovieSQLiteHelper.TABLE_NAME, null, null, null, null, null, orderBy);
+        List<Movie> movies = cursorToList(cursor);
+        return movies;
+    }
+
+    private List<Movie> cursorToList(Cursor cursor) {
+        List<Movie> movies = new ArrayList<Movie>();
+        if (cursor.getCount() > 0) {
+            while (cursor.moveToNext()) {
+                Movie movie = new Movie();
+                movie.setId(cursor.getLong(cursor.getColumnIndex(MovieSQLiteHelper.KEY_ID)));
+                movie.setName(cursor.getString(1));
+                movie.setDescription(cursor.getString(2));
+                movie.setYear(cursor.getInt(3));
+                movie.setImageUrl(cursor.getString(4));
+                movie.setRating(cursor.getFloat(5));
+                movies.add(movie);
+            }
+        }
+        return movies;
+    }
+
+    float createMovie(long id, String name, String description, int year, String imageUrl, float rating) {
         ContentValues values = new ContentValues();
         values.put(MovieSQLiteHelper.KEY_ID, id);
         values.put(MovieSQLiteHelper.KEY_NAME, name);
@@ -50,23 +68,7 @@ public class MoviesDataSource {
         values.put(MovieSQLiteHelper.KEY_YEAR, year);
         values.put(MovieSQLiteHelper.KEY_IMAGE_URL, imageUrl);
         values.put(MovieSQLiteHelper.KEY_RATING, rating);
-        long resultId = database.insert(MovieSQLiteHelper.TABLE_NAME, null, values);
-        Log.v("SQL" , resultId + "");
-        Cursor cursor = database.query(MovieSQLiteHelper.TABLE_NAME, null, null, null, null, null, null);
-        Movie movie = cursorToMovie(cursor);
-        cursor.close();
-        return movie;
-    }
-
-
-    private Movie cursorToMovie(Cursor cursor) {
-        Movie movie = new Movie();
-        movie.setId(cursor.getLong(0));
-        movie.setName(cursor.getString(1));
-        movie.setDescription(cursor.getString(2));
-        movie.setYear(cursor.getInt(3));
-        movie.setImageUrl(cursor.getString(4));
-        movie.setRating(cursor.getFloat(5));
-        return movie;
+        float resultId = database.insertOrThrow(MovieSQLiteHelper.TABLE_NAME, null, values);
+        return resultId;
     }
 }

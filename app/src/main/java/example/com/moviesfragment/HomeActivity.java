@@ -1,112 +1,93 @@
 package example.com.moviesfragment;
 
 import android.app.ListActivity;
-import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
-import android.os.AsyncTask;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ListView;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.List;
 
 public class HomeActivity extends ListActivity {
-    MoviesDataSource moviesDataSource;
+
     public static final String LOG = "HomeActivity";
+    public static final String POSITION = ".Model.Movie";
+    MoviesDataSource moviesDataSource;
+    ListView listView;
+    List<Movie> getMovies;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        ListView listView = getListView();
+        Log.v(LOG, "onCreate() ");
+        listView = getListView();
 
-        //Gets a reference to the database and gets all the records into a List
-        //close the database
         moviesDataSource = new MoviesDataSource(this);
         moviesDataSource.open();
-        List<Movie> movies = moviesDataSource.getAllMovies();
-        moviesDataSource.close();
+        getMovies = moviesDataSource.getAllMovies();
+//        Log.v(LOG, movies.get(1).toString());
+        refreshAdapter();
 
-        //Check if the database had movie records
-        if (!movies.isEmpty()) {
-            //if there were movie records they will be displayed
-            Log.v(LOG, "displaying movies");
-            MoviesAdapter moviesAdapter = new MoviesAdapter(this, movies);
-            listView.setAdapter(moviesAdapter);
-        } else {
-            //if no movie records were in the databas
-            //a call to GetMovies asyncTask is made to fetch movies from the Internet
-            new GetMovies(this).execute();
-            Log.v(LOG, "fetching movies");
-        }
-    }
-}
-
-class GetMovies extends AsyncTask<Void, Void, Void> {
-    private Context context;
-    private StringBuilder sb;
-    private String result;
-    private MovieSQLiteHelper movieSQLiteHelper;
-    private SQLiteDatabase database;
-    private BufferedReader bufferedReader;
-
-    HttpURLConnection httpURLConnection;
-
-    GetMovies(Context context) {
-        this.context = context;
-        movieSQLiteHelper = MovieSQLiteHelper.getsInstance(context);
-        database = movieSQLiteHelper.getWritableDatabase();
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                //Create a new intent
+                // put the position of the movie that was clicked in the intent
+                //start the activity
+                Movie movie = getMovies.get(position);
+                Intent intent = new Intent(HomeActivity.this, MovieActivity.class);
+                intent.putExtra(POSITION, movie);
+                startActivity(intent);
+            }
+        });
     }
 
     @Override
-    protected Void doInBackground(Void... params) {
-        try {
-            URL url = new URL("https://yts.ag/api/v2/list_movies.json?limit=50&minimum_rating=8&sort_by=rating");
-            httpURLConnection = (HttpURLConnection) url.openConnection();
-            httpURLConnection.setRequestMethod("GET");
-            bufferedReader = new BufferedReader(new InputStreamReader(httpURLConnection.getInputStream()));
-            sb = new StringBuilder();
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.menu, menu);
+        return true;
+    }
 
-            String line = null;
-            while ((line = bufferedReader.readLine()) != null) {
-                sb.append(line + "\n");
-            }
-            result = sb.toString();
-        } catch (Exception e) {
-            e.printStackTrace();
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.sortByName:
+                getMovies = moviesDataSource.sortBy(MovieSQLiteHelper.KEY_NAME + " ASC");
+                refreshAdapter();
+                return true;
+            case R.id.sortByRating:
+                getMovies = moviesDataSource.sortBy(MovieSQLiteHelper.KEY_RATING + " ASC");
+                refreshAdapter();
+                return true;
+            case R.id.sortByYear:
+                getMovies = moviesDataSource.sortBy(MovieSQLiteHelper.KEY_YEAR + " ASC");
+                refreshAdapter();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-//        Log.v(HomeActivity.LOG, result.toString());
-        if (result != null) {
-            try {
-                JSONObject jsonObject = new JSONObject(result);
-                JSONObject data = jsonObject.getJSONObject("data");
-                JSONArray movies = data.getJSONArray("movies");
+    }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        moviesDataSource.close();
+    }
 
-                for (int i = 0; i < movies.length(); i++) {
-                    Log.v("SQL", movies.length() + "");
-                    JSONObject m = movies.getJSONObject(i);
-                    String id = m.getString("id");
-                    String name = m.getString("title");
-                    String year = m.getString("year");
-                    String rating = m.getString("rating");
-                    String summary = m.getString("summary");
-                    String imageUrl = m.getString("background_image");
-                    movieSQLiteHelper.createMovie(database, Long.valueOf(id), name, summary, Integer.valueOf(year), imageUrl, Float.valueOf(rating));
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            } finally {
-                database.close();
-                movieSQLiteHelper.close();
-            }
-        }
-        return null;
+    @Override
+    protected void onResume() {
+        super.onResume();
+        moviesDataSource.open();
+    }
+
+    public void refreshAdapter() {
+        MoviesAdapter moviesAdapter = new MoviesAdapter(this, getMovies);
+        setListAdapter(moviesAdapter);
     }
 }

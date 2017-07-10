@@ -1,10 +1,13 @@
 package example.com.moviesfragment;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by jusuf on 04.7.2017.
  */
 
-public class Movie {
+public class Movie implements Parcelable {
 
     private long id;
     private String name, description;
@@ -12,13 +15,13 @@ public class Movie {
     private String imageUrl;
     private float rating;
 
-    public Movie(long id, String name, String description, int year, String imageUrl, float rating) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.year = year;
-        this.imageUrl = imageUrl;
-        this.rating = rating;
+    public Movie(Parcel in) {
+        id = in.readLong();
+        name = in.readString();
+        description = in.readString();
+        year = in.readInt();
+        imageUrl = in.readString();
+        rating = in.readFloat();
     }
 
     public Movie() {
@@ -77,4 +80,36 @@ public class Movie {
     public String toString() {
         return this.getId() + this.getName() + this.getDescription() + this.getYear() + this.getImageUrl() + this.getRating();
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(id);
+        dest.writeString(name);
+        dest.writeString(description);
+        dest.writeInt(year);
+        dest.writeString(imageUrl);
+        dest.writeFloat(rating);
+    }
+
+    public static final Parcelable.Creator<Movie> CREATOR =
+            new Parcelable.Creator<Movie>() {
+
+                @Override
+                public Movie createFromParcel(Parcel source) {
+                    return new Movie(source);
+                }
+
+                @Override
+                public Movie[] newArray(int size) {
+                    return new Movie[size];
+                }
+
+            };
+
+
 }
