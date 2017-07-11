@@ -17,6 +17,7 @@ public class HomeActivity extends ListActivity {
 
     public static final String LOG = "HomeActivity";
     public static final String POSITION = ".Model.Movie";
+    public static final String BUNDLE = "bundle";
     MoviesDataSource moviesDataSource;
     ListView listView;
     List<Movie> getMovies;
@@ -36,12 +37,17 @@ public class HomeActivity extends ListActivity {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                //Create a new intent
-                // put the position of the movie that was clicked in the intent
-                //start the activity
+
+                //create a new movie from the getMovies List (which comes from the database)
+                //wrap the movie in a Bundle
+                //put the bundle in a Intent
+                //Start the new Activity
                 Movie movie = getMovies.get(position);
+
+                Bundle b = new Bundle();
+                b.putParcelable(POSITION, movie);
                 Intent intent = new Intent(HomeActivity.this, MovieActivity.class);
-                intent.putExtra(POSITION, movie);
+                intent.putExtra(BUNDLE, b);
                 startActivity(intent);
             }
         });

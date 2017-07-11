@@ -1,7 +1,6 @@
 package example.com.moviesfragment;
 
 import android.app.Activity;
-import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TextView;
 
@@ -21,9 +20,10 @@ public class MovieActivity extends Activity {
         ratingTV = (TextView) findViewById(R.id.movie_rating);
         descriptionTV = (TextView) findViewById(R.id.movie_description);
 
-        Intent intent = getIntent();
-        Bundle bundle = intent.getExtras();
-        movie = bundle.getParcelable(HomeActivity.POSITION);
+        // get the bundle from the intent
+        //unwrap the bundle and get the movie;
+        Bundle b = getIntent().getBundleExtra(HomeActivity.BUNDLE);
+        movie = b.getParcelable(HomeActivity.POSITION);
 
         nameTV.setText(movie.getName());
         yearTV.setText(String.valueOf(movie.getYear()));
