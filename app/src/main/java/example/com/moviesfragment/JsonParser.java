@@ -27,13 +27,12 @@ public class JsonParser {
 
     public JsonParser(Context context) {
         this.context = context;
-
+        moviesDataSource = new MoviesDataSource(context);
+        moviesDataSource.open();
     }
 
-    public void getJsonFromWeb(String stringUrl) {
+    void getJsonFromWeb(String stringUrl) {
         try {
-            moviesDataSource = new MoviesDataSource(context);
-            moviesDataSource.open();
             URL url = new URL(stringUrl);
             httpURLConnection = (HttpURLConnection) url.openConnection();
             httpURLConnection.setRequestMethod("GET");
