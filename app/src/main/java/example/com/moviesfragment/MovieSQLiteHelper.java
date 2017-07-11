@@ -1,6 +1,5 @@
 package example.com.moviesfragment;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
@@ -15,7 +14,7 @@ public class MovieSQLiteHelper extends SQLiteOpenHelper {
     private static MovieSQLiteHelper sInstance;
 
     public static final String DATABASE_NAME = "movie.db";
-    public static final int DATABASE_VERSION = 1;
+    public static final int DATABASE_VERSION = 2;
 
     public static final String TABLE_NAME = "movie";
 
@@ -25,6 +24,7 @@ public class MovieSQLiteHelper extends SQLiteOpenHelper {
     public static final String KEY_YEAR = "year";
     public static final String KEY_IMAGE_URL = "imageUrl";
     public static final String KEY_RATING = "rating";
+    public static final String KEY_TRAILER = "trailer";
 
 
     private MovieSQLiteHelper(Context context) {
@@ -44,7 +44,8 @@ public class MovieSQLiteHelper extends SQLiteOpenHelper {
             KEY_DESCRIPTION + " TEXT," +
             KEY_YEAR + " INTEGER," +
             KEY_IMAGE_URL + " TEXT," +
-            KEY_RATING + " REAL" + ")";
+            KEY_RATING + " REAL," +
+            KEY_TRAILER + " TEXT" + ")";
 
     @Override
     public void onCreate(SQLiteDatabase db) {
@@ -66,17 +67,5 @@ public class MovieSQLiteHelper extends SQLiteOpenHelper {
         if (oldVersion != newVersion) {
             db.execSQL("DROP TABLE " + TABLE_NAME);
         }
-    }
-
-    private float createMovie(SQLiteDatabase db, long id, String name, String description, int year, String imageUrl, float rating) {
-        ContentValues values = new ContentValues();
-        values.put(MovieSQLiteHelper.KEY_ID, id);
-        values.put(MovieSQLiteHelper.KEY_NAME, name);
-        values.put(MovieSQLiteHelper.KEY_DESCRIPTION, description);
-        values.put(MovieSQLiteHelper.KEY_YEAR, year);
-        values.put(MovieSQLiteHelper.KEY_IMAGE_URL, imageUrl);
-        values.put(MovieSQLiteHelper.KEY_RATING, rating);
-        float resultId = db.insertOrThrow(MovieSQLiteHelper.TABLE_NAME, null, values);
-        return resultId;
     }
 }

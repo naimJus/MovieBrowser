@@ -130,7 +130,8 @@ class GetMovies extends AsyncTask<Void, Void, Void> {
                     String rating = m.getString("rating");
                     String summary = m.getString("summary");
                     String imageUrl = m.getString("medium_cover_image");
-                    resultId = moviesDataSource.createMovie(Long.valueOf(id), name, summary, Integer.valueOf(year), imageUrl, Float.valueOf(rating));
+                    String trailerCode = m.getString("yt_trailer_code");
+                    resultId = moviesDataSource.createMovie(Long.valueOf(id), name, summary, Integer.valueOf(year), imageUrl, Float.valueOf(rating),trailerCode);
                     if (resultId == -1) {
                         Toast.makeText(context, "The Movie " + name + " is already in the database ", Toast.LENGTH_SHORT).show();
                     }

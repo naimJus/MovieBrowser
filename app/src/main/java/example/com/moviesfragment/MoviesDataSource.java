@@ -54,13 +54,14 @@ public class MoviesDataSource {
                 movie.setYear(cursor.getInt(3));
                 movie.setImageUrl(cursor.getString(4));
                 movie.setRating(cursor.getFloat(5));
+                movie.setTrailerCode(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.KEY_TRAILER)));
                 movies.add(movie);
             }
         }
         return movies;
     }
 
-    float createMovie(long id, String name, String description, int year, String imageUrl, float rating) {
+    float createMovie(long id, String name, String description, int year, String imageUrl, float rating, String trailerCode) {
         ContentValues values = new ContentValues();
         values.put(MovieSQLiteHelper.KEY_ID, id);
         values.put(MovieSQLiteHelper.KEY_NAME, name);
@@ -68,6 +69,7 @@ public class MoviesDataSource {
         values.put(MovieSQLiteHelper.KEY_YEAR, year);
         values.put(MovieSQLiteHelper.KEY_IMAGE_URL, imageUrl);
         values.put(MovieSQLiteHelper.KEY_RATING, rating);
+        values.put(MovieSQLiteHelper.KEY_TRAILER, trailerCode);
         float resultId = database.insertOrThrow(MovieSQLiteHelper.TABLE_NAME, null, values);
         return resultId;
     }

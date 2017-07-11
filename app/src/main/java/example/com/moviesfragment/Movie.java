@@ -14,6 +14,7 @@ public class Movie implements Parcelable {
     private int year;
     private String imageUrl;
     private float rating;
+    private String trailerCode;
 
     public Movie(Parcel in) {
         id = in.readLong();
@@ -22,10 +23,19 @@ public class Movie implements Parcelable {
         year = in.readInt();
         imageUrl = in.readString();
         rating = in.readFloat();
+        trailerCode = in.readString();
     }
 
     public Movie() {
 
+    }
+
+    public String getTrailerCode() {
+        return trailerCode;
+    }
+
+    public void setTrailerCode(String trailerCode) {
+        this.trailerCode = trailerCode;
     }
 
     public void setId(long id) {
@@ -94,6 +104,7 @@ public class Movie implements Parcelable {
         dest.writeInt(year);
         dest.writeString(imageUrl);
         dest.writeFloat(rating);
+        dest.writeString(trailerCode);
     }
 
     public static final Parcelable.Creator<Movie> CREATOR =
