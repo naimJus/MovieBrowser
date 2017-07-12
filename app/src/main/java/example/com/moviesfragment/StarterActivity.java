@@ -11,7 +11,7 @@ import com.facebook.stetho.Stetho;
 
 import java.util.List;
 
-public class MainActivity extends Activity {
+public class StarterActivity extends Activity {
 
     public static final int DELAYED_MILI = 3000;
     private MoviesDataSource moviesDataSource;
@@ -19,7 +19,7 @@ public class MainActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_starter);
         // Initialize Stetho for debugging Databases and network calls
         Stetho.newInitializerBuilder(this);
 
@@ -32,12 +32,12 @@ public class MainActivity extends Activity {
 
         //Check if the database had movie records
         if (movies.isEmpty()) {
-            new GetMovies(this, MainActivity.this).execute();
+            new GetMovies(this, StarterActivity.this).execute();
         } else {
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    Intent intent = new Intent(MainActivity.this, HomeActivity.class);
+                    Intent intent = new Intent(StarterActivity.this, HomeActivity.class);
                     startActivity(intent);
                     finish();
                 }
@@ -61,8 +61,8 @@ public class MainActivity extends Activity {
 
 
 class GetMovies extends AsyncTask<Void, Void, Void> {
-    Context context;
-    Activity mActivity;
+    private Context context;
+    private Activity mActivity;
 
     public GetMovies(Context context, Activity mActivity) {
         this.context = context;
