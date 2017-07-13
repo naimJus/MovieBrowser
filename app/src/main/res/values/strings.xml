@@ -3,4 +3,58 @@
     <string name="sortByName">Sort By Name</string>
     <string name="sortByRating">Sort By Rating</string>
     <string name="sortByYear">Sort By Year</string>
+    <string name="quality">Quality:</string>
+    <string name="rating">Rating:</string>
+    <string name="genre">Genre:</string>
+    <string name="prompt">All</string>
+    <string name="search">Search</string>
+
+    <string-array name="array">
+        <item>string1</item>
+    </string-array>
+    <string-array name="rating_filter">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+    </string-array>
+    <string-array name="quality_filter">
+        <item>720p</item>
+        <item>1800p</item>
+        <item>3d</item>
+    </string-array>
+    <string-array name="genre_filter">
+        <item>Action</item>
+        <item>Adventure</item>
+        <item>Animation</item>
+        <item>Biography</item>
+        <item>Comedy</item>
+        <item>Crime</item>
+        <item>Documentary</item>
+        <item>Drama</item>
+        <item>Family</item>
+        <item>Fantasy</item>
+        <item>Film-Noir</item>
+        <item>Game-Show</item>
+        <item>Film-Noir</item>
+        <item>History</item>
+        <item>Horror</item>
+        <item>Music</item>
+        <item>Musical</item>
+        <item>Mystery</item>
+        <item>News</item>
+        <item>Reality-TV</item>
+        <item>Romance</item>
+        <item>Sci-Fi</item>
+        <item>Sport</item>
+        <item>Talk-show</item>
+        <item>Thriller</item>
+        <item>War</item>
+        <item>Western</item>
+    </string-array>
 </resources>

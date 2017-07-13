@@ -37,7 +37,7 @@ public class StarterActivity extends Activity {
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
-                    Intent intent = new Intent(StarterActivity.this, HomeActivity.class);
+                    Intent intent = new Intent(StarterActivity.this, SearchActivity.class);
                     startActivity(intent);
                     finish();
                 }
@@ -80,7 +80,7 @@ class GetMovies extends AsyncTask<Void, Void, Void> {
     @Override
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
-        Intent intent = new Intent(context, HomeActivity.class);
+        Intent intent = new Intent(context, SearchActivity.class);
         context.startActivity(intent);
         mActivity.finish();
 
