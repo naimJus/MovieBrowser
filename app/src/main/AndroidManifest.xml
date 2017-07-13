@@ -22,6 +22,7 @@
         <activity android:name=".HomeActivity" />
         <activity android:name=".MovieActivity" />
         <activity android:name=".SearchActivity" />
+        <activity android:name=".MainActivity"></activity>
     </application>
 
 </manifest>
