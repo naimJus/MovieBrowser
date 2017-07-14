@@ -20,9 +20,6 @@ public class StarterActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_starter);
-        // Initialize Stetho for debugging Databases and network calls
-        Stetho.newInitializerBuilder(this);
-
         //Create a new Runnable to show a welcome screen and after
         // n-milliseconds to run the application
         Handler handler = new Handler();
