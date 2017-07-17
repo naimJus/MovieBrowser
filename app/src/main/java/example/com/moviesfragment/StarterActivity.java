@@ -3,11 +3,11 @@ package example.com.moviesfragment;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-
-import com.facebook.stetho.Stetho;
 
 import java.util.List;
 
@@ -26,11 +26,9 @@ public class StarterActivity extends Activity {
         moviesDataSource = new MoviesDataSource(this);
         moviesDataSource.open();
         List<Movie> movies = moviesDataSource.getAllMovies();
-
-        //Check if the database had movie records
-        if (movies.isEmpty()) {
+        if (isNetworkAvailable()) {
             new GetMovies(this, StarterActivity.this).execute();
-        } else {
+        } else{
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -38,7 +36,8 @@ public class StarterActivity extends Activity {
                     startActivity(intent);
                     finish();
                 }
-            }, DELAYED_MILI);
+            },DELAYED_MILI);
+
         }
     }
 
@@ -53,6 +52,13 @@ public class StarterActivity extends Activity {
     protected void onResume() {
         super.onResume();
         moviesDataSource.open();
+    }
+
+    private boolean isNetworkAvailable() {
+        ConnectivityManager connectivityManager
+                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
+        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
     }
 }
 
@@ -82,6 +88,9 @@ class GetMovies extends AsyncTask<Void, Void, Void> {
         mActivity.finish();
 
     }
+
+
+
 }
 
 
