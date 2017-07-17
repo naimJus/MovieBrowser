@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +17,7 @@ import java.util.List;
 public class MoviesDataSource {
     SQLiteDatabase database;
     MovieSQLiteHelper dbHelper;
+    private static final String LOGTAG = MoviesDataSource.class.getSimpleName();
 
     public MoviesDataSource(Context context) {
         dbHelper = MovieSQLiteHelper.getsInstance(context);
@@ -71,6 +73,9 @@ public class MoviesDataSource {
         values.put(MovieSQLiteHelper.KEY_RATING, rating);
         values.put(MovieSQLiteHelper.KEY_TRAILER, trailerCode);
         float resultId = database.insertOrThrow(MovieSQLiteHelper.TABLE_NAME, null, values);
+        if (resultId != -1) {
+            Log.v(LOGTAG, "Movie " + name + ", with ID " + id + " was added in database");
+        }
         return resultId;
     }
 }
