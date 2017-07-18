@@ -3,8 +3,10 @@ package example.com.moviesfragment;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
+import android.os.Parcelable;
 import android.util.Log;
 
 import java.util.ArrayList;
@@ -63,7 +65,8 @@ public class MoviesDataSource {
         return movies;
     }
 
-    float createMovie(long id, String name, String description, int year, String imageUrl, float rating, String trailerCode) {
+    long createMovie(long id, String name, String description, int year, String imageUrl, float rating, String trailerCode) {
+        long resultId = -1;
         ContentValues values = new ContentValues();
         values.put(MovieSQLiteHelper.KEY_ID, id);
         values.put(MovieSQLiteHelper.KEY_NAME, name);
@@ -72,10 +75,14 @@ public class MoviesDataSource {
         values.put(MovieSQLiteHelper.KEY_IMAGE_URL, imageUrl);
         values.put(MovieSQLiteHelper.KEY_RATING, rating);
         values.put(MovieSQLiteHelper.KEY_TRAILER, trailerCode);
-        float resultId = database.insertOrThrow(MovieSQLiteHelper.TABLE_NAME, null, values);
-        if (resultId != -1) {
+        try {
+            resultId = database.replace(MovieSQLiteHelper.TABLE_NAME, null, values);
             Log.v(LOGTAG, "Movie " + name + ", with ID " + id + " was added in database");
+        } catch (SQLException sqlException) {
+            sqlException.printStackTrace();
+            Log.v(LOGTAG, sqlException.getMessage());
+            Log.v(LOGTAG, "Movie " + name + ", with ID " + id + " was already in database");
         }
         return resultId;
+        }
     }
-}

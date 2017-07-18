@@ -33,13 +33,11 @@ public class HomeActivity extends ListActivity {
 
         Bundle b = getIntent().getExtras();
         if (b != null) {
-            String s = b.getString("TOPRATED");
+            String s = b.getString(MainActivity.FILTER);
             getMovies = moviesDataSource.sortBy(s);
-            refreshAdapter();
         } else {
             getMovies = moviesDataSource.getAllMovies();
 //        Log.v(LOG, movies.get(1).toString());
-            refreshAdapter();
         }
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -58,6 +56,12 @@ public class HomeActivity extends ListActivity {
                 startActivity(intent);
             }
         });
+    }
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        refreshAdapter();
+
     }
 
     @Override
@@ -96,6 +100,7 @@ public class HomeActivity extends ListActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        refreshAdapter();
         moviesDataSource.open();
     }
 

@@ -32,7 +32,7 @@ public class StarterActivity extends Activity {
             Intent intent = new Intent(StarterActivity.this, MainActivity.class);
             startActivity(intent);
             finish();
-        } else{
+        } else {
             handler.postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -40,7 +40,7 @@ public class StarterActivity extends Activity {
                     startActivity(intent);
                     finish();
                 }
-            },DELAYED_MILI);
+            }, DELAYED_MILI);
 
         }
     }
@@ -80,7 +80,7 @@ class GetMovies extends AsyncTask<String, Void, Void> {
     @Override
     protected Void doInBackground(String... params) {
         JsonParser jsonParser = new JsonParser(context);
-        StringBuilder url =  new StringBuilder ("https://yts.ag/api/v2/list_movies.json?limit=50");
+        StringBuilder url = new StringBuilder("https://yts.ag/api/v2/list_movies.json?limit=50");
         if (params[0] != null) {
             url.append(params[0]);
         }
@@ -89,18 +89,6 @@ class GetMovies extends AsyncTask<String, Void, Void> {
 
         return null;
     }
-
-    @Override
-    protected void onPostExecute(Void aVoid) {
-        super.onPostExecute(aVoid);
-//        Intent intent = new Intent(context, MainActivity.class);
-//        context.startActivity(intent);
-//        mActivity.finish();
-
-    }
-
-
-
 }
 
 
