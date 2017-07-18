@@ -30,10 +30,17 @@ public class HomeActivity extends ListActivity {
 
         moviesDataSource = new MoviesDataSource(this);
         moviesDataSource.open();
-        getMovies = moviesDataSource.getAllMovies();
-//        Log.v(LOG, movies.get(1).toString());
-        refreshAdapter();
 
+        Bundle b = getIntent().getExtras();
+        if (b != null) {
+            String s = b.getString("TOPRATED");
+            getMovies = moviesDataSource.sortBy(s);
+            refreshAdapter();
+        } else {
+            getMovies = moviesDataSource.getAllMovies();
+//        Log.v(LOG, movies.get(1).toString());
+            refreshAdapter();
+        }
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

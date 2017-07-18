@@ -32,6 +32,7 @@ public class JsonParser {
     }
 
     void getJsonFromWeb(String stringUrl) {
+        Log.v("JsonParser", "the url is " + stringUrl);
         try {
             URL url = new URL(stringUrl);
             httpURLConnection = (HttpURLConnection) url.openConnection();

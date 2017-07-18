@@ -36,6 +36,15 @@ public class MainActivity extends Activity {
                 startActivity(intent);
             }
         });
+        topBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new GetMovies(getApplicationContext(), MainActivity.this).execute("&sort_by=rating");
+                Intent intent = new Intent(MainActivity.this, HomeActivity.class);
+                intent.putExtra("TOPRATED", MovieSQLiteHelper.KEY_RATING + " DESC");
+                startActivity(intent);
+            }
+        });
 
 
     }

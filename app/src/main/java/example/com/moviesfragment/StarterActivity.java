@@ -8,6 +8,7 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 
 import java.util.List;
 
@@ -27,7 +28,10 @@ public class StarterActivity extends Activity {
         moviesDataSource.open();
         List<Movie> movies = moviesDataSource.getAllMovies();
         if (isNetworkAvailable()) {
-            new GetMovies(this, StarterActivity.this).execute();
+            new GetMovies(this, StarterActivity.this).execute("");
+            Intent intent = new Intent(StarterActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
         } else{
             handler.postDelayed(new Runnable() {
                 @Override
@@ -63,8 +67,9 @@ public class StarterActivity extends Activity {
 }
 
 
-class GetMovies extends AsyncTask<Void, Void, Void> {
+class GetMovies extends AsyncTask<String, Void, Void> {
     private Context context;
+    public static final String LOGTAG = "AsyncTask";
     private Activity mActivity;
 
     public GetMovies(Context context, Activity mActivity) {
@@ -73,9 +78,14 @@ class GetMovies extends AsyncTask<Void, Void, Void> {
     }
 
     @Override
-    protected Void doInBackground(Void... params) {
+    protected Void doInBackground(String... params) {
         JsonParser jsonParser = new JsonParser(context);
-        jsonParser.getJsonFromWeb("https://yts.ag/api/v2/list_movies.json?limit=50");
+        StringBuilder url =  new StringBuilder ("https://yts.ag/api/v2/list_movies.json?limit=50");
+        if (params[0] != null) {
+            url.append(params[0]);
+        }
+        Log.v(LOGTAG, url.toString());
+        jsonParser.getJsonFromWeb(url.toString());
 
         return null;
     }
@@ -83,9 +93,9 @@ class GetMovies extends AsyncTask<Void, Void, Void> {
     @Override
     protected void onPostExecute(Void aVoid) {
         super.onPostExecute(aVoid);
-        Intent intent = new Intent(context, MainActivity.class);
-        context.startActivity(intent);
-        mActivity.finish();
+//        Intent intent = new Intent(context, MainActivity.class);
+//        context.startActivity(intent);
+//        mActivity.finish();
 
     }
 
