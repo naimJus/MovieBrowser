@@ -24,6 +24,7 @@ public class JsonParser {
     private BufferedReader bufferedReader;
     private HttpURLConnection httpURLConnection;
     float resultId;
+    private String LOG = JsonParser.class.getSimpleName();
 
     public JsonParser(Context context) {
         this.context = context;
@@ -54,6 +55,7 @@ public class JsonParser {
     }
 
     private void fromJsonToDatabase(String json) {
+        Log.v(LOG, "fromJsonToDatabase called");
         try {
             JSONObject jsonObject = new JSONObject(json);
             JSONObject data = jsonObject.getJSONObject("data");
@@ -61,7 +63,6 @@ public class JsonParser {
 
 
             for (int i = 0; i < movies.length(); i++) {
-                Log.v("SQL", movies.length() + "");
                 JSONObject m = movies.getJSONObject(i);
                 String id = m.getString("id");
                 String name = m.getString("title");
@@ -71,14 +72,13 @@ public class JsonParser {
                 String imageUrl = m.getString("medium_cover_image");
                 String trailerCode = m.getString("yt_trailer_code");
                 resultId = moviesDataSource.createMovie(Long.valueOf(id), name, summary, Integer.valueOf(year), imageUrl, Float.valueOf(rating), trailerCode);
-                if (resultId == -1) {
+                if (resultId == -1)
                     Toast.makeText(context, "The Movie " + name + " is already in the database ", Toast.LENGTH_SHORT).show();
-                }
             }
         } catch (Exception e) {
             e.printStackTrace();
         } finally {
-            moviesDataSource.close();
+//            moviesDataSource.close();
         }
     }
 }

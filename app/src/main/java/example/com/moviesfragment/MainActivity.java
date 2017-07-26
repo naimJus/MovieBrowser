@@ -3,10 +3,7 @@ package example.com.moviesfragment;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -44,29 +41,10 @@ public class MainActivity extends Activity {
         topBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                new GetMoviesTwo(getApplicationContext(), MainActivity.this).execute("&sort_by=rating");
+//                new GetMovieCountTwo(getApplicationContext(), MainActivity.this).execute("&sort_by=rating");
             }
         });
 
 
-    }
-}
-class GetMoviesTwo extends GetMovies {
-    private Context context;
-    public static final String LOGTAG = "AsyncTask";
-    private Activity mActivity;
-
-    public GetMoviesTwo(Context context, Activity mActivity) {
-        super(context, mActivity);
-        this.context = context;
-        this.mActivity = mActivity;
-    }
-
-    @Override
-    protected void onPostExecute(Void aVoid) {
-        super.onPostExecute(aVoid);
-        Intent intent = new Intent(context, HomeActivity.class);
-        intent.putExtra(MainActivity.FILTER, MovieSQLiteHelper.KEY_RATING + " DESC");
-        mActivity.startActivity(intent);
     }
 }

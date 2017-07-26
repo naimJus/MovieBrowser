@@ -4,6 +4,7 @@ import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -45,8 +46,10 @@ public class HomeActivity extends ListActivity {
             if (b != null) {
                 filter = b.getString(MainActivity.FILTER);
                 getMovies = moviesDataSource.sortBy(filter);
+                Log.v(LOG, getMovies.size() + " items in database");
             } else {
                 getMovies = moviesDataSource.getAllMovies();
+                Log.v(LOG, getMovies.size() + " items in database");
             }
         }
 
