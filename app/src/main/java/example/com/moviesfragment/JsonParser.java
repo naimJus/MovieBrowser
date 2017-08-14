@@ -18,13 +18,11 @@ import java.net.URL;
 
 public class JsonParser {
     private Context context;
-    private StringBuilder sb;
     private String result;
     private MoviesDataSource moviesDataSource;
-    private BufferedReader bufferedReader;
-    private HttpURLConnection httpURLConnection;
     float resultId;
     private String LOG = JsonParser.class.getSimpleName();
+    int pages;
 
     public JsonParser(Context context) {
         this.context = context;
@@ -32,33 +30,38 @@ public class JsonParser {
         moviesDataSource.open();
     }
 
-    void getJsonFromWeb(String stringUrl) {
-        Log.v("JsonParser", "the url is " + stringUrl);
+    public int getJsonFromWeb(String stringUrl) {
+        Log.v(LOG, "the url is " + stringUrl);
         try {
             URL url = new URL(stringUrl);
-            httpURLConnection = (HttpURLConnection) url.openConnection();
+            HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
             httpURLConnection.setRequestMethod("GET");
-            bufferedReader = new BufferedReader(new InputStreamReader(httpURLConnection.getInputStream()));
-            sb = new StringBuilder();
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(httpURLConnection.getInputStream()));
+            StringBuilder sb = new StringBuilder();
 
             String line = null;
             while ((line = bufferedReader.readLine()) != null) {
                 sb.append(line + "\n");
             }
+            bufferedReader.close();
             result = sb.toString();
         } catch (Exception e) {
             e.printStackTrace();
         }
         if (result != null) {
-            fromJsonToDatabase(result);
+            pages = fromJsonToDatabase(result);
         }
+
+        return pages;
     }
 
-    private void fromJsonToDatabase(String json) {
+
+    private int fromJsonToDatabase(String json) {
         Log.v(LOG, "fromJsonToDatabase called");
         try {
             JSONObject jsonObject = new JSONObject(json);
             JSONObject data = jsonObject.getJSONObject("data");
+            int movie_count = data.getInt("movie_count");
             JSONArray movies = data.getJSONArray("movies");
 
 
@@ -75,10 +78,14 @@ public class JsonParser {
                 if (resultId == -1)
                     Toast.makeText(context, "The Movie " + name + " is already in the database ", Toast.LENGTH_SHORT).show();
             }
+            pages = movie_count / 50;
+            if (movie_count % 50 != 0)
+                pages = pages + 1;
+            Log.v("Pages", "Pages " + pages);
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-//            moviesDataSource.close();
         }
+        return pages;
     }
+
 }

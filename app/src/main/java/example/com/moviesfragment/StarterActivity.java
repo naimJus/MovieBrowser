@@ -8,19 +8,9 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.List;
 
-import static example.com.moviesfragment.GetMovieCount.pageNumber;
-import static example.com.moviesfragment.GetMovieCount.pages;
 
 public class StarterActivity extends Activity {
 
@@ -38,22 +28,7 @@ public class StarterActivity extends Activity {
         moviesDataSource.open();
         List<Movie> movies = moviesDataSource.getAllMovies();
         if (isNetworkAvailable()) {
-            new GetMovieCount().execute();
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    new GetMovies(getApplicationContext()).execute();
-                }
-            }, DELAYED_MILI);
-        } else {
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    Intent intent = new Intent(StarterActivity.this, MainActivity.class);
-                    startActivity(intent);
-                    finish();
-                }
-            }, DELAYED_MILI);
+            new GetMovies(getApplicationContext()).execute();
         }
         Intent intent = new Intent(StarterActivity.this, MainActivity.class);
         startActivity(intent);
@@ -81,81 +56,30 @@ public class StarterActivity extends Activity {
     }
 }
 
-
-class GetMovieCount extends AsyncTask<Void, Void, Void> {
-    public static final String LOGTAG = GetMovieCount.class.getSimpleName();
-    String result;
-    public static int pageNumber;
-    public int movieCount;
-    public static int pages;
-
-
-    @Override
-    protected Void doInBackground(Void... params) {
-        try {
-            URL url = new URL("https://yts.ag/api/v2/list_movies.json?limit=50");
-            HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
-            httpURLConnection.setRequestMethod("GET");
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(httpURLConnection.getInputStream()));
-            StringBuilder sb = new StringBuilder();
-
-            String line = null;
-            while ((line = bufferedReader.readLine()) != null) {
-                sb.append(line + "\n");
-            }
-            result = sb.toString();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        if (result != null) {
-            try {
-
-                JSONObject jsonObject = new JSONObject(result);
-                JSONObject data = jsonObject.getJSONObject("data");
-                pageNumber = data.getInt("page_number");
-                movieCount = data.getInt("movie_count");
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-        return null;
-    }
-
-    @Override
-    protected void onPostExecute(Void aVoid) {
-        super.onPostExecute(aVoid);
-        pages = calculate(movieCount);
-    }
-
-    public int calculate(int allMovies) {
-        Log.v(LOGTAG, "all movies " + allMovies);
-        double pages = allMovies / 50;
-        int pagesToLoad = (int) pages;
-        return pagesToLoad;
-    }
-}
-
-class GetMovies extends AsyncTask<Void, Void, Void> {
-    public static final String LOGTAG = GetMovies.class.getSimpleName();
+class GetMovies extends AsyncTask<String, Void, Void> {
+    JsonParser jsonParser;
     Context context;
 
-    GetMovies(Context context) {
+    public GetMovies(Context context) {
         this.context = context;
     }
 
     @Override
-    protected Void doInBackground(Void... params) {
-        JsonParser jsonParser = new JsonParser(context);
-        Log.v(LOGTAG, "pages " + pages + " page number " + pageNumber);
-        while (pages >= pageNumber) {
-            StringBuilder url = new StringBuilder("https://yts.ag/api/v2/list_movies.json?limit=50");
-            url.append("&page=" + pageNumber);
-            Log.v(LOGTAG, url.toString());
-            jsonParser.getJsonFromWeb(url.toString());
-            pageNumber++;
+    protected Void doInBackground(String... params) {
+        int pageNumber = 1;
+        int pages;
+        try {
+            jsonParser = new JsonParser(context);
+            String url = "https://yts.ag/api/v2/list_movies.json?limit=50";
+            pages = jsonParser.getJsonFromWeb(url);
+            while (pageNumber <= pages) {
+                jsonParser.getJsonFromWeb(url + "&page=" + pageNumber);
+                pageNumber++;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
         }
         return null;
     }
 }
-
 
