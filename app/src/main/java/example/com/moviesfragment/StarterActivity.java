@@ -7,45 +7,27 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
+import android.view.View;
+import android.widget.ProgressBar;
 
-import java.util.List;
+import static example.com.moviesfragment.StarterActivity.progressBar;
 
 
 public class StarterActivity extends Activity {
-
-    public static final int DELAYED_MILI = 3000;
-    private MoviesDataSource moviesDataSource;
+    static ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_starter);
-        //Create a new Runnable to show a welcome screen and after
-        // n-milliseconds to run the application
-        Handler handler = new Handler();
-        moviesDataSource = new MoviesDataSource(this);
-        moviesDataSource.open();
-        List<Movie> movies = moviesDataSource.getAllMovies();
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
         if (isNetworkAvailable()) {
-            new GetMovies(getApplicationContext()).execute();
+            new GetMovies(getApplicationContext(), this).execute();
+        } else {
+            Intent intent = new Intent(StarterActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
         }
-        Intent intent = new Intent(StarterActivity.this, MainActivity.class);
-        startActivity(intent);
-        finish();
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        moviesDataSource.close();
-
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        moviesDataSource.open();
     }
 
     private boolean isNetworkAvailable() {
@@ -57,11 +39,13 @@ public class StarterActivity extends Activity {
 }
 
 class GetMovies extends AsyncTask<String, Void, Void> {
-    JsonParser jsonParser;
-    Context context;
+    private JsonParser jsonParser;
+    private Activity activity;
+    private Context context;
 
-    public GetMovies(Context context) {
+    public GetMovies(Context context, Activity activity) {
         this.context = context;
+        this.activity = activity;
     }
 
     @Override
@@ -80,6 +64,22 @@ class GetMovies extends AsyncTask<String, Void, Void> {
             e.printStackTrace();
         }
         return null;
+    }
+
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
+        progressBar.setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    protected void onPostExecute(Void aVoid) {
+        super.onPostExecute(aVoid);
+        progressBar.setVisibility(View.GONE);
+        Intent intent = new Intent(activity, MainActivity.class);
+        activity.startActivity(intent);
+        activity.finish();
+
     }
 }
 
