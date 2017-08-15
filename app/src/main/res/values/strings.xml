@@ -12,6 +12,7 @@
     <string name="recent">Recent Movies</string>
     <string name="top">Top Rated Movies</string>
     <string name="load_more_button">Load More</string>
+    <string name="loading">Loading...</string>
 
     <string-array name="array">
         <item>string1</item>
