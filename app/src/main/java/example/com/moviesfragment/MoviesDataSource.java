@@ -32,7 +32,8 @@ public class MoviesDataSource {
     }
 
     List<Movie> getAllMovies() {
-        Cursor cursor = database.query(MovieSQLiteHelper.TABLE_NAME, null, null, null, null, null, null);
+//        Cursor cursor = database.query(MovieSQLiteHelper.TABLE_NAME, null, null, null, null, null, null);
+        Cursor cursor = database.query(MovieSQLiteHelper.TABLE_NAME, null, null, null, null, null, null, "10");
         List<Movie> movies = cursorToList(cursor);
         return movies;
 
@@ -40,7 +41,14 @@ public class MoviesDataSource {
 
     List<Movie> sortBy(String orderBy) {
 
-        Cursor cursor = database.query(MovieSQLiteHelper.TABLE_NAME, null, null, null, null, null, orderBy);
+        Cursor cursor = database.query(MovieSQLiteHelper.TABLE_NAME, null, null, null, null, null, orderBy, "50");
+        List<Movie> movies = cursorToList(cursor);
+        return movies;
+    }
+
+    List<Movie> sortAndLimit(String orderBy, String limit) {
+
+        Cursor cursor = database.query(MovieSQLiteHelper.TABLE_NAME, null, null, null, null, null, orderBy, limit);
         List<Movie> movies = cursorToList(cursor);
         return movies;
     }
