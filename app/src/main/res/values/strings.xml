@@ -13,6 +13,7 @@
     <string name="top">Top Rated Movies</string>
     <string name="load_more_button">Load More</string>
     <string name="loading">Loading...</string>
+    <string name="order">Order By:</string>
 
     <string-array name="rating_filter">
         <item>All</item>
@@ -31,6 +32,12 @@
         <item>720p</item>
         <item>1800p</item>
         <item>3d</item>
+    </string-array>
+    <string-array name="order_filter">
+        <item>Alphabetical</item>
+        <item>Year</item>
+        <item>Rating</item>
+        <item>Latest</item>
     </string-array>
     <string-array name="genre_filter">
         <item>All</item>

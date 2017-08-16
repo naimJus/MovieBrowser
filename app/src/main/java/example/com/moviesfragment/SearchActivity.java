@@ -10,7 +10,7 @@ import android.widget.Spinner;
 
 public class SearchActivity extends Activity {
 
-    Spinner qualitySpinner, genreSpinner, ratingSpinner;
+    Spinner qualitySpinner, genreSpinner, ratingSpinner, orderBySpinner;
     EditText searchET;
     Button searchBtn;
     public static final String SEARCH = "search";
@@ -24,6 +24,7 @@ public class SearchActivity extends Activity {
         qualitySpinner = (Spinner) findViewById(R.id.qualitySpinner);
         genreSpinner = (Spinner) findViewById(R.id.genreSpinner);
         ratingSpinner = (Spinner) findViewById(R.id.ratingSpinner);
+        orderBySpinner = (Spinner) findViewById(R.id.orderBySpinner);
         searchBtn = (Button) findViewById(R.id.searchBtn);
         searchET = (EditText) findViewById(R.id.searchET);
 
