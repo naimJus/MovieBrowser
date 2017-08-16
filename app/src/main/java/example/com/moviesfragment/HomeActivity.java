@@ -163,6 +163,7 @@ public class HomeActivity extends ListActivity {
     protected void onResume() {
         super.onResume();
         refreshAdapter();
+        listView.setSelectionFromTop(firstItemId, 0);
         moviesDataSource.open();
     }
 
@@ -172,8 +173,8 @@ public class HomeActivity extends ListActivity {
         if (lastItemId != 0) {
             listView.setSelectionFromTop(lastItemId, 0);
         }
-        if (firstItemId != 0) {
-            listView.setSelectionFromTop(firstItemId, 0);
-        }
+//        if (firstItemId != 0) {
+//            listView.setSelectionFromTop(firstItemId, 0);
+//        }
     }
 }
