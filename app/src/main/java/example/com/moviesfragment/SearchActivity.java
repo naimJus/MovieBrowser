@@ -1,7 +1,10 @@
 package example.com.moviesfragment;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -11,7 +14,9 @@ public class SearchActivity extends Activity {
     Spinner qualitySpinner, genreSpinner, ratingSpinner;
     EditText searchET;
     Button searchBtn;
-
+    public static final String SEARCH = "search";
+    String editTextString;
+    private static final String LOG = SearchActivity.class.getSimpleName();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -23,7 +28,18 @@ public class SearchActivity extends Activity {
         searchBtn = (Button) findViewById(R.id.searchBtn);
         searchET = (EditText) findViewById(R.id.searchET);
 
-        
+
+
+        searchBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                editTextString = searchET.getText().toString();
+                Intent intent = new Intent(SearchActivity.this, HomeActivity.class);
+                intent.putExtra(SEARCH, editTextString);
+                startActivity(intent);
+            }
+        });
+
 
     }
 }

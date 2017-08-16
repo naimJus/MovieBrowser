@@ -5,34 +5,27 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by jusuf on 04.7.2017.
- */
-
 public class MoviesDataSource {
-    SQLiteDatabase database;
-    MovieSQLiteHelper dbHelper;
-    private static final String LOGTAG = MoviesDataSource.class.getSimpleName();
+    private SQLiteDatabase database;
+    private MovieSQLiteHelper dbHelper;
 
-    public MoviesDataSource(Context context) {
+    MoviesDataSource(Context context) {
         dbHelper = MovieSQLiteHelper.getsInstance(context);
     }
 
-    public void open() throws SQLiteException {
+    void open() throws SQLiteException {
         database = dbHelper.getWritableDatabase();
     }
 
-    public void close() {
+    void close() {
         dbHelper.close();
     }
 
     List<Movie> getAllMovies() {
-//        Cursor cursor = database.query(MovieSQLiteHelper.TABLE_NAME, null, null, null, null, null, null);
         Cursor cursor = database.query(MovieSQLiteHelper.TABLE_NAME, null, null, null, null, null, null, "10");
         List<Movie> movies = cursorToList(cursor);
         return movies;
@@ -40,15 +33,19 @@ public class MoviesDataSource {
     }
 
     List<Movie> sortBy(String orderBy) {
-
         Cursor cursor = database.query(MovieSQLiteHelper.TABLE_NAME, null, null, null, null, null, orderBy, "50");
         List<Movie> movies = cursorToList(cursor);
         return movies;
     }
 
     List<Movie> sortAndLimit(String orderBy, String limit) {
-
         Cursor cursor = database.query(MovieSQLiteHelper.TABLE_NAME, null, null, null, null, null, orderBy, limit);
+        List<Movie> movies = cursorToList(cursor);
+        return movies;
+    }
+
+    List<Movie> searchMovies(String search) {
+        Cursor cursor = database.query(MovieSQLiteHelper.TABLE_NAME, null, MovieSQLiteHelper.KEY_NAME + " like " + "'%" + search + "%'", null, null, null, null);
         List<Movie> movies = cursorToList(cursor);
         return movies;
     }
@@ -64,7 +61,7 @@ public class MoviesDataSource {
                 movie.setYear(cursor.getInt(3));
                 movie.setImageUrl(cursor.getString(4));
                 movie.setRating(cursor.getFloat(5));
-                movie.setTrailerCode(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.KEY_TRAILER)));
+                movie.setTrailerCode(cursor.getString(4));
                 movies.add(movie);
             }
         }
@@ -82,7 +79,6 @@ public class MoviesDataSource {
         values.put(MovieSQLiteHelper.KEY_RATING, rating);
         values.put(MovieSQLiteHelper.KEY_TRAILER, trailerCode);
         resultId = database.insertWithOnConflict(MovieSQLiteHelper.TABLE_NAME, null, values, SQLiteDatabase.CONFLICT_IGNORE);
-        Log.v(LOGTAG, "Movie " + name + ", with ID " + id + " was added in database");
         return resultId;
     }
 }

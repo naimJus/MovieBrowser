@@ -5,9 +5,6 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-/**
- * Created by jusuf on 04.7.2017.
- */
 
 public class MovieSQLiteHelper extends SQLiteOpenHelper {
 
@@ -51,14 +48,12 @@ public class MovieSQLiteHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
 //        db.execSQL("DROP TABLE " + TABLE_NAME);
         db.execSQL(CREATE_TABLE);
-        Log.v("SQL", "database created");
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
         onCreate(db);
-        Log.v("SQL", "database created");
     }
 
     @Override

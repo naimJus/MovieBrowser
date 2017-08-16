@@ -14,10 +14,8 @@
     <string name="load_more_button">Load More</string>
     <string name="loading">Loading...</string>
 
-    <string-array name="array">
-        <item>string1</item>
-    </string-array>
     <string-array name="rating_filter">
+        <item>All</item>
         <item>1</item>
         <item>2</item>
         <item>3</item>
@@ -29,11 +27,13 @@
         <item>9</item>
     </string-array>
     <string-array name="quality_filter">
+        <item>All</item>
         <item>720p</item>
         <item>1800p</item>
         <item>3d</item>
     </string-array>
     <string-array name="genre_filter">
+        <item>All</item>
         <item>Action</item>
         <item>Adventure</item>
         <item>Animation</item>

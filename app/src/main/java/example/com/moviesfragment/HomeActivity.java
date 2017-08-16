@@ -22,16 +22,18 @@ public class HomeActivity extends ListActivity {
     public static final String POSITION = ".Model.Movie";
     public static final String BUNDLE = "bundle";
     private static final String FIRSTITEMID = "firstItemId";
-    public static final String SORTED = "filter";
-    public static final String ITEMID = "itemId";
+    private static final String SORTED = "filter";
+    private static final String ITEMID = "itemId";
     MoviesDataSource moviesDataSource;
     ListView listView;
     List<Movie> getMovies;
     String filter;
+    String search;
     Button loadMoreBtn;
     static int limit = 50;
     int lastItemId;
     int firstItemId;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,14 +55,21 @@ public class HomeActivity extends ListActivity {
                 listView.setSelectionFromTop(lastItemId, 0);
             } else {
                 getMovies = moviesDataSource.sortBy(filter);
-                listView.setSelectionFromTop(firstItemId,0);
+                listView.setSelectionFromTop(firstItemId, 0);
             }
         } else {
             firstItemId = listView.getFirstVisiblePosition();
             Bundle b = getIntent().getExtras();
             if (b != null) {
-                filter = b.getString(MainActivity.FILTER);
-                getMovies = moviesDataSource.sortBy(filter);
+                if (b.containsKey(MainActivity.FILTER)) {
+                    filter = b.getString(MainActivity.FILTER);
+                    getMovies = moviesDataSource.sortBy(filter);
+                } if(b.containsKey(SearchActivity.SEARCH)){
+                    search = b.getString(SearchActivity.SEARCH);
+                    Log.v(LOG, "search " + search);
+//                    getMovies = moviesDataSource.getAllMovies();
+                    getMovies = moviesDataSource.searchMovies(search);
+                }
             } else {
                 getMovies = moviesDataSource.getAllMovies();
             }
