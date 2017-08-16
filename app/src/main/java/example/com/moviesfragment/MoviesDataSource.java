@@ -44,8 +44,17 @@ public class MoviesDataSource {
         return movies;
     }
 
-    List<Movie> searchMovies(String search) {
-        Cursor cursor = database.query(MovieSQLiteHelper.TABLE_NAME, null, MovieSQLiteHelper.KEY_NAME + " like " + "'%" + search + "%'", null, null, null, null);
+    List<Movie> searchMovies(String[] search) {
+        Cursor cursor = database.query(MovieSQLiteHelper.TABLE_NAME,
+                null,
+                MovieSQLiteHelper.KEY_NAME + " LIKE " + "'%" + search[0] + "%' AND " +
+//                MovieSQLiteHelper.KEY_QUALITY + "=" + search[1] + "AND " +
+//                MovieSQLiteHelper.KEY_GENRE + "=" + search[2] + "AND " +
+                MovieSQLiteHelper.KEY_RATING + ">=" + search[3],
+                null,
+                null,
+                null,
+                null);
         List<Movie> movies = cursorToList(cursor);
         return movies;
     }

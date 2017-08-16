@@ -3,7 +3,6 @@ package example.com.moviesfragment;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,8 +14,8 @@ public class SearchActivity extends Activity {
     EditText searchET;
     Button searchBtn;
     public static final String SEARCH = "search";
-    String editTextString;
     private static final String LOG = SearchActivity.class.getSimpleName();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -29,13 +28,17 @@ public class SearchActivity extends Activity {
         searchET = (EditText) findViewById(R.id.searchET);
 
 
-
         searchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                editTextString = searchET.getText().toString();
+                String[] searchParameters = {
+                        searchET.getText().toString(),
+                        qualitySpinner.getSelectedItem().toString(),
+                        genreSpinner.getSelectedItem().toString(),
+                        ratingSpinner.getSelectedItem().toString()};
+
                 Intent intent = new Intent(SearchActivity.this, HomeActivity.class);
-                intent.putExtra(SEARCH, editTextString);
+                intent.putExtra(SEARCH, searchParameters);
                 startActivity(intent);
             }
         });

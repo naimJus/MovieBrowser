@@ -28,7 +28,7 @@ public class HomeActivity extends ListActivity {
     ListView listView;
     List<Movie> getMovies;
     String filter;
-    String search;
+    String[] search;
     Button loadMoreBtn;
     static int limit = 50;
     int lastItemId;
@@ -65,7 +65,7 @@ public class HomeActivity extends ListActivity {
                     filter = b.getString(MainActivity.FILTER);
                     getMovies = moviesDataSource.sortBy(filter);
                 } if(b.containsKey(SearchActivity.SEARCH)){
-                    search = b.getString(SearchActivity.SEARCH);
+                    search = b.getStringArray(SearchActivity.SEARCH);
                     Log.v(LOG, "search " + search);
 //                    getMovies = moviesDataSource.getAllMovies();
                     getMovies = moviesDataSource.searchMovies(search);
