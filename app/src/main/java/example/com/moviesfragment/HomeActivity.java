@@ -4,6 +4,7 @@ import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -20,42 +21,42 @@ public class HomeActivity extends ListActivity {
     public static final String LOG = "HomeActivity";
     public static final String POSITION = ".Model.Movie";
     public static final String BUNDLE = "bundle";
+    private static final String FIRSTITEMID = "firstItemId";
+    public static final String SORTED = "filter";
+    public static final String ITEMID = "itemId";
     MoviesDataSource moviesDataSource;
     ListView listView;
     List<Movie> getMovies;
     String filter;
-    public static final String SORTED = "filter";
-    public static final String ITEMID = "itemId";
     Button loadMoreBtn;
     static int limit = 50;
     int lastItemId;
+    int firstItemId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        listView = getListView();
 
+        listView = getListView();
         moviesDataSource = new MoviesDataSource(this);
         moviesDataSource.open();
-
         View footerView = ((LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.footer_layout, null, false);
         listView.addFooterView(footerView);
-        loadMoreBtn = (Button) findViewById(R.id.loadMoreButton);
-        loadMoreBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                lastItemId = listView.getCount() - 1;
-                limit = limit + 50;
-                getMovies = moviesDataSource.sortAndLimit(filter, String.valueOf(limit));
-                refreshAdapter();
-            }
-        });
+
+
         if (savedInstanceState != null) {
             lastItemId = savedInstanceState.getInt(ITEMID);
             filter = savedInstanceState.getString(SORTED);
-            getMovies = moviesDataSource.sortBy(filter);
-            listView.setSelectionFromTop(lastItemId, 0);
+            firstItemId = savedInstanceState.getInt(FIRSTITEMID);
+            if (limit > 50) {
+                getMovies = moviesDataSource.sortAndLimit(filter, String.valueOf(limit));
+                listView.setSelectionFromTop(lastItemId, 0);
+            } else {
+                getMovies = moviesDataSource.sortBy(filter);
+                listView.setSelectionFromTop(firstItemId,0);
+            }
         } else {
+            firstItemId = listView.getFirstVisiblePosition();
             Bundle b = getIntent().getExtras();
             if (b != null) {
                 filter = b.getString(MainActivity.FILTER);
@@ -74,12 +75,21 @@ public class HomeActivity extends ListActivity {
                 //put the bundle in a Intent
                 //Start the new Activity
                 Movie movie = getMovies.get(position);
-
                 Bundle b = new Bundle();
                 b.putParcelable(POSITION, movie);
                 Intent intent = new Intent(HomeActivity.this, MovieActivity.class);
                 intent.putExtra(BUNDLE, b);
                 startActivity(intent);
+            }
+        });
+        loadMoreBtn = (Button) findViewById(R.id.loadMoreButton);
+        loadMoreBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                lastItemId = listView.getCount() - 1;
+                limit = limit + 50;
+                getMovies = moviesDataSource.sortAndLimit(filter, String.valueOf(limit));
+                refreshAdapter();
             }
         });
     }
@@ -89,6 +99,7 @@ public class HomeActivity extends ListActivity {
         super.onSaveInstanceState(outState);
         outState.putString(SORTED, filter);
         outState.putInt(ITEMID, lastItemId);
+        outState.putInt(FIRSTITEMID, firstItemId);
     }
 
     @Override
@@ -143,6 +154,8 @@ public class HomeActivity extends ListActivity {
     @Override
     protected void onPause() {
         super.onPause();
+        firstItemId = listView.getFirstVisiblePosition();
+        Log.v(LOG, "first item id " + firstItemId);
         moviesDataSource.close();
     }
 
@@ -158,6 +171,9 @@ public class HomeActivity extends ListActivity {
         setListAdapter(moviesAdapter);
         if (lastItemId != 0) {
             listView.setSelectionFromTop(lastItemId, 0);
+        }
+        if (firstItemId != 0) {
+            listView.setSelectionFromTop(firstItemId, 0);
         }
     }
 }
