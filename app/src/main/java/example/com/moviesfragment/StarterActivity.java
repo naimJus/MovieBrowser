@@ -13,6 +13,8 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.facebook.stetho.Stetho;
+
 
 public class StarterActivity extends Activity {
 
@@ -21,6 +23,8 @@ public class StarterActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_starter);
+        Stetho.initializeWithDefaults(this);
+
         if (isNetworkAvailable()) {
             new GetMovies(getApplicationContext(), this).execute();
         } else {
