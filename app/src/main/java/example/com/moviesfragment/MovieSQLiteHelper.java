@@ -3,7 +3,6 @@ package example.com.moviesfragment;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.util.Log;
 
 
 public class MovieSQLiteHelper extends SQLiteOpenHelper {
@@ -22,6 +21,10 @@ public class MovieSQLiteHelper extends SQLiteOpenHelper {
     public static final String KEY_IMAGE_URL = "imageUrl";
     public static final String KEY_RATING = "rating";
     public static final String KEY_TRAILER = "trailer";
+    public static final String KEY_GENRE = "genre";
+    public static final String KEY_720P = "url720p";
+    public static final String KEY_1080P = "url1080p";
+    public static final String KEY_3D = "url3d";
 
 
     private MovieSQLiteHelper(Context context) {
@@ -42,11 +45,14 @@ public class MovieSQLiteHelper extends SQLiteOpenHelper {
             KEY_YEAR + " INTEGER," +
             KEY_IMAGE_URL + " TEXT," +
             KEY_RATING + " REAL," +
-            KEY_TRAILER + " TEXT" + ")";
+            KEY_TRAILER + " TEXT," +
+            KEY_GENRE + " TEXT," +
+            KEY_720P + " TEXT," +
+            KEY_1080P + " TEXT," +
+            KEY_3D + " TEXT" + ")";
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-//        db.execSQL("DROP TABLE " + TABLE_NAME);
         db.execSQL(CREATE_TABLE);
     }
 
