@@ -2,7 +2,6 @@ package example.com.moviesfragment;
 
 import android.content.Context;
 import android.util.Log;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -11,6 +10,7 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.HashMap;
 
 /**
  * Created by jusuf on 11.7.2017.
@@ -20,7 +20,7 @@ public class JsonParser {
     private Context context;
     private String result;
     private MoviesDataSource moviesDataSource;
-    float resultId;
+    private long resultId;
     private String LOG = JsonParser.class.getSimpleName();
     int pages;
 
@@ -57,15 +57,16 @@ public class JsonParser {
 
 
     private int fromJsonToDatabase(String json) {
-        Log.v(LOG, "fromJsonToDatabase called");
+
         try {
             JSONObject jsonObject = new JSONObject(json);
             JSONObject data = jsonObject.getJSONObject("data");
             int movie_count = data.getInt("movie_count");
             JSONArray movies = data.getJSONArray("movies");
 
-
             for (int i = 0; i < movies.length(); i++) {
+                StringBuilder sb = new StringBuilder();
+                HashMap<String, String> torrent = new HashMap<>(3);
                 JSONObject m = movies.getJSONObject(i);
                 String id = m.getString("id");
                 String name = m.getString("title");
@@ -74,14 +75,26 @@ public class JsonParser {
                 String summary = m.getString("summary");
                 String imageUrl = m.getString("medium_cover_image");
                 String trailerCode = m.getString("yt_trailer_code");
-                resultId = moviesDataSource.createMovie(Long.valueOf(id), name, summary, Integer.valueOf(year), imageUrl, Float.valueOf(rating), trailerCode);
-                if (resultId == -1)
-                    Toast.makeText(context, "The Movie " + name + " is already in the database ", Toast.LENGTH_SHORT).show();
+
+                JSONArray genresJsonArray = m.getJSONArray("genres");
+                for (int j = 0; j < genresJsonArray.length(); j++) {
+                    sb.append(genresJsonArray.getString(j));
+                    sb.append(" ");
+                }
+
+                JSONArray torrentsJsonArray = m.getJSONArray("torrents");
+                for (int k = 0; k < torrentsJsonArray.length(); k++) {
+                    JSONObject torrentJson = torrentsJsonArray.getJSONObject(k);
+                    String url = torrentJson.getString("url");
+                    String quality = torrentJson.getString("quality");
+                    torrent.put(quality, url);
+                }
+                resultId = moviesDataSource.createMovie(Long.valueOf(id), name, summary, Integer.valueOf(year), imageUrl, Float.valueOf(rating), trailerCode, sb.toString(), torrent);
             }
+
             pages = movie_count / 50;
             if (movie_count % 50 != 0)
                 pages = pages + 1;
-            Log.v("Pages", "Pages " + pages);
         } catch (Exception e) {
             e.printStackTrace();
         }
