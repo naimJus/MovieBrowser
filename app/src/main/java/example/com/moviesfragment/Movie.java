@@ -15,6 +15,10 @@ public class Movie implements Parcelable {
     private String imageUrl;
     private float rating;
     private String trailerCode;
+    private String genre;
+    private String url720p;
+    private String url1080p;
+    private String url3d;
 
     public Movie(Parcel in) {
         id = in.readLong();
@@ -24,10 +28,46 @@ public class Movie implements Parcelable {
         imageUrl = in.readString();
         rating = in.readFloat();
         trailerCode = in.readString();
+        genre = in.readString();
+        url720p = in.readString();
+        url1080p = in.readString();
+        url3d = in.readString();
     }
 
     public Movie() {
 
+    }
+
+    public String getUrl720p() {
+        return url720p;
+    }
+
+    public void setUrl720p(String url720p) {
+        this.url720p = url720p;
+    }
+
+    public String getUrl1080p() {
+        return url1080p;
+    }
+
+    public void setUrl1080p(String url1080p) {
+        this.url1080p = url1080p;
+    }
+
+    public String getUrl3d() {
+        return url3d;
+    }
+
+    public void setUrl3d(String url3d) {
+        this.url3d = url3d;
+    }
+
+    public String getGenre() {
+        return genre;
+    }
+
+    public void setGenre(String genre) {
+        this.genre = genre;
     }
 
     public String getTrailerCode() {
@@ -105,6 +145,10 @@ public class Movie implements Parcelable {
         dest.writeString(imageUrl);
         dest.writeFloat(rating);
         dest.writeString(trailerCode);
+        dest.writeString(genre);
+        dest.writeString(url720p);
+        dest.writeString(url1080p);
+        dest.writeString(url3d);
     }
 
     public static final Parcelable.Creator<Movie> CREATOR =
