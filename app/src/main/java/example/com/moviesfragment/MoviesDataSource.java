@@ -46,22 +46,26 @@ public class MoviesDataSource {
         return movies;
     }
 
-    List<Movie> searchMovies(String[] search) {
-        if (search[3].equalsIgnoreCase("all"))
-            search[3] = "0";
-//        if (search[2].equalsIgnoreCase("all"))
-//            search[2] =
+    List<Movie> searchMovies(HashMap<String, String> searchParams) {
+
+        String quality = searchParams.get("Quality");
+        String genre = searchParams.get("Genre");
+        String rating = searchParams.get("Rating");
+        String order = searchParams.get("Order");
+        String search = searchParams.get("Search");
+
 
         Cursor cursor = database.query(MovieSQLiteHelper.TABLE_NAME,
                 null,
-                MovieSQLiteHelper.KEY_NAME + " LIKE " + search[0] + " AND " +
-                        MovieSQLiteHelper.KEY_QUALITY + "=" + search[1] + " AND " +
-                        MovieSQLiteHelper.KEY_GENRE + "=" + search[2] + " AND " +
-                        MovieSQLiteHelper.KEY_RATING + ">=" + search[3],
+                quality + " AND " +
+                        genre + " AND " +
+                        rating + " AND " +
+                        search,
                 null,
                 null,
                 null,
-                null);
+                order);
+
         List<Movie> movies = cursorToList(cursor);
         return movies;
     }
@@ -78,7 +82,7 @@ public class MoviesDataSource {
                 movie.setImageUrl(cursor.getString(4));
                 movie.setRating(cursor.getFloat(5));
                 movie.setTrailerCode(cursor.getString(4));
-                movie.setGenre(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.KEY_GENRE)));
+                movie.setGenre(cursor.getString(5));
                 movie.setQuality(cursor.getString(6));
                 movie.setUrl720p(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.KEY_720P)));
                 movie.setUrl1080p(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.KEY_1080P)));

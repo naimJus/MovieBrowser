@@ -13,22 +13,25 @@ import java.util.HashMap;
 public class SearchActivity extends Activity {
 
     Spinner qualitySpinner, genreSpinner, ratingSpinner, orderBySpinner;
-    EditText searchET;
+    EditText nameET;
     Button searchBtn;
     public static final String SEARCH = "search";
     private static final String LOG = SearchActivity.class.getSimpleName();
-    HashMap<String, String> searchParams = new HashMap<>(4);
+    HashMap<String, String> searchParams = new HashMap<>(5);
+    SqlStatements sqlStatements;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
+        sqlStatements = new SqlStatements();
+
         qualitySpinner = (Spinner) findViewById(R.id.qualitySpinner);
         genreSpinner = (Spinner) findViewById(R.id.genreSpinner);
         ratingSpinner = (Spinner) findViewById(R.id.ratingSpinner);
         orderBySpinner = (Spinner) findViewById(R.id.orderBySpinner);
         searchBtn = (Button) findViewById(R.id.searchBtn);
-        searchET = (EditText) findViewById(R.id.searchET);
+        nameET = (EditText) findViewById(R.id.nameET);
 
         searchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -46,16 +49,22 @@ public class SearchActivity extends Activity {
                 String genre = genreSpinner.getSelectedItem().toString();
                 String rating = ratingSpinner.getSelectedItem().toString();
                 String order = orderBySpinner.getSelectedItem().toString();
-                String search = searchET.getText().toString();
+                String name = nameET.getText().toString();
 
-                searchParams.put("Quality", quality);
-                searchParams.put("Genre", genre);
-                searchParams.put("Rating", rating);
-                searchParams.put("Order", order);
-                searchParams.put("Search", search);
+                String orderSql = sqlStatements.generateOrderSql(order);
+                String ratingSql = sqlStatements.generateRatingSql(rating);
+                String genreSql = sqlStatements.generateGenreSql(genre);
+                String qualitySql = sqlStatements.generateQualitySql(quality);
+                String nameSql = sqlStatements.generateNameSql(name);
+
+                searchParams.put("Search", nameSql);
+                searchParams.put("Quality", qualitySql);
+                searchParams.put("Genre", genreSql);
+                searchParams.put("Rating", ratingSql);
+                searchParams.put("Order", orderSql);
 
 
-                Intent intent = new Intent(SearchActivity.this, HomeActivity.class);
+                Intent intent = new Intent(SearchActivity.this, SearchResultsActivity.class);
                 intent.putExtra(SEARCH, searchParams);
                 startActivity(intent);
             }
