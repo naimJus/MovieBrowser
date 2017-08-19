@@ -10,7 +10,9 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by jusuf on 11.7.2017.
@@ -65,8 +67,10 @@ public class JsonParser {
             JSONArray movies = data.getJSONArray("movies");
 
             for (int i = 0; i < movies.length(); i++) {
-                StringBuilder sb = new StringBuilder();
+                StringBuilder genreSb = new StringBuilder();
+                StringBuilder qualitySb = new StringBuilder();
                 HashMap<String, String> torrent = new HashMap<>(3);
+
                 JSONObject m = movies.getJSONObject(i);
                 String id = m.getString("id");
                 String name = m.getString("title");
@@ -78,8 +82,8 @@ public class JsonParser {
 
                 JSONArray genresJsonArray = m.getJSONArray("genres");
                 for (int j = 0; j < genresJsonArray.length(); j++) {
-                    sb.append(genresJsonArray.getString(j));
-                    sb.append(" ");
+                    genreSb.append(genresJsonArray.getString(j));
+                    genreSb.append(" ");
                 }
 
                 JSONArray torrentsJsonArray = m.getJSONArray("torrents");
@@ -87,9 +91,11 @@ public class JsonParser {
                     JSONObject torrentJson = torrentsJsonArray.getJSONObject(k);
                     String url = torrentJson.getString("url");
                     String quality = torrentJson.getString("quality");
+                    qualitySb.append(quality);
+                    qualitySb.append(" ");
                     torrent.put(quality, url);
                 }
-                resultId = moviesDataSource.createMovie(Long.valueOf(id), name, summary, Integer.valueOf(year), imageUrl, Float.valueOf(rating), trailerCode, sb.toString(), torrent);
+                resultId = moviesDataSource.createMovie(Long.valueOf(id), name, summary, Integer.valueOf(year), imageUrl, Float.valueOf(rating), trailerCode, genreSb.toString(), qualitySb.toString(), torrent);
             }
 
             pages = movie_count / 50;

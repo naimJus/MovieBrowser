@@ -28,7 +28,7 @@ public class MoviesDataSource {
     }
 
     List<Movie> getAllMovies() {
-        Cursor cursor = database.query(MovieSQLiteHelper.TABLE_NAME, null, null, null, null, null, null, "10");
+        Cursor cursor = database.query(MovieSQLiteHelper.TABLE_NAME, null, null, null, null, null, null, "50");
         List<Movie> movies = cursorToList(cursor);
         return movies;
 
@@ -55,7 +55,7 @@ public class MoviesDataSource {
         Cursor cursor = database.query(MovieSQLiteHelper.TABLE_NAME,
                 null,
                 MovieSQLiteHelper.KEY_NAME + " LIKE " + search[0] + " AND " +
-//                MovieSQLiteHelper.KEY_QUALITY + "=" + search[1] + " AND " +
+                        MovieSQLiteHelper.KEY_QUALITY + "=" + search[1] + " AND " +
                         MovieSQLiteHelper.KEY_GENRE + "=" + search[2] + " AND " +
                         MovieSQLiteHelper.KEY_RATING + ">=" + search[3],
                 null,
@@ -79,6 +79,7 @@ public class MoviesDataSource {
                 movie.setRating(cursor.getFloat(5));
                 movie.setTrailerCode(cursor.getString(4));
                 movie.setGenre(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.KEY_GENRE)));
+                movie.setQuality(cursor.getString(6));
                 movie.setUrl720p(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.KEY_720P)));
                 movie.setUrl1080p(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.KEY_1080P)));
                 movie.setUrl3d(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.KEY_3D)));
@@ -88,7 +89,7 @@ public class MoviesDataSource {
         return movies;
     }
 
-    long createMovie(long id, String name, String description, int year, String imageUrl, float rating, String trailerCode, String genre, HashMap<String, String> torrents) {
+    long createMovie(long id, String name, String description, int year, String imageUrl, float rating, String trailerCode, String genre, String quality, HashMap<String, String> torrents) {
         long resultId = -1;
         ContentValues values = new ContentValues();
         values.put(MovieSQLiteHelper.KEY_ID, id);
@@ -99,6 +100,7 @@ public class MoviesDataSource {
         values.put(MovieSQLiteHelper.KEY_RATING, rating);
         values.put(MovieSQLiteHelper.KEY_TRAILER, trailerCode);
         values.put(MovieSQLiteHelper.KEY_GENRE, genre);
+        values.put(MovieSQLiteHelper.KEY_QUALITY, quality);
         values.put(MovieSQLiteHelper.KEY_720P, torrents.get("720p"));
         values.put(MovieSQLiteHelper.KEY_1080P, torrents.get("1080p"));
         values.put(MovieSQLiteHelper.KEY_3D, torrents.get("3D"));

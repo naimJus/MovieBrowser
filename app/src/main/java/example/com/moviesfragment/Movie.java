@@ -16,9 +16,11 @@ public class Movie implements Parcelable {
     private float rating;
     private String trailerCode;
     private String genre;
+    private String quality;
     private String url720p;
     private String url1080p;
     private String url3d;
+
 
     public Movie(Parcel in) {
         id = in.readLong();
@@ -29,6 +31,7 @@ public class Movie implements Parcelable {
         rating = in.readFloat();
         trailerCode = in.readString();
         genre = in.readString();
+        quality = in.readString();
         url720p = in.readString();
         url1080p = in.readString();
         url3d = in.readString();
@@ -36,6 +39,14 @@ public class Movie implements Parcelable {
 
     public Movie() {
 
+    }
+
+    public String getQuality() {
+        return quality;
+    }
+
+    public void setQuality(String quality) {
+        this.quality = quality;
     }
 
     public String getUrl720p() {
@@ -146,6 +157,7 @@ public class Movie implements Parcelable {
         dest.writeFloat(rating);
         dest.writeString(trailerCode);
         dest.writeString(genre);
+        dest.writeString(quality);
         dest.writeString(url720p);
         dest.writeString(url1080p);
         dest.writeString(url3d);
