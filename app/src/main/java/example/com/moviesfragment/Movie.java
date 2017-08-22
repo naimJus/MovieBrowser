@@ -17,9 +17,8 @@ public class Movie implements Parcelable {
     private String trailerCode;
     private String genre;
     private String quality;
-    private String url720p;
-    private String url1080p;
-    private String url3d;
+    private String[] urls;
+    private String[] hashValues;
 
 
     public Movie(Parcel in) {
@@ -32,49 +31,39 @@ public class Movie implements Parcelable {
         trailerCode = in.readString();
         genre = in.readString();
         quality = in.readString();
-        url720p = in.readString();
-        url1080p = in.readString();
-        url3d = in.readString();
+        in.readStringArray(urls);
+        in.readStringArray(hashValues);
     }
 
     public Movie() {
+    }
 
+    public String getGenre() {
+        return genre;
     }
 
     public String getQuality() {
         return quality;
     }
 
+    public String[] getUrls() {
+        return urls;
+    }
+
+    public void setUrls(String[] urls) {
+        this.urls = urls;
+    }
+
+    public String[] getHashValues() {
+        return hashValues;
+    }
+
+    public void setHashValues(String[] hashValues) {
+        this.hashValues = hashValues;
+    }
+
     public void setQuality(String quality) {
         this.quality = quality;
-    }
-
-    public String getUrl720p() {
-        return url720p;
-    }
-
-    public void setUrl720p(String url720p) {
-        this.url720p = url720p;
-    }
-
-    public String getUrl1080p() {
-        return url1080p;
-    }
-
-    public void setUrl1080p(String url1080p) {
-        this.url1080p = url1080p;
-    }
-
-    public String getUrl3d() {
-        return url3d;
-    }
-
-    public void setUrl3d(String url3d) {
-        this.url3d = url3d;
-    }
-
-    public String getGenre() {
-        return genre;
     }
 
     public void setGenre(String genre) {
@@ -158,9 +147,8 @@ public class Movie implements Parcelable {
         dest.writeString(trailerCode);
         dest.writeString(genre);
         dest.writeString(quality);
-        dest.writeString(url720p);
-        dest.writeString(url1080p);
-        dest.writeString(url3d);
+        dest.readStringArray(urls);
+        dest.writeStringArray(hashValues);
     }
 
     public static final Parcelable.Creator<Movie> CREATOR =

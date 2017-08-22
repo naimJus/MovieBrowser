@@ -75,6 +75,8 @@ public class MoviesDataSource {
         if (cursor.getCount() > 0) {
             while (cursor.moveToNext()) {
                 Movie movie = new Movie();
+                String[] hash = {cursor.getString(10), cursor.getString(11), cursor.getString(12)};
+                String[] urls = {cursor.getString(7), cursor.getString(8), cursor.getString(9)};
                 movie.setId(cursor.getLong(cursor.getColumnIndex(MovieSQLiteHelper.KEY_ID)));
                 movie.setName(cursor.getString(1));
                 movie.setDescription(cursor.getString(2));
@@ -84,16 +86,15 @@ public class MoviesDataSource {
                 movie.setTrailerCode(cursor.getString(4));
                 movie.setGenre(cursor.getString(5));
                 movie.setQuality(cursor.getString(6));
-                movie.setUrl720p(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.KEY_720P)));
-                movie.setUrl1080p(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.KEY_1080P)));
-                movie.setUrl3d(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.KEY_3D)));
+                movie.setUrls(urls);
+                movie.setHashValues(hash);
                 movies.add(movie);
             }
         }
         return movies;
     }
 
-    long createMovie(long id, String name, String description, int year, String imageUrl, float rating, String trailerCode, String genre, String quality, HashMap<String, String> torrents) {
+    long createMovie(long id, String name, String description, int year, String imageUrl, float rating, String trailerCode, String genre, String quality, HashMap<String, String> torrents, HashMap<String, String> hashValues) {
         long resultId = -1;
         ContentValues values = new ContentValues();
         values.put(MovieSQLiteHelper.KEY_ID, id);
@@ -108,6 +109,9 @@ public class MoviesDataSource {
         values.put(MovieSQLiteHelper.KEY_720P, torrents.get("720p"));
         values.put(MovieSQLiteHelper.KEY_1080P, torrents.get("1080p"));
         values.put(MovieSQLiteHelper.KEY_3D, torrents.get("3D"));
+        values.put(MovieSQLiteHelper.KEY_HASH720P, hashValues.get("720p"));
+        values.put(MovieSQLiteHelper.KEY_HASH1080P, hashValues.get("1080p"));
+        values.put(MovieSQLiteHelper.KEY_HASH3D, hashValues.get("3D"));
         resultId = database.insertWithOnConflict(MovieSQLiteHelper.TABLE_NAME, null, values, SQLiteDatabase.CONFLICT_IGNORE);
         return resultId;
     }

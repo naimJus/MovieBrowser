@@ -20,7 +20,6 @@ public class MovieActivity extends YouTubeBaseActivity {
     private YouTubePlayer.OnInitializedListener initializedListener;
     private static final String YOUTUBE_KEY = "AIzaSyBp9dpHGyl_0MUM8z_SwKPXeWEabVlUSKk";
     private Button quality720Btn, quality1080Btn, quality3dBtn;
-    Button torrent;
 
     @Override
 

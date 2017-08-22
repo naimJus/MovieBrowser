@@ -70,6 +70,7 @@ public class JsonParser {
                 StringBuilder genreSb = new StringBuilder();
                 StringBuilder qualitySb = new StringBuilder();
                 HashMap<String, String> torrent = new HashMap<>(3);
+                HashMap<String, String> hashes = new HashMap<>(3);
 
                 JSONObject m = movies.getJSONObject(i);
                 String id = m.getString("id");
@@ -91,11 +92,13 @@ public class JsonParser {
                     JSONObject torrentJson = torrentsJsonArray.getJSONObject(k);
                     String url = torrentJson.getString("url");
                     String quality = torrentJson.getString("quality");
+                    String hash = torrentJson.getString("hash");
                     qualitySb.append(quality);
                     qualitySb.append(" ");
                     torrent.put(quality, url);
+                    hashes.put(quality,hash);
                 }
-                resultId = moviesDataSource.createMovie(Long.valueOf(id), name, summary, Integer.valueOf(year), imageUrl, Float.valueOf(rating), trailerCode, genreSb.toString(), qualitySb.toString(), torrent);
+                resultId = moviesDataSource.createMovie(Long.valueOf(id), name, summary, Integer.valueOf(year), imageUrl, Float.valueOf(rating), trailerCode, genreSb.toString(), qualitySb.toString(), torrent, hashes);
             }
 
             pages = movie_count / 50;
