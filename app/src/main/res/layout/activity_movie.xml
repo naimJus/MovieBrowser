@@ -36,6 +36,31 @@
             android:paddingStart="10dp"
             android:textAppearance="?android:attr/textAppearance" />
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/quality720p"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="720p" />
+
+            <Button
+                android:id="@+id/quality1080p"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1080p" />
+
+            <Button
+                android:id="@+id/quality3d"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="3D" />
+
+        </LinearLayout>
+
         <ScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent">
