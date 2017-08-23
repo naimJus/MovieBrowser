@@ -3,6 +3,7 @@ package example.com.moviesfragment;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -20,6 +21,7 @@ public class MovieActivity extends YouTubeBaseActivity {
     private YouTubePlayer.OnInitializedListener initializedListener;
     private static final String YOUTUBE_KEY = "AIzaSyBp9dpHGyl_0MUM8z_SwKPXeWEabVlUSKk";
     private Button quality720Btn, quality1080Btn, quality3dBtn;
+    private static final String LOG = MovieActivity.class.getSimpleName();
 
     @Override
 
@@ -70,6 +72,7 @@ public class MovieActivity extends YouTubeBaseActivity {
             @Override
             public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean b) {
                 youTubePlayer.loadVideo(movie.getTrailerCode());
+                Log.v(LOG, movie.getTrailerCode());
                 youTubePlayer.addFullscreenControlFlag(BIND_ADJUST_WITH_ACTIVITY);
             }
 

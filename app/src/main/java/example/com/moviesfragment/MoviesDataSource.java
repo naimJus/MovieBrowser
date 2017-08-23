@@ -80,14 +80,14 @@ public class MoviesDataSource {
                 movie.setName(cursor.getString(1));
                 movie.setDescription(cursor.getString(2));
                 movie.setYear(cursor.getInt(3));
-                movie.setImageUrl(cursor.getString(4));
-                movie.setRating(cursor.getFloat(5));
-                movie.setTrailerCode(cursor.getString(4));
-                movie.setGenre(cursor.getString(5));
-                movie.setQuality(cursor.getString(6));
-                movie.setUrl720p(cursor.getString(7));
-                movie.setUrl1080p(cursor.getString(8));
-                movie.setUrl3d(cursor.getString(9));
+                movie.setImageUrl(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.KEY_IMAGE_URL)));
+                movie.setRating(cursor.getFloat(cursor.getColumnIndex(MovieSQLiteHelper.KEY_RATING)));
+                movie.setTrailerCode(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.KEY_TRAILER)));
+                movie.setGenre(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.KEY_GENRE)));
+                movie.setQuality(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.KEY_QUALITY)));
+                movie.setUrl720p(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.KEY_720P)));
+                movie.setUrl1080p(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.KEY_1080P)));
+                movie.setUrl3d(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.KEY_3D)));
                 movie.setHashValues(hash);
                 movies.add(movie);
             }
