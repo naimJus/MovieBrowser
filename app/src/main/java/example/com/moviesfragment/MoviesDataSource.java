@@ -76,7 +76,6 @@ public class MoviesDataSource {
             while (cursor.moveToNext()) {
                 Movie movie = new Movie();
                 String[] hash = {cursor.getString(10), cursor.getString(11), cursor.getString(12)};
-                String[] urls = {cursor.getString(7), cursor.getString(8), cursor.getString(9)};
                 movie.setId(cursor.getLong(cursor.getColumnIndex(MovieSQLiteHelper.KEY_ID)));
                 movie.setName(cursor.getString(1));
                 movie.setDescription(cursor.getString(2));
@@ -86,7 +85,9 @@ public class MoviesDataSource {
                 movie.setTrailerCode(cursor.getString(4));
                 movie.setGenre(cursor.getString(5));
                 movie.setQuality(cursor.getString(6));
-                movie.setUrls(urls);
+                movie.setUrl720p(cursor.getString(7));
+                movie.setUrl1080p(cursor.getString(8));
+                movie.setUrl3d(cursor.getString(9));
                 movie.setHashValues(hash);
                 movies.add(movie);
             }

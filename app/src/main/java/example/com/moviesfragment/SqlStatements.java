@@ -58,7 +58,7 @@ public class SqlStatements {
         if (s.equalsIgnoreCase("All")) {
             sql = MovieSQLiteHelper.KEY_QUALITY + " IS NOT NULL";
         } else {
-            sql = MovieSQLiteHelper.KEY_QUALITY + " >= " + s;
+            sql = MovieSQLiteHelper.KEY_QUALITY + " LIKE '%" + s + "%' ";
         }
         Log.v("SQL ", sql);
         return sql;
