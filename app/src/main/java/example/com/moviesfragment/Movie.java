@@ -18,7 +18,7 @@ public class Movie implements Parcelable {
     private String genre;
     private String quality;
     private String url720p, url1080p, url3d;
-    private String hashValues[] = new String[3];
+    private String hash720p, hash1080p, hash3d;
 
 
     public Movie(Parcel in) {
@@ -34,7 +34,9 @@ public class Movie implements Parcelable {
         url720p = in.readString();
         url1080p = in.readString();
         url3d = in.readString();
-        in.readStringArray(hashValues);
+        hash720p = in.readString();
+        hash1080p = in.readString();
+        hash3d = in.readString();
     }
 
     public Movie() {
@@ -72,12 +74,28 @@ public class Movie implements Parcelable {
         this.url3d = url3d;
     }
 
-    public String[] getHashValues() {
-        return hashValues;
+    public String getHash720p() {
+        return hash720p;
     }
 
-    public void setHashValues(String[] hashValues) {
-        this.hashValues = hashValues;
+    public void setHash720p(String hash720p) {
+        this.hash720p = hash720p;
+    }
+
+    public String getHash1080p() {
+        return hash1080p;
+    }
+
+    public void setHash1080p(String hash1080p) {
+        this.hash1080p = hash1080p;
+    }
+
+    public String getHash3d() {
+        return hash3d;
+    }
+
+    public void setHash3d(String hash3d) {
+        this.hash3d = hash3d;
     }
 
     public void setQuality(String quality) {
@@ -168,7 +186,10 @@ public class Movie implements Parcelable {
         dest.writeString(url720p);
         dest.writeString(url1080p);
         dest.writeString(url3d);
-        dest.writeStringArray(hashValues);
+        dest.writeString(hash720p);
+        dest.writeString(hash1080p);
+        dest.writeString(hash3d);
+
     }
 
     public static final Parcelable.Creator<Movie> CREATOR =
