@@ -52,11 +52,6 @@ public class MovieActivity extends YouTubeBaseActivity {
         descriptionTV.setText(movie.getSummary());
         List<Torrent> torrents = movie.getTorrents();
 
-        for (Torrent t : torrents) {
-            String url = t.getUrl();
-            Log.v(LOG, url);
-        }
-
 
         final Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.addCategory(Intent.CATEGORY_DEFAULT);

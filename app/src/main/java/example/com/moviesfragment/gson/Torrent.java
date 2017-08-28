@@ -36,7 +36,10 @@ public class Torrent implements Parcelable {
     @Expose
     private Integer dateUploadedUnix;
 
-    protected Torrent(Parcel in) {
+    public Torrent() {
+    }
+
+    public Torrent(Parcel in) {
         url = in.readString();
         hash = in.readString();
         quality = in.readString();

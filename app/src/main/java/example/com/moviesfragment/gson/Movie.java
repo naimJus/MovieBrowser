@@ -92,7 +92,10 @@ public class Movie implements Parcelable {
     @Expose
     private Integer dateUploadedUnix;
 
-    protected Movie(Parcel in) {
+    public Movie() {
+    }
+
+    public Movie(Parcel in) {
         url = in.readString();
         imdbCode = in.readString();
         title = in.readString();
