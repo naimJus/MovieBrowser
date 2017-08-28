@@ -16,6 +16,8 @@ import android.widget.ListView;
 
 import java.util.List;
 
+import example.com.moviesfragment.gson.Movie;
+
 public class HomeActivity extends ListActivity {
 
     public static final String LOG = "HomeActivity";
@@ -79,7 +81,7 @@ public class HomeActivity extends ListActivity {
                 //Start the new Activity
                 Movie movie = getMovies.get(position);
                 Bundle b = new Bundle();
-                b.putParcelable(POSITION, movie);
+//                b.putParcelable(POSITION, movie);
                 Intent intent = new Intent(HomeActivity.this, MovieActivity.class);
                 intent.putExtra(BUNDLE, b);
                 startActivity(intent);

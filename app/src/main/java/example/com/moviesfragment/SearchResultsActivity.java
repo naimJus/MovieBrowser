@@ -10,6 +10,8 @@ import android.widget.ListView;
 import java.util.HashMap;
 import java.util.List;
 
+import example.com.moviesfragment.gson.Movie;
+
 public class SearchResultsActivity extends ListActivity {
     ListView listView;
     MoviesDataSource moviesDataSource;
@@ -49,7 +51,7 @@ public class SearchResultsActivity extends ListActivity {
                 //Start the new Activity
                 Movie movie = getMovies.get(position);
                 Bundle b = new Bundle();
-                b.putParcelable(POSITION, movie);
+//                b.putParcelable(POSITION, movie);
                 Intent intent = new Intent(SearchResultsActivity.this, MovieActivity.class);
                 intent.putExtra(BUNDLE, b);
                 startActivity(intent);

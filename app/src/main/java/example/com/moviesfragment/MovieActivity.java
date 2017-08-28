@@ -13,6 +13,8 @@ import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerView;
 
+import example.com.moviesfragment.gson.Movie;
+
 public class MovieActivity extends YouTubeBaseActivity {
 
     private Movie movie;
@@ -42,20 +44,20 @@ public class MovieActivity extends YouTubeBaseActivity {
         Bundle b = getIntent().getBundleExtra(HomeActivity.BUNDLE);
         movie = b.getParcelable(HomeActivity.POSITION);
 
-        nameTV.setText(movie.getName());
+        nameTV.setText(movie.getTitle());
         yearTV.setText(String.valueOf(movie.getYear()));
         ratingTV.setText(String.valueOf(movie.getRating()));
-        descriptionTV.setText(movie.getDescription());
-        final String url720 = movie.getUrl720p();
-        String url1080 = movie.getUrl1080p();
-        String url3d = movie.getUrl3d();
+        descriptionTV.setText(movie.getSummary());
+//        final String url720 = movie.getUrl720p();
+//        String url1080 = movie.getUrl1080p();
+//        String url3d = movie.getUrl3d();
 
-        if (url720 == null)
-            quality720Btn.setVisibility(View.GONE);
-        if (url1080 == null)
-            quality1080Btn.setVisibility(View.GONE);
-        if (url3d == null)
-            quality3dBtn.setVisibility(View.GONE);
+//        if (url720 == null)
+//            quality720Btn.setVisibility(View.GONE);
+//        if (url1080 == null)
+//            quality1080Btn.setVisibility(View.GONE);
+//        if (url3d == null)
+//            quality3dBtn.setVisibility(View.GONE);
 
         final Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.addCategory(Intent.CATEGORY_DEFAULT);
@@ -63,7 +65,7 @@ public class MovieActivity extends YouTubeBaseActivity {
         quality720Btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                intent.setData(Uri.parse(url720));
+//                intent.setData(Uri.parse(url720));
                 startActivity(intent);
             }
         });
@@ -71,8 +73,7 @@ public class MovieActivity extends YouTubeBaseActivity {
         initializedListener = new YouTubePlayer.OnInitializedListener() {
             @Override
             public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean b) {
-                youTubePlayer.loadVideo(movie.getTrailerCode());
-                Log.v(LOG, movie.getTrailerCode());
+                youTubePlayer.loadVideo(movie.getYtTrailerCode());
                 youTubePlayer.addFullscreenControlFlag(BIND_ADJUST_WITH_ACTIVITY);
             }
 

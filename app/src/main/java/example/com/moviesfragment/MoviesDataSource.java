@@ -10,6 +10,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import example.com.moviesfragment.gson.Movie;
+import example.com.moviesfragment.gson.Torrent;
+
 public class MoviesDataSource {
     private SQLiteDatabase database;
     private MovieSQLiteHelper dbHelper;
@@ -74,29 +77,36 @@ public class MoviesDataSource {
         List<Movie> movies = new ArrayList<Movie>();
         if (cursor.getCount() > 0) {
             while (cursor.moveToNext()) {
+                List<String> quality = new ArrayList<>();
                 Movie movie = new Movie();
-                movie.setId(cursor.getLong(cursor.getColumnIndex(MovieSQLiteHelper.KEY_ID)));
-                movie.setName(cursor.getString(1));
-                movie.setDescription(cursor.getString(2));
+                List<Torrent> torrents = movie.getTorrents();
+                movie.setId(cursor.getInt(cursor.getColumnIndex(MovieSQLiteHelper.KEY_ID)));
+                movie.setTitle(cursor.getString(1));
+                movie.setSummary(cursor.getString(2));
                 movie.setYear(cursor.getInt(3));
-                movie.setImageUrl(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.KEY_IMAGE_URL)));
-                movie.setRating(cursor.getFloat(cursor.getColumnIndex(MovieSQLiteHelper.KEY_RATING)));
-                movie.setTrailerCode(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.KEY_TRAILER)));
-                movie.setGenre(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.KEY_GENRE)));
-                movie.setQuality(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.KEY_QUALITY)));
+                movie.setMediumCoverImage(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.KEY_IMAGE_URL)));
+                movie.setRating(cursor.getDouble(cursor.getColumnIndex(MovieSQLiteHelper.KEY_RATING)));
+                movie.setYtTrailerCode(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.KEY_TRAILER)));
+/*//                movie.setge(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.KEY_GENRE)));
+                quality.add(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.KEY_720P)));
+                quality.add(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.KEY_1080P)));
+                quality.add(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.KEY_3D)));
+                for (Torrent t:torrents) {
+                    t.setUrl(cursor.);
+                }
                 movie.setUrl720p(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.KEY_720P)));
                 movie.setUrl1080p(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.KEY_1080P)));
                 movie.setUrl3d(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.KEY_3D)));
                 movie.setHash720p(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.KEY_HASH720P)));
                 movie.setHash1080p(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.KEY_HASH1080P)));
                 movie.setHash3d(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.KEY_HASH3D)));
-                movies.add(movie);
+                movies.add(movie);*/
             }
         }
         return movies;
     }
 
-    long createMovie(long id, String name, String description, int year, String imageUrl, float rating, String trailerCode, String genre, String quality, HashMap<String, String> torrents, HashMap<String, String> hashValues) {
+    long createMovie(long id, String name, String description, int year, String imageUrl, double rating, String trailerCode, String genre, HashMap<String, String> torrents, HashMap<String, String> hashValues) {
         long resultId = -1;
         ContentValues values = new ContentValues();
         values.put(MovieSQLiteHelper.KEY_ID, id);
@@ -107,7 +117,6 @@ public class MoviesDataSource {
         values.put(MovieSQLiteHelper.KEY_RATING, rating);
         values.put(MovieSQLiteHelper.KEY_TRAILER, trailerCode);
         values.put(MovieSQLiteHelper.KEY_GENRE, genre);
-        values.put(MovieSQLiteHelper.KEY_QUALITY, quality);
         values.put(MovieSQLiteHelper.KEY_720P, torrents.get("720p"));
         values.put(MovieSQLiteHelper.KEY_1080P, torrents.get("1080p"));
         values.put(MovieSQLiteHelper.KEY_3D, torrents.get("3D"));

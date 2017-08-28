@@ -12,6 +12,8 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import example.com.moviesfragment.gson.Movie;
+
 /**
  * Created by jusuf on 05.7.2017.
  */
@@ -36,11 +38,11 @@ public class MoviesAdapter extends ArrayAdapter<Movie> {
         ImageView imageView = (ImageView) convertView.findViewById(R.id.list_item_image);
 
         // Populate the data into the template view using the data object
-        tvName.setText(movie.getName());
+        tvName.setText(movie.getTitle());
         tvYear.setText(String.valueOf(movie.getYear()));
         tvRating.setText(String.valueOf(movie.getRating()));
         Picasso.with(getContext())
-                .load(movie.getImageUrl())
+                .load(movie.getMediumCoverImage())
                 .placeholder(R.drawable.welcome)
                 .fit()
                 .into(imageView);
