@@ -92,6 +92,42 @@ public class Movie implements Parcelable {
     @Expose
     private Integer dateUploadedUnix;
 
+    protected Movie(Parcel in) {
+        url = in.readString();
+        imdbCode = in.readString();
+        title = in.readString();
+        titleEnglish = in.readString();
+        titleLong = in.readString();
+        slug = in.readString();
+        genres = in.createStringArrayList();
+        summary = in.readString();
+        descriptionFull = in.readString();
+        synopsis = in.readString();
+        ytTrailerCode = in.readString();
+        language = in.readString();
+        mpaRating = in.readString();
+        backgroundImage = in.readString();
+        backgroundImageOriginal = in.readString();
+        smallCoverImage = in.readString();
+        mediumCoverImage = in.readString();
+        largeCoverImage = in.readString();
+        state = in.readString();
+        torrents = in.createTypedArrayList(Torrent.CREATOR);
+        dateUploaded = in.readString();
+    }
+
+    public static final Creator<Movie> CREATOR = new Creator<Movie>() {
+        @Override
+        public Movie createFromParcel(Parcel in) {
+            return new Movie(in);
+        }
+
+        @Override
+        public Movie[] newArray(int size) {
+            return new Movie[size];
+        }
+    };
+
     public Integer getId() {
         return id;
     }
@@ -307,6 +343,26 @@ public class Movie implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-
+        dest.writeString(url);
+        dest.writeString(imdbCode);
+        dest.writeString(title);
+        dest.writeString(titleEnglish);
+        dest.writeString(titleLong);
+        dest.writeString(slug);
+        dest.writeStringList(genres);
+        dest.writeString(summary);
+        dest.writeString(descriptionFull);
+        dest.writeString(synopsis);
+        dest.writeString(ytTrailerCode);
+        dest.writeString(language);
+        dest.writeString(mpaRating);
+        dest.writeString(backgroundImage);
+        dest.writeString(backgroundImageOriginal);
+        dest.writeString(smallCoverImage);
+        dest.writeString(mediumCoverImage);
+        dest.writeString(largeCoverImage);
+        dest.writeString(state);
+        dest.writeTypedList(torrents);
+        dest.writeString(dateUploaded);
     }
 }

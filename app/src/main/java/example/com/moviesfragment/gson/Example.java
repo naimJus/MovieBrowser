@@ -1,9 +1,12 @@
 package example.com.moviesfragment.gson;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
-public class Example {
+public class Example implements Parcelable {
 
     @SerializedName("status")
     @Expose
@@ -17,6 +20,24 @@ public class Example {
     @SerializedName("@meta")
     @Expose
     private Meta meta;
+
+    protected Example(Parcel in) {
+        status = in.readString();
+        statusMessage = in.readString();
+        data = in.readParcelable(Data.class.getClassLoader());
+    }
+
+    public static final Creator<Example> CREATOR = new Creator<Example>() {
+        @Override
+        public Example createFromParcel(Parcel in) {
+            return new Example(in);
+        }
+
+        @Override
+        public Example[] newArray(int size) {
+            return new Example[size];
+        }
+    };
 
     public String getStatus() {
         return status;
@@ -50,6 +71,17 @@ public class Example {
         this.meta = meta;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(status);
+        dest.writeString(statusMessage);
+        dest.writeParcelable(data, flags);
+    }
 }
 
 

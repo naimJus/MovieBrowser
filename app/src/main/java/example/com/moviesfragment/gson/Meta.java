@@ -1,10 +1,13 @@
 package example.com.moviesfragment.gson;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 
-public class Meta {
+public class Meta implements Parcelable {
 
     @SerializedName("server_time")
     @Expose
@@ -18,6 +21,34 @@ public class Meta {
     @SerializedName("execution_time")
     @Expose
     private String executionTime;
+
+    protected Meta(Parcel in) {
+        serverTimezone = in.readString();
+        executionTime = in.readString();
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(serverTimezone);
+        dest.writeString(executionTime);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<Meta> CREATOR = new Creator<Meta>() {
+        @Override
+        public Meta createFromParcel(Parcel in) {
+            return new Meta(in);
+        }
+
+        @Override
+        public Meta[] newArray(int size) {
+            return new Meta[size];
+        }
+    };
 
     public Integer getServerTime() {
         return serverTime;
