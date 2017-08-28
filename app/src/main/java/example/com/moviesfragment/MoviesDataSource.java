@@ -77,9 +77,9 @@ public class MoviesDataSource {
         List<Movie> movies = new ArrayList<Movie>();
         if (cursor.getCount() > 0) {
             while (cursor.moveToNext()) {
-                List<String> quality = new ArrayList<>();
                 Movie movie = new Movie();
-                List<Torrent> torrents = movie.getTorrents();
+                List<Torrent> torrents = new ArrayList<Torrent>(3);
+
                 movie.setId(cursor.getInt(cursor.getColumnIndex(MovieSQLiteHelper.KEY_ID)));
                 movie.setTitle(cursor.getString(1));
                 movie.setSummary(cursor.getString(2));
@@ -87,20 +87,24 @@ public class MoviesDataSource {
                 movie.setMediumCoverImage(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.KEY_IMAGE_URL)));
                 movie.setRating(cursor.getDouble(cursor.getColumnIndex(MovieSQLiteHelper.KEY_RATING)));
                 movie.setYtTrailerCode(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.KEY_TRAILER)));
-/*//                movie.setge(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.KEY_GENRE)));
-                quality.add(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.KEY_720P)));
-                quality.add(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.KEY_1080P)));
-                quality.add(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.KEY_3D)));
-                for (Torrent t:torrents) {
-                    t.setUrl(cursor.);
-                }
-                movie.setUrl720p(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.KEY_720P)));
-                movie.setUrl1080p(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.KEY_1080P)));
-                movie.setUrl3d(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.KEY_3D)));
-                movie.setHash720p(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.KEY_HASH720P)));
-                movie.setHash1080p(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.KEY_HASH1080P)));
-                movie.setHash3d(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.KEY_HASH3D)));
-                movies.add(movie);*/
+
+                Torrent t = new Torrent();
+                t.setUrl(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.KEY_720P)));
+                t.setHash(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.KEY_HASH720P)));
+                torrents.add(t);
+
+                Torrent t1 = new Torrent();
+                t1.setUrl(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.KEY_1080P)));
+                t1.setHash(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.KEY_HASH1080P)));
+                torrents.add(t1);
+
+                Torrent t2 = new Torrent();
+                t2.setUrl(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.KEY_3D)));
+                t2.setHash(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.KEY_HASH3D)));
+                torrents.add(t2);
+
+                movie.setTorrents(torrents);
+                movies.add(movie);
             }
         }
         return movies;

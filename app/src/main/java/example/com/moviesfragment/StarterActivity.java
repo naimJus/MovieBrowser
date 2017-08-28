@@ -60,12 +60,12 @@ class GetMovies extends AsyncTask<String, Void, Void> {
         int pages;
         try {
             jsonParser = new JsonParser(context);
-            String url = "https://yts.ag/api/v2/list_movies.json?limit=50";
+            String url = "https://yts.ag/api/v2/list_movies.json?limit=50&start=100";
             pages = jsonParser.getJsonFromWeb(url);
-            while (pageNumber <= pages) {
-                jsonParser.getJsonFromWeb(url + "&page=" + pageNumber);
-                pageNumber++;
-            }
+//            while (pageNumber <= pages) {
+//                jsonParser.getJsonFromWeb(url + "&page=" + pageNumber);
+//                pageNumber++;
+//            }
         } catch (Exception e) {
             e.printStackTrace();
         }

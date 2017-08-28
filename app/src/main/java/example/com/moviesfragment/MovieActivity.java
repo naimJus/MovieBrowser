@@ -1,7 +1,6 @@
 package example.com.moviesfragment;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -13,7 +12,10 @@ import com.google.android.youtube.player.YouTubeInitializationResult;
 import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerView;
 
+import java.util.List;
+
 import example.com.moviesfragment.gson.Movie;
+import example.com.moviesfragment.gson.Torrent;
 
 public class MovieActivity extends YouTubeBaseActivity {
 
@@ -48,16 +50,13 @@ public class MovieActivity extends YouTubeBaseActivity {
         yearTV.setText(String.valueOf(movie.getYear()));
         ratingTV.setText(String.valueOf(movie.getRating()));
         descriptionTV.setText(movie.getSummary());
-//        final String url720 = movie.getUrl720p();
-//        String url1080 = movie.getUrl1080p();
-//        String url3d = movie.getUrl3d();
+        List<Torrent> torrents = movie.getTorrents();
 
-//        if (url720 == null)
-//            quality720Btn.setVisibility(View.GONE);
-//        if (url1080 == null)
-//            quality1080Btn.setVisibility(View.GONE);
-//        if (url3d == null)
-//            quality3dBtn.setVisibility(View.GONE);
+        for (Torrent t : torrents) {
+            String url = t.getUrl();
+            Log.v(LOG, url);
+        }
+
 
         final Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.addCategory(Intent.CATEGORY_DEFAULT);

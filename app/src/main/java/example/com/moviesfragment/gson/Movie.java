@@ -1,5 +1,8 @@
 package example.com.moviesfragment.gson;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
@@ -8,7 +11,7 @@ import java.util.List;
 /**
  * Created by jusuf on 28.8.2017.
  */
-public class Movie {
+public class Movie implements Parcelable {
 
     @SerializedName("id")
     @Expose
@@ -297,4 +300,13 @@ public class Movie {
         this.dateUploadedUnix = dateUploadedUnix;
     }
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+
+    }
 }
