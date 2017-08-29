@@ -1,96 +1,1 @@
-package example.com.moviesfragment;
-
-import android.app.ActionBar;
-import android.app.Activity;
-import android.content.Context;
-import android.content.Intent;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.os.AsyncTask;
-import android.os.Bundle;
-import android.view.View;
-import android.widget.ProgressBar;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-
-import com.facebook.stetho.Stetho;
-
-
-public class StarterActivity extends Activity {
-
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_starter);
-        Stetho.initializeWithDefaults(this);
-
-        if (isNetworkAvailable()) {
-            new GetMovies(getApplicationContext(), this).execute();
-        } else {
-            Intent intent = new Intent(StarterActivity.this, MainActivity.class);
-            startActivity(intent);
-            finish();
-        }
-    }
-
-    private boolean isNetworkAvailable() {
-        ConnectivityManager connectivityManager
-                = (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetworkInfo = connectivityManager.getActiveNetworkInfo();
-        return activeNetworkInfo != null && activeNetworkInfo.isConnected();
-    }
-}
-
-class GetMovies extends AsyncTask<String, Void, Void> {
-    private JsonParser jsonParser;
-    private Activity activity;
-    private Context context;
-    ProgressBar progressBar;
-    TextView progressBarTV;
-
-    public GetMovies(Context context, Activity activity) {
-        this.context = context;
-        this.activity = activity;
-    }
-
-    @Override
-    protected Void doInBackground(String... params) {
-        int pageNumber = 1;
-        int pages;
-        try {
-            jsonParser = new JsonParser(context);
-            String url = "https://yts.ag/api/v2/list_movies.json?limit=50&start=100";
-            pages = jsonParser.getJsonFromWeb(url);
-//            while (pageNumber <= pages) {
-//                jsonParser.getJsonFromWeb(url + "&page=" + pageNumber);
-//                pageNumber++;
-//            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-    @Override
-    protected void onPreExecute() {
-        super.onPreExecute();
-        progressBar = (ProgressBar) activity.findViewById(R.id.progressBar);
-        progressBar.setVisibility(View.VISIBLE);
-        progressBarTV = (TextView) activity.findViewById(R.id.progressBarTextView);
-        progressBarTV.setVisibility(View.VISIBLE);
-
-    }
-
-    @Override
-    protected void onPostExecute(Void aVoid) {
-        super.onPostExecute(aVoid);
-        progressBar.setVisibility(View.GONE);
-        progressBarTV.setVisibility(View.GONE);
-        Intent intent = new Intent(activity, MainActivity.class);
-        activity.startActivity(intent);
-        activity.finish();
-
-    }
-}
-
+package example.com.moviesfragment;import android.app.Activity;import android.content.Intent;import android.os.Bundle;import android.os.Handler;import android.util.Log;import android.widget.ProgressBar;import android.widget.Toast;import com.facebook.stetho.Stetho;import java.util.HashMap;import java.util.List;import example.com.moviesfragment.gson.Data;import example.com.moviesfragment.gson.Example;import example.com.moviesfragment.gson.Movie;import example.com.moviesfragment.gson.Torrent;import retrofit2.Call;import retrofit2.Callback;import retrofit2.Response;public class StarterActivity extends Activity {    MoviesDataSource moviesDataSource;    long resultId;    int currentPage;    YtsApi ytsApi;    public int totalPages;    public static final String LOG = StarterActivity.class.getSimpleName();    ProgressBar progressbar;    int movieCount;    @Override    protected void onCreate(Bundle savedInstanceState) {        super.onCreate(savedInstanceState);        moviesDataSource = new MoviesDataSource(this);        moviesDataSource.open();        setContentView(R.layout.activity_starter);        Stetho.initializeWithDefaults(this);        ytsApi = ApiClient.getClient().create(YtsApi.class);        loadPages(currentPage);        totalPages = movieCount / 50;        if (totalPages % 50 != 0)            totalPages++;        Handler handler = new Handler();        handler.postDelayed(new Runnable() {            @Override            public void run() {                totalPages = movieCount / 50;                if (totalPages % 50 != 0)                    totalPages++;                while (currentPage < totalPages) {                    currentPage++;                    loadPages(currentPage);                }            }        }, 1000);        Intent intent = new Intent(this, MainActivity.class);        startActivity(intent);        finish();    }    private void loadPages(int actualPage) {        Call<Example> call = ytsApi.getExampleCall(50, actualPage);        call.enqueue(new Callback<Example>() {            @Override            public void onResponse(Call<Example> call, retrofit2.Response<Example> response) {                fetchResults(response);            }            @Override            public void onFailure(Call<Example> call, Throwable t) {                Toast.makeText(StarterActivity.this, "Failed", Toast.LENGTH_SHORT).show();            }        });    }    private void fetchResults(Response<Example> response) {        Data data = response.body().getData();        List<Movie> movies = data.getMovies();        movieCount = data.getMovieCount();        Log.v(LOG, "movie count " + movieCount);        for (Movie movie : movies) {            HashMap<String, String> torrentMap = new HashMap<>();            HashMap<String, String> hashMap = new HashMap<>();            List<Torrent> torrents = movie.getTorrents();            StringBuilder gen = new StringBuilder();            int id = movie.getId();            String title = movie.getTitle();            String summary = movie.getSummary();            int year = movie.getYear();            String mediumImage = movie.getMediumCoverImage();            double rating = movie.getRating();            String trailerCode = movie.getYtTrailerCode();            List<String> genre = movie.getGenres();            for (String s : genre) {                gen.append(s);            }//                        for (Torrent torrent : torrents) {////                            String quality = torrent.getQuality();//                            String hash = torrent.getHash();//                            torrentMap.put(quality, torrent.getUrl());//                            hashMap.put(quality, hash);//                        }            resultId = moviesDataSource.createMovie(id, title, summary, year, mediumImage, rating, trailerCode, gen.toString(), torrentMap, hashMap);        }    }    @Override    protected void onPause() {        super.onPause();        moviesDataSource.close();    }}
