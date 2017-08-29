@@ -160,8 +160,6 @@ public class HomeActivity extends ListActivity {
     protected void onPause() {
         super.onPause();
         firstItemId = listView.getFirstVisiblePosition();
-        Log.v(LOG, "first item id " + firstItemId);
-        moviesDataSource.close();
     }
 
     @Override

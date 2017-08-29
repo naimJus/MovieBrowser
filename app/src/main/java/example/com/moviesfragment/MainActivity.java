@@ -17,6 +17,7 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
+        Stetho.initializeWithDefaults(this);
 
         browseBtn = (Button) findViewById(R.id.browseBtn);
         recentBtn = (Button) findViewById(R.id.recentBtn);
