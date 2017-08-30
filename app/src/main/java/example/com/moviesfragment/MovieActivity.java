@@ -45,10 +45,11 @@ public class MovieActivity extends YouTubeBaseActivity {
         //unwrap the bundle and get the movie;
         Bundle b = getIntent().getBundleExtra(HomeActivity.BUNDLE);
         movie = b.getParcelable(HomeActivity.POSITION);
+        Log.v(LOG, movie.toString());
 
         nameTV.setText(movie.getTitle());
-        yearTV.setText(String.valueOf(movie.getYear()));
-        ratingTV.setText(String.valueOf(movie.getRating()));
+        yearTV.setText(movie.getYear().toString());
+        ratingTV.setText(movie.getRating().toString());
         descriptionTV.setText(movie.getSummary());
         List<Torrent> torrents = movie.getTorrents();
 
