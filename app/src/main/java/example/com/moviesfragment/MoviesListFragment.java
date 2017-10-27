@@ -30,7 +30,6 @@ public class MoviesListFragment extends ListFragment {
     ListView listView;
     List<Movie> getMovies;
     String filter = "recent";
-    Button loadMoreBtn;
     int lastItemId;
     int firstItemId;
 
