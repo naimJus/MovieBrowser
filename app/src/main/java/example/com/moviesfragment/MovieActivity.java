@@ -43,8 +43,8 @@ public class MovieActivity extends YouTubeBaseActivity {
 
         // get the bundle from the intent
         //unwrap the bundle and get the movie;
-        Bundle b = getIntent().getBundleExtra(HomeActivity.BUNDLE);
-        movie = b.getParcelable(HomeActivity.POSITION);
+        Bundle b = getIntent().getBundleExtra(MoviesListFragment.BUNDLE);
+        movie = b.getParcelable(MoviesListFragment.POSITION);
         Log.v(LOG, movie.toString());
 
         nameTV.setText(movie.getTitle());

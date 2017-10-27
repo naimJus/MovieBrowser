@@ -1,0 +1,281 @@
+[33mcommit f1b1c60216e021ca9a4b1c4cabd2db96450a531b[m[33m ([m[1;36mHEAD -> [m[1;32mTabbedApp[m[33m, [m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmaster[m[33m)[m
+Author: Naim Jusufi <jusufi.naim@outlook.com>
+Date:   Thu Oct 26 15:37:48 2017 +0200
+
+    add progressbar and make the app unusable if internet is not available
+
+[33mcommit 3de80f7f40a96cff2e1c28e2486dd300ba540828[m
+Author: naim <jusufi.naim@outlook.com>
+Date:   Tue Sep 26 10:06:25 2017 +0200
+
+    Increase the delay millis
+
+[33mcommit 00a021157a9f3fdb422e55e8ccd61eb4f4d0a7fb[m
+Author: naim <jusufi.naim@outlook.com>
+Date:   Wed Aug 30 09:37:09 2017 +0200
+
+    Fix for Movie Parcelable class write and read to/from parcel year and rating field.
+
+[33mcommit f28f9b184405d03586ad9b7baec8384e9e3d3541[m
+Author: naim <jusufi.naim@outlook.com>
+Date:   Tue Aug 29 16:58:45 2017 +0200
+
+    Database fix
+
+[33mcommit fc6517ea5a47fed1ad551ff0f4d5565e96323244[m
+Author: naim <jusufi.naim@outlook.com>
+Date:   Tue Aug 29 16:24:22 2017 +0200
+
+    Make retrofit call on another thread.
+
+[33mcommit c10f2abc4d6c13fc7da504c2a4d7a9b891ee5b9d[m
+Author: naim <jusufi.naim@outlook.com>
+Date:   Tue Aug 29 11:42:46 2017 +0200
+
+    Load all pages using Retrofit
+
+[33mcommit 154cea0f38611438e2547fedaa50f369de8e2329[m
+Author: naim <jusufi.naim@outlook.com>
+Date:   Mon Aug 28 20:24:39 2017 +0200
+
+    fix Parcelable classes
+
+[33mcommit 233a80d34231579736b46c84fe336c42b5e5f046[m
+Author: naim <jusufi.naim@outlook.com>
+Date:   Mon Aug 28 20:08:20 2017 +0200
+
+    Make gson package Parcelable
+
+[33mcommit 1356723bc83bd728c17f26c992d6467cd61ab63b[m
+Author: naim <jusufi.naim@outlook.com>
+Date:   Mon Aug 28 13:47:59 2017 +0200
+
+    Make Movie Parcelable
+
+[33mcommit 74cd829c1e8c55e973826475b36819a76428baa6[m
+Author: naim <jusufi.naim@outlook.com>
+Date:   Mon Aug 28 12:55:25 2017 +0200
+
+    Gson library
+
+[33mcommit 064a35869b079b077fa43e32c2c9b6638e219d07[m
+Author: naim <jusufi.naim@outlook.com>
+Date:   Fri Aug 25 10:22:08 2017 +0200
+
+    Fix database cursor
+
+[33mcommit ca87f1e7dfb1b72a0a8767e0168047a55ef120ee[m
+Author: naim <jusufi.naim@outlook.com>
+Date:   Wed Aug 23 09:59:31 2017 +0200
+
+    Fix columns
+
+[33mcommit 8da717877a38c2d6ee4694b52a24da641e7a8bfe[m
+Author: naim <jusufi.naim@outlook.com>
+Date:   Wed Aug 23 09:50:56 2017 +0200
+
+    Fix search
+
+[33mcommit b82cf04256097f3774ebe9bd65cad9efd030f803[m
+Author: naim <jusufi.naim@outlook.com>
+Date:   Tue Aug 22 11:42:21 2017 +0200
+
+    Get Hash Values from Web
+
+[33mcommit d5ec5cd942ad02b1d83e24dc7ef9bbd4f016eef0[m
+Author: naim <jusufi.naim@outlook.com>
+Date:   Tue Aug 22 10:47:06 2017 +0200
+
+    Download Torrents
+
+[33mcommit 07e25dd3a7c3b3cef737b456abe84b176612f22e[m
+Author: naim <jusufi.naim@outlook.com>
+Date:   Sat Aug 19 17:50:14 2017 +0200
+
+    Fix search
+
+[33mcommit 32f87ba80809b2ad3095bdef3ddc5d20ae3c1b05[m
+Author: naim <jusufi.naim@outlook.com>
+Date:   Sat Aug 19 14:01:19 2017 +0200
+
+    Add new Activity to show search results
+
+[33mcommit dcff05b72629f7ef81c19c99a5868e7ab05e37e9[m
+Author: naim <jusufi.naim@outlook.com>
+Date:   Sat Aug 19 14:00:32 2017 +0200
+
+    Set up search parameters
+
+[33mcommit 9f02d155c9fb2228a7a25831c6d50605b5b60cef[m
+Author: naim <jusufi.naim@outlook.com>
+Date:   Sat Aug 19 13:59:22 2017 +0200
+
+    Get Quality from web and add it to Database
+
+[33mcommit d73a27957497666fc9fc72511d376f18b1818c46[m
+Author: naim <jusufi.naim@outlook.com>
+Date:   Fri Aug 18 11:34:31 2017 +0200
+
+    Add Fields for torrent links
+
+[33mcommit 10470ee7867456ca9e9e84c4428b7e013f94d8eb[m
+Author: naim <jusufi.naim@outlook.com>
+Date:   Fri Aug 18 11:33:26 2017 +0200
+
+    Add torrent links to database
+
+[33mcommit 8033eaaa88a8889d55accac4374d51d2c46c9510[m
+Author: naim <jusufi.naim@outlook.com>
+Date:   Fri Aug 18 11:32:59 2017 +0200
+
+    fetch torrents from Web
+
+[33mcommit 7c3c9a2297a895ce146a2ee893c280b1c97684a5[m
+Author: naim <jusufi.naim@outlook.com>
+Date:   Fri Aug 18 10:16:11 2017 +0200
+
+    Include torrent fields in Database
+
+[33mcommit c65d22d964e3135da23be5ca3fdf5b23c27af8f5[m
+Author: naim <jusufi.naim@outlook.com>
+Date:   Thu Aug 17 13:49:53 2017 +0200
+
+    Add Stetho library for debugging
+
+[33mcommit 84d8f38daa21f77f4dc9b8b43f692115baf5540d[m
+Author: naim <jusufi.naim@outlook.com>
+Date:   Wed Aug 16 12:21:02 2017 +0200
+
+    Add OderBy Spinner
+
+[33mcommit 1e1028cab09e9e68289cad7e435783a2000bbe88[m
+Author: naim <jusufi.naim@outlook.com>
+Date:   Wed Aug 16 11:16:44 2017 +0200
+
+    Configure Search
+
+[33mcommit f298e4815b49b34b4efd88125f9a5125e44f6b8e[m
+Author: naim <jusufi.naim@outlook.com>
+Date:   Wed Aug 16 10:56:03 2017 +0200
+
+    Configure Search by name
+
+[33mcommit f70ba41a5eff30002242c6f1a6d6b8379cd1c9b9[m
+Author: naim <jusufi.naim@outlook.com>
+Date:   Wed Aug 16 09:59:55 2017 +0200
+
+    fix List start position
+
+[33mcommit ca3aa72ae1303d6e08a93368269671e216000fc5[m
+Author: naim <jusufi.naim@outlook.com>
+Date:   Wed Aug 16 09:54:34 2017 +0200
+
+    List start position
+
+[33mcommit 2d651497451f569d515c4bf3aadd1083dd615628[m
+Author: naim <jusufi.naim@outlook.com>
+Date:   Tue Aug 15 16:41:14 2017 +0200
+
+    Add another 50 movies to the list with the button click
+
+[33mcommit 64170a5bc24b7ec834d37477361f28325157563d[m
+Author: naim <jusufi.naim@outlook.com>
+Date:   Tue Aug 15 16:40:48 2017 +0200
+
+    Limit the numbers that come from the database
+
+[33mcommit 5099eceda95ed95dc66c6b90aa3f855f50c1a522[m
+Author: naim <jusufi.naim@outlook.com>
+Date:   Tue Aug 15 11:16:36 2017 +0200
+
+    Insert only if movie doesn't exist
+
+[33mcommit 0034d6808b8dd76fe15f91ab6a6d8204e7bd9c18[m
+Author: naim <jusufi.naim@outlook.com>
+Date:   Tue Aug 15 11:15:39 2017 +0200
+
+    ProgressBar fix
+
+[33mcommit 41dcc71284f2dccd01936945998b97b382f43bbe[m
+Author: naim <jusufi.naim@outlook.com>
+Date:   Tue Aug 15 10:48:52 2017 +0200
+
+    Add progress bar
+
+[33mcommit 1957fcf90f62ea6c0dbab9b6a77bd6dcae066440[m
+Author: naim <jusufi.naim@outlook.com>
+Date:   Tue Aug 15 00:52:36 2017 +0200
+
+    Activity movie split layout 50/50
+
+[33mcommit 3a17b627e084125a647c98908574629882888786[m
+Author: naim <jusufi.naim@outlook.com>
+Date:   Tue Aug 15 00:43:35 2017 +0200
+
+    Download all the movies (multiple getDataFromUrl() call)
+
+[33mcommit 42c9c67eda5525da32ea88bc753465095eea3cae[m
+Author: naim <jusufi.naim@outlook.com>
+Date:   Wed Jul 26 14:17:52 2017 +0200
+
+    Download all the movies
+
+[33mcommit 7ebe8e73668cec68bc48e602331c6c38922e8a4a[m
+Author: naim <jusufi.naim@outlook.com>
+Date:   Wed Jul 19 14:49:34 2017 +0200
+
+    Filter configuration
+
+[33mcommit 4b17e7e43cb5b1da6ded8b2288465fa564af7c40[m
+Author: naim <jusufi.naim@outlook.com>
+Date:   Tue Jul 18 15:09:49 2017 +0200
+
+    Adding new movies and replacing the old ones
+
+[33mcommit ec42844da42284c7f44dc2e305ae1115c68016d4[m
+Author: naim <jusufi.naim@outlook.com>
+Date:   Tue Jul 18 11:32:23 2017 +0200
+
+    Get the top rated movies
+
+[33mcommit 99308978d99d946cbdf6ee839974bcc4de93e1c9[m
+Author: naim <jusufi.naim@outlook.com>
+Date:   Mon Jul 17 15:38:08 2017 +0200
+
+    Add the new movies if they are not in the database
+
+[33mcommit cf52d08f8b79b0650b890e88b0ae7d03d6c33378[m
+Author: naim <jusufi.naim@outlook.com>
+Date:   Mon Jul 17 15:36:36 2017 +0200
+
+    fetch the movies every time the app starts if there is internet connection
+
+[33mcommit 7f05dd1ed9ed86fe9b55e36e7ba9c44aaedc602c[m
+Author: naim <jusufi.naim@outlook.com>
+Date:   Fri Jul 14 15:45:26 2017 +0200
+
+    Main Activity listeners
+
+[33mcommit 8ddbe461da07f369aa0b6f76f1ea0cde6806c40b[m
+Author: naim <jusufi.naim@outlook.com>
+Date:   Thu Jul 13 11:10:59 2017 +0200
+
+    Design MainActivity
+
+[33mcommit 19928e5836ba33c0e47a0010d1ad444264deeb7e[m
+Author: naim <jusufi.naim@outlook.com>
+Date:   Thu Jul 13 10:56:51 2017 +0200
+
+    Add MainActivity "Show right after StarterActivity(which fetches movies)"
+
+[33mcommit 599aaad5b6fec72714eab182d74a5f0bb17671ba[m
+Author: naim <jusufi.naim@outlook.com>
+Date:   Thu Jul 13 10:54:52 2017 +0200
+
+    Add SearchActivity
+
+[33mcommit 4f516b877ff6b31a45c9351c6795d11431c3ae3b[m
+Author: naim <jusufi.naim@outlook.com>
+Date:   Wed Jul 12 10:36:13 2017 +0200
+
+    Change Pro

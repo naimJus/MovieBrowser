@@ -4,7 +4,6 @@ import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -18,9 +17,9 @@ import java.util.List;
 
 import example.com.moviesfragment.gson.Movie;
 
-public class HomeActivity extends ListActivity {
+public class MoviesListFragment extends ListActivity {
 
-    public static final String LOG = "HomeActivity";
+    public static final String LOG = "MoviesListFragment";
     public static final String POSITION = ".Model.Movie";
     public static final String BUNDLE = "bundle";
     private static final String FIRSTITEMID = "firstItemId";
@@ -82,7 +81,7 @@ public class HomeActivity extends ListActivity {
                 Movie movie = getMovies.get(position);
                 Bundle b = new Bundle();
                 b.putParcelable(POSITION, movie);
-                Intent intent = new Intent(HomeActivity.this, MovieActivity.class);
+                Intent intent = new Intent(MoviesListFragment.this, MovieActivity.class);
                 intent.putExtra(BUNDLE, b);
                 startActivity(intent);
             }
