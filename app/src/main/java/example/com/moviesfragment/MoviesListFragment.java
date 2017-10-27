@@ -1,14 +1,12 @@
 package example.com.moviesfragment;
 
-import android.app.ListActivity;
-import android.content.Context;
-import android.content.Intent;
+import android.app.ListFragment;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ListView;
@@ -17,35 +15,42 @@ import java.util.List;
 
 import example.com.moviesfragment.gson.Movie;
 
-public class MoviesListFragment extends ListActivity {
 
-    public static final String LOG = "MoviesListFragment";
+public class MoviesListFragment extends ListFragment {
+
+    public static final String TAG = "MoviesListFragmentTag";
+    public static final String LOG = MoviesListFragment.class.getSimpleName();
     public static final String POSITION = ".Model.Movie";
     public static final String BUNDLE = "bundle";
     private static final String FIRSTITEMID = "firstItemId";
     private static final String SORTED = "filter";
     private static final String ITEMID = "itemId";
+    static int limit = 50;
     MoviesDataSource moviesDataSource;
     ListView listView;
     List<Movie> getMovies;
-    String filter;
+    String filter = "recent";
     Button loadMoreBtn;
-    static int limit = 50;
     int lastItemId;
     int firstItemId;
 
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        moviesDataSource = new MoviesDataSource(getActivity().getApplicationContext());
+        moviesDataSource.open();
+        setHasOptionsMenu(true);
+
+//        Temporarily until the savedinstaceState is fixed,
+// when its fixed the filter should get the value from previous state if not it will be randomly assigned
+        filter = MovieSQLiteHelper.KEY_NAME + " DESC";
+        getMovies = moviesDataSource.getAllMovies();
+        return super.onCreateView(inflater, container, savedInstanceState);
+
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        listView = getListView();
-        moviesDataSource = new MoviesDataSource(this);
-        moviesDataSource.open();
-        View footerView = ((LayoutInflater) this.getSystemService(Context.LAYOUT_INFLATER_SERVICE)).inflate(R.layout.footer_layout, null, false);
-        listView.addFooterView(footerView);
-
-
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
         if (savedInstanceState != null) {
             lastItemId = savedInstanceState.getInt(ITEMID);
             filter = savedInstanceState.getString(SORTED);
@@ -59,17 +64,14 @@ public class MoviesListFragment extends ListActivity {
             }
         } else {
             firstItemId = listView.getFirstVisiblePosition();
-            Bundle b = getIntent().getExtras();
-            if (b != null) {
-                if (b.containsKey(MainActivity.FILTER)) {
-                    filter = b.getString(MainActivity.FILTER);
-                    getMovies = moviesDataSource.sortBy(filter);
-                }
-            } else {
-                getMovies = moviesDataSource.getAllMovies();
-            }
+            getMovies = moviesDataSource.getAllMovies();
         }
+    }
 
+    @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        listView = getListView();
+        refreshAdapter();
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -81,25 +83,16 @@ public class MoviesListFragment extends ListActivity {
                 Movie movie = getMovies.get(position);
                 Bundle b = new Bundle();
                 b.putParcelable(POSITION, movie);
-                Intent intent = new Intent(MoviesListFragment.this, MovieActivity.class);
-                intent.putExtra(BUNDLE, b);
-                startActivity(intent);
+//                Intent intent = new Intent(MoviesListFragment.this, MovieActivity.class);
+//                intent.putExtra(BUNDLE, b);
+//                startActivity(intent);
             }
         });
-        loadMoreBtn = (Button) findViewById(R.id.loadMoreButton);
-        loadMoreBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                lastItemId = listView.getCount() - 1;
-                limit = limit + 50;
-                getMovies = moviesDataSource.sortAndLimit(filter, String.valueOf(limit));
-                refreshAdapter();
-            }
-        });
+        super.onViewCreated(view, savedInstanceState);
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState) {
+    public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         outState.putString(SORTED, filter);
         outState.putInt(ITEMID, lastItemId);
@@ -107,18 +100,23 @@ public class MoviesListFragment extends ListActivity {
     }
 
     @Override
-    protected void onRestart() {
-        super.onRestart();
+    public void onViewStateRestored(Bundle savedInstanceState) {
+        super.onViewStateRestored(savedInstanceState);
         refreshAdapter();
-
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.menu, menu);
-        return true;
-    }
+    /*
+             loadMoreBtn = (Button) findViewById(R.id.loadMoreButton);
+             loadMoreBtn.setOnClickListener(new View.OnClickListener() {
+                 @Override
+                 public void onClick(View v) {
+                     lastItemId = listView.getCount() - 1;
+                     limit = limit + 50;
+                     getMovies = moviesDataSource.sortAndLimit(filter, String.valueOf(limit));
+                     refreshAdapter();
+                 }
+             });
+            }*/
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -156,27 +154,31 @@ public class MoviesListFragment extends ListActivity {
     }
 
     @Override
-    protected void onPause() {
+    public void onPause() {
         super.onPause();
         firstItemId = listView.getFirstVisiblePosition();
     }
 
     @Override
-    protected void onResume() {
+    public void onResume() {
         super.onResume();
+        moviesDataSource.open();
         refreshAdapter();
         listView.setSelectionFromTop(firstItemId, 0);
-        moviesDataSource.open();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        moviesDataSource.close();
     }
 
     public void refreshAdapter() {
-        MoviesAdapter moviesAdapter = new MoviesAdapter(this, getMovies);
+        MoviesAdapter moviesAdapter = new MoviesAdapter(getActivity().getApplicationContext(), getMovies);
         setListAdapter(moviesAdapter);
         if (lastItemId != 0) {
             listView.setSelectionFromTop(lastItemId, 0);
         }
-//        if (firstItemId != 0) {
-//            listView.setSelectionFromTop(firstItemId, 0);
-//        }
+
     }
 }
