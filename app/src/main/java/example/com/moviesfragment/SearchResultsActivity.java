@@ -3,6 +3,7 @@ package example.com.moviesfragment;
 import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -13,13 +14,13 @@ import java.util.List;
 import example.com.moviesfragment.gson.Movie;
 
 public class SearchResultsActivity extends ListActivity {
+    public static final String POSITION = ".Model.Movie";
+    public static final String BUNDLE = "bundle";
+    private static final String FIRSTITEMID = "firstItemId";
     ListView listView;
     MoviesDataSource moviesDataSource;
     List<Movie> getMovies;
     HashMap<String, String> sqlParams;
-    public static final String POSITION = ".Model.Movie";
-    public static final String BUNDLE = "bundle";
-    private static final String FIRSTITEMID = "firstItemId";
     int firstItemId;
 
     @Override
@@ -39,8 +40,9 @@ public class SearchResultsActivity extends ListActivity {
             getMovies = moviesDataSource.searchMovies(sqlParams);
         } else
             getMovies = moviesDataSource.getAllMovies();
-        moviesDataSource.close();
+//        moviesDataSource.close();
         refreshAdapter();
+        Log.v("SearchResultActivity", sqlParams.toString());
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

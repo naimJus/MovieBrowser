@@ -14,9 +14,9 @@ import example.com.moviesfragment.gson.Movie;
 import example.com.moviesfragment.gson.Torrent;
 
 public class MoviesDataSource {
+    private static final String LOG = MoviesDataSource.class.getSimpleName();
     private SQLiteDatabase database;
     private MovieSQLiteHelper dbHelper;
-    private static final String LOG = MoviesDataSource.class.getSimpleName();
 
     MoviesDataSource(Context context) {
         dbHelper = MovieSQLiteHelper.getsInstance(context);
@@ -128,6 +128,11 @@ public class MoviesDataSource {
         values.put(MovieSQLiteHelper.KEY_HASH1080P, hashValues.get("1080p"));
         values.put(MovieSQLiteHelper.KEY_HASH3D, hashValues.get("3D"));
         resultId = database.insertWithOnConflict(MovieSQLiteHelper.TABLE_NAME, null, values, SQLiteDatabase.CONFLICT_IGNORE);
+//        try {
+//            resultId = database.insertOrThrow(MovieSQLiteHelper.TABLE_NAME, null, values);
+//        }catch (SQLiteException e){
+//            e.printStackTrace();
+//        }
         return resultId;
     }
 }

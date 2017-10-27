@@ -54,13 +54,17 @@ public class SqlStatements {
     }
 
     public String generateQualitySql(String s) {
-        String sql;
+        String sql = null;
         if (s.equalsIgnoreCase("All")) {
-            sql = MovieSQLiteHelper.KEY_QUALITY + " IS NOT NULL";
-        } else {
-            sql = MovieSQLiteHelper.KEY_QUALITY + " LIKE '%" + s + "%' ";
+            sql = MovieSQLiteHelper.KEY_720P + " IS NOT NULL"
+                    + " AND " +
+                    MovieSQLiteHelper.KEY_1080P + " IS NOT NULL"
+                    + " AND " +
+                    MovieSQLiteHelper.KEY_3D + " IS NOT NULL";
+        } else if (s.equalsIgnoreCase("720p")) {
+            sql = MovieSQLiteHelper.KEY_720P + " IS NOT NULL";
         }
-        Log.v("SQL ", sql);
+//        Log.v("SQL ", sql);
         return sql;
     }
 
