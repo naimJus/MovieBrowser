@@ -26,24 +26,13 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-
         setContentView(R.layout.activity_main);
         Stetho.initializeWithDefaults(this);
-
-
-/*//      Display the recent movies
-        FragmentManager manager = getFragmentManager();
-        Fragment moviesListFragment = new MoviesListFragment();
-        FragmentTransaction fragmentTransaction = manager.beginTransaction();
-        fragmentTransaction.replace(R.id.fragment_container, moviesListFragment);
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
-        */
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
         viewPager = (ViewPager) findViewById(R.id.viewpager);
         setupViewPager(viewPager);
@@ -54,9 +43,9 @@ public class MainActivity extends AppCompatActivity {
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new MoviesListFragment(), "ONE");
-        adapter.addFragment(new MoviesListFragment(), "TWO");
-        adapter.addFragment(new MoviesListFragment(), "THREE");
+        adapter.addFragment(new MoviesListFragment(), "Recent Movies");
+        adapter.addFragment(new MoviesListFragment(), "Top Rated");
+        adapter.addFragment(new SearchActivity(), "Search Movies");
         viewPager.setAdapter(adapter);
     }
 

@@ -8,7 +8,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ListView;
 
 import java.util.List;
@@ -39,6 +38,7 @@ public class MoviesListFragment extends ListFragment {
         moviesDataSource.open();
         setHasOptionsMenu(true);
 
+
 //        Temporarily until the savedinstaceState is fixed,
 // when its fixed the filter should get the value from previous state if not it will be randomly assigned
         filter = MovieSQLiteHelper.KEY_NAME + " DESC";
@@ -66,6 +66,7 @@ public class MoviesListFragment extends ListFragment {
             getMovies = moviesDataSource.getAllMovies();
         }
     }
+
 
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
@@ -161,15 +162,8 @@ public class MoviesListFragment extends ListFragment {
     @Override
     public void onResume() {
         super.onResume();
-        moviesDataSource.open();
         refreshAdapter();
         listView.setSelectionFromTop(firstItemId, 0);
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-        moviesDataSource.close();
     }
 
     public void refreshAdapter() {

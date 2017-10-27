@@ -1,37 +1,44 @@
 package example.com.moviesfragment;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
 import java.util.HashMap;
 
-public class SearchActivity extends Activity {
+public class SearchActivity extends Fragment {
 
+    public static final String SEARCH = "search";
+    private static final String LOG = SearchActivity.class.getSimpleName();
     Spinner qualitySpinner, genreSpinner, ratingSpinner, orderBySpinner;
     EditText nameET;
     Button searchBtn;
-    public static final String SEARCH = "search";
-    private static final String LOG = SearchActivity.class.getSimpleName();
     HashMap<String, String> searchParams = new HashMap<>(5);
     SqlStatements sqlStatements;
+    MoviesDataSource moviesDataSource;
 
+
+    @Nullable
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search);
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.activity_search, container, false);
+        moviesDataSource = new MoviesDataSource(getActivity().getApplicationContext());
+        moviesDataSource.open();
         sqlStatements = new SqlStatements();
 
-        qualitySpinner = (Spinner) findViewById(R.id.qualitySpinner);
-        genreSpinner = (Spinner) findViewById(R.id.genreSpinner);
-        ratingSpinner = (Spinner) findViewById(R.id.ratingSpinner);
-        orderBySpinner = (Spinner) findViewById(R.id.orderBySpinner);
-        searchBtn = (Button) findViewById(R.id.searchBtn);
-        nameET = (EditText) findViewById(R.id.nameET);
+        qualitySpinner = (Spinner) view.findViewById(R.id.qualitySpinner);
+        genreSpinner = (Spinner) view.findViewById(R.id.genreSpinner);
+        ratingSpinner = (Spinner) view.findViewById(R.id.ratingSpinner);
+        orderBySpinner = (Spinner) view.findViewById(R.id.orderBySpinner);
+        searchBtn = (Button) view.findViewById(R.id.searchBtn);
+        nameET = (EditText) view.findViewById(R.id.nameET);
 
         searchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -64,13 +71,12 @@ public class SearchActivity extends Activity {
                 searchParams.put("Order", orderSql);
 
 
-                Intent intent = new Intent(SearchActivity.this, SearchResultsActivity.class);
+                Intent intent = new Intent(getActivity(), SearchResultsActivity.class);
                 intent.putExtra(SEARCH, searchParams);
                 startActivity(intent);
+
             }
         });
-
-
+        return view;
     }
 }
-
