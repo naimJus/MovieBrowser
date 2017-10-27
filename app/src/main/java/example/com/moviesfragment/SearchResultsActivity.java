@@ -35,7 +35,7 @@ public class SearchResultsActivity extends ListActivity {
         moviesDataSource.open();
         Intent i = getIntent();
         if (i != null) {
-            sqlParams = (HashMap<String, String>) i.getSerializableExtra(SearchActivity.SEARCH);
+            sqlParams = (HashMap<String, String>) i.getSerializableExtra(SearchFragment.SEARCH);
             getMovies = moviesDataSource.searchMovies(sqlParams);
         } else
             getMovies = moviesDataSource.getAllMovies();

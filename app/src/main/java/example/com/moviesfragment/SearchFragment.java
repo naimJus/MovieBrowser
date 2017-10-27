@@ -13,10 +13,10 @@ import android.widget.Spinner;
 
 import java.util.HashMap;
 
-public class SearchActivity extends Fragment {
+public class SearchFragment extends Fragment {
 
     public static final String SEARCH = "search";
-    private static final String LOG = SearchActivity.class.getSimpleName();
+    private static final String LOG = SearchFragment.class.getSimpleName();
     Spinner qualitySpinner, genreSpinner, ratingSpinner, orderBySpinner;
     EditText nameET;
     Button searchBtn;
@@ -28,7 +28,7 @@ public class SearchActivity extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.activity_search, container, false);
+        View view = inflater.inflate(R.layout.fragment_search, container, false);
         moviesDataSource = new MoviesDataSource(getActivity().getApplicationContext());
         moviesDataSource.open();
         sqlStatements = new SqlStatements();

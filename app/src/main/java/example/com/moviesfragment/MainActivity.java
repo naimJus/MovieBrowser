@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(new MoviesListFragment(), "Recent Movies");
         adapter.addFragment(new MoviesListFragment(), "Top Rated");
-        adapter.addFragment(new SearchActivity(), "Search Movies");
+        adapter.addFragment(new SearchFragment(), "Search Movies");
         viewPager.setAdapter(adapter);
     }
 
