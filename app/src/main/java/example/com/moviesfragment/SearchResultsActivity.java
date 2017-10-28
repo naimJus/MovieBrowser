@@ -149,7 +149,6 @@ public class SearchResultsActivity extends AppCompatActivity {
     protected void onPause() {
         super.onPause();
         firstItemId = listView.getFirstVisiblePosition();
-        moviesDataSource.close();
     }
 
     @Override
