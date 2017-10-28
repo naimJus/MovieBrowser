@@ -43,8 +43,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void setupViewPager(ViewPager viewPager) {
         ViewPagerAdapter adapter = new ViewPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new MoviesListFragment(), "Recent Movies");
-        adapter.addFragment(new MoviesListFragment(), "Top Rated");
+        adapter.addFragment(new MoviesListFragment(), "List Movies");
+//        adapter.addFragment(new MoviesListFragment(), "Favorite Movies");
         adapter.addFragment(new SearchFragment(), "Search Movies");
         viewPager.setAdapter(adapter);
     }

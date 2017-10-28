@@ -1,9 +1,13 @@
 package example.com.moviesfragment;
 
-import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
@@ -13,7 +17,7 @@ import java.util.List;
 
 import example.com.moviesfragment.gson.Movie;
 
-public class SearchResultsActivity extends ListActivity {
+public class SearchResultsActivity extends AppCompatActivity {
     public static final String POSITION = ".Model.Movie";
     public static final String BUNDLE = "bundle";
     private static final String FIRSTITEMID = "firstItemId";
@@ -22,25 +26,36 @@ public class SearchResultsActivity extends ListActivity {
     List<Movie> getMovies;
     HashMap<String, String> sqlParams;
     int firstItemId;
+    String orderBy;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_search_results);
 
         if (savedInstanceState != null) {
             firstItemId = savedInstanceState.getInt(FIRSTITEMID);
         }
 
-        listView = getListView();
+        Toolbar myToolbar = (Toolbar) findViewById(R.id.searchResultToolbar);
+        setSupportActionBar(myToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        listView = (ListView) findViewById(R.id.list_results);
         moviesDataSource = new MoviesDataSource(this);
         moviesDataSource.open();
+
+
         Intent i = getIntent();
         if (i != null) {
             sqlParams = (HashMap<String, String>) i.getSerializableExtra(SearchFragment.SEARCH);
             getMovies = moviesDataSource.searchMovies(sqlParams);
-        } else
+        } else {
             getMovies = moviesDataSource.getAllMovies();
-//        moviesDataSource.close();
+        }
+        orderBy = sqlParams.get("Order");
+
         refreshAdapter();
         Log.v("SearchResultActivity", sqlParams.toString());
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -62,6 +77,48 @@ public class SearchResultsActivity extends ListActivity {
     }
 
     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.sortByName:
+                if (sqlParams.get("Order").equals(MovieSQLiteHelper.KEY_NAME + " ASC")) {
+                    sqlParams.put("Order", MovieSQLiteHelper.KEY_NAME + " DESC");
+                } else {
+                    sqlParams.put("Order", MovieSQLiteHelper.KEY_NAME + " ASC");
+                }
+                getMovies = moviesDataSource.searchMovies(sqlParams);
+                refreshAdapter();
+                return true;
+            case R.id.sortByRating:
+                if (sqlParams.get("Order").equals(MovieSQLiteHelper.KEY_RATING + " ASC")) {
+                    sqlParams.put("Order", MovieSQLiteHelper.KEY_RATING + " DESC");
+                } else {
+                    sqlParams.put("Order", MovieSQLiteHelper.KEY_RATING + " ASC");
+                }
+                getMovies = moviesDataSource.searchMovies(sqlParams);
+                refreshAdapter();
+                return true;
+            case R.id.sortByYear:
+                if (sqlParams.get("Order").equals(MovieSQLiteHelper.KEY_YEAR + " ASC")) {
+                    sqlParams.put("Order", MovieSQLiteHelper.KEY_YEAR + " DESC");
+                } else {
+                    sqlParams.put("Order", MovieSQLiteHelper.KEY_YEAR + " ASC");
+                }
+                getMovies = moviesDataSource.searchMovies(sqlParams);
+                refreshAdapter();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater menuInflater = getMenuInflater();
+        menuInflater.inflate(R.menu.menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
     protected void onPause() {
         super.onPause();
         firstItemId = listView.getFirstVisiblePosition();
@@ -77,7 +134,7 @@ public class SearchResultsActivity extends ListActivity {
 
     public void refreshAdapter() {
         MoviesAdapter moviesAdapter = new MoviesAdapter(this, getMovies);
-        setListAdapter(moviesAdapter);
+        listView.setAdapter(moviesAdapter);
         if (firstItemId != 0)
             listView.setSelectionFromTop(firstItemId, 0);
     }
