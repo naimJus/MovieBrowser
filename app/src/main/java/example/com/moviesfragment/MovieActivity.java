@@ -1,9 +1,7 @@
 package example.com.moviesfragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
@@ -19,13 +17,13 @@ import example.com.moviesfragment.gson.Torrent;
 
 public class MovieActivity extends YouTubeBaseActivity {
 
+    private static final String YOUTUBE_KEY = "AIzaSyBp9dpHGyl_0MUM8z_SwKPXeWEabVlUSKk";
+    private static final String LOG = MovieActivity.class.getSimpleName();
     private Movie movie;
     private TextView nameTV, yearTV, ratingTV, descriptionTV;
     private YouTubePlayerView youTubePlayerView;
     private YouTubePlayer.OnInitializedListener initializedListener;
-    private static final String YOUTUBE_KEY = "AIzaSyBp9dpHGyl_0MUM8z_SwKPXeWEabVlUSKk";
     private Button quality720Btn, quality1080Btn, quality3dBtn;
-    private static final String LOG = MovieActivity.class.getSimpleName();
 
     @Override
 
@@ -54,16 +52,6 @@ public class MovieActivity extends YouTubeBaseActivity {
         List<Torrent> torrents = movie.getTorrents();
 
 
-        final Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.addCategory(Intent.CATEGORY_DEFAULT);
-
-        quality720Btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                intent.setData(Uri.parse(url720));
-                startActivity(intent);
-            }
-        });
         youTubePlayerView = (YouTubePlayerView) findViewById(R.id.playerYouTube);
         initializedListener = new YouTubePlayer.OnInitializedListener() {
             @Override

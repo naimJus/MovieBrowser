@@ -2,6 +2,7 @@ package example.com.moviesfragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -41,6 +42,7 @@ public class SearchResultsActivity extends AppCompatActivity {
         Toolbar myToolbar = (Toolbar) findViewById(R.id.searchResultToolbar);
         setSupportActionBar(myToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
 
         listView = (ListView) findViewById(R.id.list_results);
         moviesDataSource = new MoviesDataSource(this);
@@ -74,6 +76,27 @@ public class SearchResultsActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+//        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+//
+//            public void onScrollStateChanged(AbsListView view, int scrollState) {
+//
+//
+//            }
+//
+//            public void onScroll(AbsListView view, int firstVisibleItem,
+//                                 int visibleItemCount, int totalItemCount) {
+//
+//                if(firstVisibleItem+visibleItemCount == totalItemCount && totalItemCount!=0)
+//                {
+//                    if(flag_loading == false)
+//                    {
+//                        flag_loading = true;
+//                        additems();
+//                    }
+//                }
+//            }
+//        });
     }
 
     @Override
@@ -106,10 +129,14 @@ public class SearchResultsActivity extends AppCompatActivity {
                 getMovies = moviesDataSource.searchMovies(sqlParams);
                 refreshAdapter();
                 return true;
+            case android.R.id.home:
+                NavUtils.navigateUpFromSameTask(this);
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

@@ -1,5 +1,6 @@
 package example.com.moviesfragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ListFragment;
@@ -7,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
@@ -31,6 +33,7 @@ public class MoviesListFragment extends ListFragment {
     String filter = "recent";
     int lastItemId;
     int firstItemId;
+    boolean flag_loading;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -83,12 +86,41 @@ public class MoviesListFragment extends ListFragment {
                 Movie movie = getMovies.get(position);
                 Bundle b = new Bundle();
                 b.putParcelable(POSITION, movie);
-//                Intent intent = new Intent(MoviesListFragment.this, MovieActivity.class);
-//                intent.putExtra(BUNDLE, b);
-//                startActivity(intent);
+                Intent intent = new Intent(getActivity(), MovieActivity.class);
+                intent.putExtra(BUNDLE, b);
+                startActivity(intent);
             }
         });
+
+        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
+
+
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+
+            }
+
+            public void onScroll(AbsListView view, int firstVisibleItem,
+                                 int visibleItemCount, int totalItemCount) {
+
+                if (firstVisibleItem + visibleItemCount == totalItemCount && totalItemCount != 0) {
+                    if (flag_loading == false) {
+                        flag_loading = true;
+                        add();
+                    }
+                }
+            }
+        });
+
         super.onViewCreated(view, savedInstanceState);
+    }
+
+    private void add() {
+        lastItemId = listView.getCount() - 1;
+        limit = limit + 50;
+        getMovies = moviesDataSource.sortAndLimit(filter, String.valueOf(limit));
+        refreshAdapter();
+        flag_loading = false;
     }
 
     @Override
@@ -127,7 +159,7 @@ public class MoviesListFragment extends ListFragment {
                 } else {
                     filter = MovieSQLiteHelper.KEY_NAME + " ASC";
                 }
-                getMovies = moviesDataSource.sortBy(filter);
+                getMovies = moviesDataSource.sortAndLimit(filter, String.valueOf(limit));
                 refreshAdapter();
                 return true;
             case R.id.sortByRating:
@@ -136,7 +168,7 @@ public class MoviesListFragment extends ListFragment {
                 } else {
                     filter = MovieSQLiteHelper.KEY_RATING + " ASC";
                 }
-                getMovies = moviesDataSource.sortBy(filter);
+                getMovies = moviesDataSource.sortAndLimit(filter, String.valueOf(limit));
                 refreshAdapter();
                 return true;
             case R.id.sortByYear:
@@ -145,7 +177,7 @@ public class MoviesListFragment extends ListFragment {
                 } else {
                     filter = MovieSQLiteHelper.KEY_YEAR + " ASC";
                 }
-                getMovies = moviesDataSource.sortBy(filter);
+                getMovies = moviesDataSource.sortAndLimit(filter, String.valueOf(limit));
                 refreshAdapter();
                 return true;
             default:
