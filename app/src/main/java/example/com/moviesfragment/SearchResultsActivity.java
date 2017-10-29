@@ -6,12 +6,15 @@ import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import java.util.HashMap;
 import java.util.List;
@@ -27,7 +30,6 @@ public class SearchResultsActivity extends AppCompatActivity {
     List<Movie> getMovies;
     HashMap<String, String> sqlParams;
     int firstItemId;
-    String orderBy;
 
 
     @Override
@@ -56,8 +58,22 @@ public class SearchResultsActivity extends AppCompatActivity {
         } else {
             getMovies = moviesDataSource.getAllMovies();
         }
-        orderBy = sqlParams.get("Order");
 
+        if (getMovies.size() == 0) {
+            TextView textView = new TextView(this);
+            textView.setText(R.string.nothing_found);
+            listView.setVisibility(View.GONE);
+            LinearLayout linearLayout = (LinearLayout) findViewById(R.id.search_results);
+            linearLayout.addView(textView);
+            textView.setTextSize(20);
+            textView.setGravity(Gravity.CENTER_VERTICAL);
+            textView.setGravity(Gravity.CENTER_HORIZONTAL);
+            textView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
+
+
+//            textView.setGravity();
+
+        }
         refreshAdapter();
         Log.v("SearchResultActivity", sqlParams.toString());
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {

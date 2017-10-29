@@ -41,6 +41,11 @@ public class SqlStatements {
         return sql;
     }
 
+    public String getCount() {
+        String sql = "Select count (*) from movie";
+        return sql;
+    }
+
     public String generateGenreSql(String s) {
         String sql;
         if (s.equalsIgnoreCase("All")) {

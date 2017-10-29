@@ -110,6 +110,14 @@ public class MoviesDataSource {
         return movies;
     }
 
+    int getCount() {
+        Cursor mCount = database.rawQuery("select count(*) from movie", null);
+        mCount.moveToFirst();
+        int count = mCount.getInt(0);
+        mCount.close();
+        return count;
+    }
+
     long createMovie(long id, String name, String description, int year, String imageUrl, double rating, String trailerCode, String genre, HashMap<String, String> torrents, HashMap<String, String> hashValues) {
         long resultId = -1;
         ContentValues values = new ContentValues();
