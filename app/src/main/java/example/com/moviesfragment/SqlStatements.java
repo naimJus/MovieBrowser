@@ -41,11 +41,6 @@ public class SqlStatements {
         return sql;
     }
 
-    public String getCount() {
-        String sql = "Select count (*) from movie";
-        return sql;
-    }
-
     public String generateGenreSql(String s) {
         String sql;
         if (s.equalsIgnoreCase("All")) {
@@ -61,13 +56,13 @@ public class SqlStatements {
     public String generateQualitySql(String s) {
         String sql = null;
         if (s.equalsIgnoreCase("All")) {
-            sql = MovieSQLiteHelper.KEY_720P + " IS NOT NULL"
-                    + " AND " +
-                    MovieSQLiteHelper.KEY_1080P + " IS NOT NULL"
-                    + " AND " +
-                    MovieSQLiteHelper.KEY_3D + " IS NOT NULL";
+            sql = MovieSQLiteHelper.KEY_ID + " IS NOT NULL";
         } else if (s.equalsIgnoreCase("720p")) {
             sql = MovieSQLiteHelper.KEY_720P + " IS NOT NULL";
+        } else if (s.equalsIgnoreCase("1080p")) {
+            sql = MovieSQLiteHelper.KEY_1080P + " IS NOT NULL";
+        } else if (s.equalsIgnoreCase("3d")) {
+            sql = MovieSQLiteHelper.KEY_3D + " IS NOT NULL";
         }
 //        Log.v("SQL ", sql);
         return sql;
