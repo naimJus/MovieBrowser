@@ -1,4 +1,4 @@
-package example.com.moviesfragment.gson;
+package example.com.moviesfragment;
 
 
 import android.app.AlertDialog;

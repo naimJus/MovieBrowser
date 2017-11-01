@@ -2,7 +2,12 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+<<<<<<< HEAD
+      <module fileurl="file://$PROJECT_DIR$/Browse Movies.iml" filepath="$PROJECT_DIR$/Browse Movies.iml" />
+      <module fileurl="file://C:\Users\jusuf\AndroidStudioProjects\Browse Movies\MoviesFragment.iml" filepath="C:\Users\jusuf\AndroidStudioProjects\Browse Movies\MoviesFragment.iml" />
+=======
       <module fileurl="file://$PROJECT_DIR$/.idea/MoviesFragment.iml" filepath="$PROJECT_DIR$/.idea/MoviesFragment.iml" />
+>>>>>>> master
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
