@@ -43,17 +43,18 @@ public class MovieActivity extends YouTubeBaseActivity {
         quality720Btn = (Button) findViewById(R.id.quality_720p);
         quality1080Btn = (Button) findViewById(R.id.quality_1080p);
         quality3dBtn = (Button) findViewById(R.id.quality_3d);
-
-        Picasso.with(this)
-                .load(movie.getMediumCoverImage())
-                .fit()
-                .into(movieImage);
+        movieImage = (ImageView) findViewById(R.id.movie_image);
 
         // get the bundle from the intent
         //unwrap the bundle and get the movie;
         Bundle b = getIntent().getBundleExtra(MoviesListFragment.BUNDLE);
         movie = b.getParcelable(MoviesListFragment.POSITION);
         Log.v(LOG, movie.toString());
+
+        Picasso.with(this)
+                .load(movie.getMediumCoverImage())
+                .fit()
+                .into(movieImage);
 
         nameTV.setText(movie.getTitle());
         yearTV.setText(movie.getYear().toString());

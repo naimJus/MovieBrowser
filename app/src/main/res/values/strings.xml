@@ -78,5 +78,8 @@
     <string name="enable_wifi">Enable Wi-Fi</string>
     <string name="cancel">Cancel</string>
     <string name="nothing_found">Nothing found.</string>
-    <string name="description">Description</string>
+    <string name="description">Description:</string>
+    <string name="quality_720p">720p</string>
+    <string name="quality_1080p">1080p</string>
+    <string name="quality_3d">3D</string>
 </resources>
