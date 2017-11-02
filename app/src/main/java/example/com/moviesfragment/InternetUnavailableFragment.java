@@ -10,8 +10,6 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 
-import example.com.moviesfragment.R;
-
 /**
  * A simple {@link Fragment} subclass.
  */
@@ -29,17 +27,13 @@ public class InternetUnavailableFragment extends DialogFragment {
                         startActivity(new Intent(WifiManager.ACTION_PICK_WIFI_NETWORK));
 
                     }
+                })
+                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        getActivity().finish();
+                        System.exit(0);
+                    }
                 });
-//                .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener() {
-//                    public void onClick(DialogInterface dialog, int id) {
-//                        Intent homeIntent = new Intent(Intent.ACTION_MAIN);
-//                        homeIntent.addCategory(Intent.CATEGORY_HOME);
-//                        homeIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-//                        startActivity(homeIntent);
-//                        getActivity().moveTaskToBack(true);
-//                        getActivity().finish();
-//                    }
-//                });
         // Create the AlertDialog object and return it
         return builder.create();
     }
