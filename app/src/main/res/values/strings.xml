@@ -83,4 +83,5 @@
     <string name="quality_1080p">1080p</string>
     <string name="quality_3d">3D</string>
     <string name="server_down">The server is not responding, new movies can not be fetched. Please try again later.</string>
+    <string name="sortByRecent">Sort by Most Recent</string>
 </resources>

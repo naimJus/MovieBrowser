@@ -189,6 +189,15 @@ public class MoviesListFragment extends ListFragment {
                 getMovies = moviesDataSource.sortAndLimit(filter, String.valueOf(limit));
                 refreshAdapter();
                 return true;
+            case R.id.sortByRecent:
+                if (filter.equals(MovieSQLiteHelper.KEY_ID + " ASC")) {
+                    filter = MovieSQLiteHelper.KEY_ID + " DESC";
+                } else {
+                    filter = MovieSQLiteHelper.KEY_ID + " ASC";
+                }
+                getMovies = moviesDataSource.sortAndLimit(filter, String.valueOf(limit));
+                refreshAdapter();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
