@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ListFragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -92,6 +93,7 @@ public class MoviesListFragment extends ListFragment {
                 //put the bundle in a Intent
                 //Start the new Activity
                 Movie movie = getMovies.get(position);
+                Log.v(LOG, movie.toString());
                 Bundle b = new Bundle();
                 b.putParcelable(POSITION, movie);
                 Intent intent = new Intent(getActivity(), MovieActivity.class);
