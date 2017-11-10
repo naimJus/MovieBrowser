@@ -5,6 +5,7 @@
     <string name="sortByYear">Sort By Year</string>
     <string name="quality">Quality:</string>
     <string name="rating">Rating:</string>
+    <string name="year">Year:</string>
     <string name="genre">Genre:</string>
     <string name="prompt">All</string>
     <string name="search">Search</string>

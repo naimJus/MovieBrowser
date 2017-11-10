@@ -57,9 +57,9 @@ public class MovieActivity extends YouTubeBaseActivity {
                 .into(movieImage);
 
         nameTV.setText(movie.getTitle());
-        yearTV.setText(movie.getYear().toString());
-        ratingTV.setText(movie.getRating().toString());
-        genreTV.setText(movie.getGenre());
+        yearTV.setText(getResources().getString(R.string.year) + " " + movie.getYear());
+        ratingTV.setText(getResources().getString(R.string.rating) + " " + movie.getRating());
+        genreTV.setText(getResources().getString(R.string.genre) + " " + movie.getGenre());
         descriptionTV.setText(movie.getSummary());
         List<Torrent> torrents = movie.getTorrents();
 
