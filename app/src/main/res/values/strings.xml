@@ -16,6 +16,7 @@
     <string name="loading">Loading...</string>
     <string name="order">Order By:</string>
     <string name="AvailableIn">Available in:</string>
+    <string name="element_text">Element</string>
 
     <string-array name="rating_filter">
         <item>All</item>
