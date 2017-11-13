@@ -175,8 +175,8 @@ public class SearchResultsActivity extends AppCompatActivity {
     }
 
     public void refreshAdapter() {
-        MoviesAdapter moviesAdapter = new MoviesAdapter(this, getMovies);
-        listView.setAdapter(moviesAdapter);
+//        MoviesAdapter moviesAdapter = new MoviesAdapter(this, getMovies);
+//        listView.setAdapter(moviesAdapter);
         if (firstItemId != 0)
             listView.setSelectionFromTop(firstItemId, 0);
     }
