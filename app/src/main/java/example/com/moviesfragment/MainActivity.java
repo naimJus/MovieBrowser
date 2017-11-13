@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.View;
 
 import com.facebook.stetho.Stetho;
 
@@ -49,7 +50,10 @@ public class MainActivity extends AppCompatActivity {
         viewPager.setAdapter(adapter);
     }
 
-
+    public static interface ClickListener{
+        public void onClick(View view,int position);
+        public void onLongClick(View view, int position);
+    }
 }
 
 class ViewPagerAdapter extends FragmentPagerAdapter {

@@ -1,10 +1,10 @@
 package example.com.moviesfragment;
 
 import android.content.Context;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -18,35 +18,65 @@ import example.com.moviesfragment.gson.Movie;
  * Created by jusuf on 05.7.2017.
  */
 
-public class MoviesAdapter extends ArrayAdapter<Movie> {
-    public MoviesAdapter(Context context, List<Movie> movies) {
-        super(context, 0, movies);
+public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder> {
+    private List<Movie> mDataset;
+    private Context context;
+
+    public MoviesAdapter(Context context, List<Movie> mDataset) {
+        this.context = context;
+        this.mDataset = mDataset;
     }
 
+    // Create new views (invoked by the layout manager)
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        // Get the data item for this position
-        Movie movie = getItem(position);
-        // Check if an existing view is being reused, otherwise inflate the view
-        if (convertView == null) {
-            convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_item, parent, false);
-        }
-        // Lookup view for data population
-        TextView tvName = (TextView) convertView.findViewById(R.id.list_item_name);
-        TextView tvYear = (TextView) convertView.findViewById(R.id.list_item_year);
-        TextView tvRating = (TextView) convertView.findViewById(R.id.list_item_rating);
-        ImageView imageView = (ImageView) convertView.findViewById(R.id.list_item_image);
+    public MoviesAdapter.ViewHolder onCreateViewHolder(ViewGroup parent,
+                                                       int viewType) {
+        // create a new view
+        View itemView = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.list_item, parent, false);
 
-        // Populate the data into the template view using the data object
-        tvName.setText(movie.getTitle());
-        tvYear.setText(String.valueOf(movie.getYear()));
-        tvRating.setText(String.valueOf(movie.getRating()));
-        Picasso.with(getContext())
+        return new ViewHolder(itemView);
+    }
+
+    // Replace the contents of a view (invoked by the layout manager)
+    @Override
+    public void onBindViewHolder(ViewHolder holder, int position) {
+        Movie movie = mDataset.get(position);
+        holder.tvName.setText(movie.getTitle());
+        holder.tvYear.setText(movie.getYear().toString());
+        holder.tvRating.setText(movie.getRating().toString());
+        Picasso.with(context)
                 .load(movie.getMediumCoverImage())
                 .placeholder(R.drawable.welcome)
                 .fit()
-                .into(imageView);
-        // Return the completed view to render on screen
-        return convertView;
+                .into(holder.imageView);
+
     }
+
+    // Return the size of your dataset (invoked by the layout manager)
+    @Override
+    public int getItemCount() {
+        return mDataset.size();
+    }
+
+    // Provide a reference to the views for each data item
+    // Complex data items may need more than one view per item, and
+    // you provide access to all the views for a data item in a view holder
+    public static class ViewHolder extends RecyclerView.ViewHolder {
+        // each data item is just a string in this case
+        TextView tvName;
+        TextView tvYear;
+        TextView tvRating;
+        ImageView imageView;
+
+        public ViewHolder(View itemView) {
+            super(itemView);
+            tvName = (TextView) itemView.findViewById(R.id.list_item_name);
+            tvYear = (TextView) itemView.findViewById(R.id.list_item_year);
+            tvRating = (TextView) itemView.findViewById(R.id.list_item_rating);
+            imageView = (ImageView) itemView.findViewById(R.id.list_item_image);
+        }
+    }
+
+
 }

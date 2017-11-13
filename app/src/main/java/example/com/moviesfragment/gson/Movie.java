@@ -13,106 +13,93 @@ import java.util.List;
  */
 public class Movie implements Parcelable {
 
+    public static final Creator<Movie> CREATOR = new Creator<Movie>() {
+        @Override
+        public Movie createFromParcel(Parcel in) {
+            return new Movie(in);
+        }
+
+        @Override
+        public Movie[] newArray(int size) {
+            return new Movie[size];
+        }
+    };
     @SerializedName("id")
     @Expose
     private Integer id;
-
     @SerializedName("url")
     @Expose
     private String url;
-
     @SerializedName("imdb_code")
     @Expose
     private String imdbCode;
-
     @SerializedName("title")
     @Expose
     private String title;
-
     @SerializedName("title_english")
     @Expose
     private String titleEnglish;
-
     @SerializedName("title_long")
     @Expose
     private String titleLong;
-
     @SerializedName("slug")
     @Expose
     private String slug;
-
     @SerializedName("year")
     @Expose
     private Integer year;
-
     @SerializedName("rating")
     @Expose
     private Double rating;
-
     @SerializedName("runtime")
     @Expose
     private Integer runtime;
-
     @SerializedName("genres")
     @Expose
     private List<String> genres = null;
-
+    private String genre;
     @SerializedName("summary")
     @Expose
     private String summary;
-
     @SerializedName("description_full")
     @Expose
     private String descriptionFull;
-
     @SerializedName("synopsis")
     @Expose
     private String synopsis;
-
     @SerializedName("yt_trailer_code")
     @Expose
     private String ytTrailerCode;
-
     @SerializedName("language")
     @Expose
     private String language;
-
     @SerializedName("mpa_rating")
     @Expose
     private String mpaRating;
-
     @SerializedName("background_image")
     @Expose
     private String backgroundImage;
-
     @SerializedName("background_image_original")
     @Expose
     private String backgroundImageOriginal;
-
     @SerializedName("small_cover_image")
     @Expose
     private String smallCoverImage;
-
     @SerializedName("medium_cover_image")
     @Expose
     private String mediumCoverImage;
-
     @SerializedName("large_cover_image")
     @Expose
     private String largeCoverImage;
-
     @SerializedName("state")
     @Expose
     private String state;
-
     @SerializedName("torrents")
     @Expose
     private List<Torrent> torrents = null;
-
     @SerializedName("date_uploaded")
     @Expose
     private String dateUploaded;
-
     @SerializedName("date_uploaded_unix")
     @Expose
     private Integer dateUploadedUnix;
@@ -130,6 +117,7 @@ public class Movie implements Parcelable {
         year = in.readInt();
         rating = in.readDouble();
         genres = in.createStringArrayList();
+        genre = in.readString();
         summary = in.readString();
         descriptionFull = in.readString();
         synopsis = in.readString();
@@ -145,18 +133,6 @@ public class Movie implements Parcelable {
         torrents = in.createTypedArrayList(Torrent.CREATOR);
         dateUploaded = in.readString();
     }
-
-    public static final Creator<Movie> CREATOR = new Creator<Movie>() {
-        @Override
-        public Movie createFromParcel(Parcel in) {
-            return new Movie(in);
-        }
-
-        @Override
-        public Movie[] newArray(int size) {
-            return new Movie[size];
-        }
-    };
 
     public Integer getId() {
         return id;
@@ -244,6 +220,14 @@ public class Movie implements Parcelable {
 
     public void setGenres(List<String> genres) {
         this.genres = genres;
+    }
+
+    public String getGenre() {
+        return genre;
+    }
+
+    public void setGenre(String genre) {
+        this.genre = genre;
     }
 
     public String getSummary() {
@@ -382,6 +366,7 @@ public class Movie implements Parcelable {
         dest.writeInt(year);
         dest.writeDouble(rating);
         dest.writeStringList(genres);
+        dest.writeString(genre);
         dest.writeString(summary);
         dest.writeString(descriptionFull);
         dest.writeString(synopsis);

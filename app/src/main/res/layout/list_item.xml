@@ -1,17 +1,25 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="horizontal">
+    android:layout_height="wrap_content"
+    android:focusable="true"
+    android:paddingLeft="16dp"
+    android:paddingRight="16dp"
+    android:paddingTop="10dp"
+    android:paddingBottom="10dp"
+    android:clickable="true"
+    android:background="?android:attr/selectableItemBackground"
+    android:orientation="vertical">
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_weight="3">
+        android:layout_width="100dp"
+        android:layout_height="120dp"
+        android:id="@+id/linearLayout">
 
         <ImageView
             android:id="@+id/list_item_image"
             android:layout_width="match_parent"
-            android:layout_height="100dp"
+            android:layout_height="match_parent"
             android:padding="4dp" />
 
     </LinearLayout>
@@ -19,8 +27,10 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
+        android:layout_alignParentTop="true"
+        android:layout_toEndOf="@+id/linearLayout"
         android:orientation="vertical">
+
 
         <TextView
             android:id="@+id/list_item_name"
@@ -46,4 +56,4 @@
     </LinearLayout>
 
 
-</LinearLayout>
+</RelativeLayout>

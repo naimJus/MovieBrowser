@@ -103,6 +103,7 @@ public class MoviesDataSource {
                 t2.setHash(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.KEY_HASH3D)));
                 torrents.add(t2);
 
+                movie.setGenre(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.KEY_GENRE)));
                 movie.setTorrents(torrents);
                 movies.add(movie);
             }
