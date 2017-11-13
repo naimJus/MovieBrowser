@@ -1,5 +1,6 @@
 package example.com.moviesfragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,6 +12,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import java.util.List;
 
@@ -82,8 +84,24 @@ public class MoviesListFragment extends Fragment {
             }
         });
 
-        mRecyclerView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
-        });
+        mRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(this.getActivity(), mRecyclerView, new MainActivity.ClickListener() {
+            @Override
+            public void onClick(View view, final int position) {
+                //Values are passing to activity & to fragment as well
+                Movie movie = getMovies.get(position);
+                Bundle b = new Bundle();
+                b.putParcelable(POSITION, movie);
+                Intent intent = new Intent(getActivity(), MovieActivity.class);
+                intent.putExtra(BUNDLE, b);
+                startActivity(intent);
+            }
+
+            @Override
+            public void onLongClick(View view, int position) {
+                Toast.makeText(getActivity(), "Long press on position :" + position,
+                        Toast.LENGTH_LONG).show();
+            }
+        }));
         mRecyclerView.setAdapter(mAdapter);
         return rootView;
     }
