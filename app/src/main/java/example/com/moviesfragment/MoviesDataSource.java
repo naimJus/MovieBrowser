@@ -80,6 +80,7 @@ public class MoviesDataSource {
                 Movie movie = new Movie();
                 List<Torrent> torrents = new ArrayList<Torrent>(3);
 
+
                 movie.setId(cursor.getInt(cursor.getColumnIndex(MovieSQLiteHelper.KEY_ID)));
                 movie.setTitle(cursor.getString(1));
                 movie.setSummary(cursor.getString(2));
@@ -104,6 +105,7 @@ public class MoviesDataSource {
                 torrents.add(t2);
 
                 movie.setGenre(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.KEY_GENRE)));
+                movie.setAvailableInQuality(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.KEY_QUALITY)));
                 movie.setTorrents(torrents);
                 movies.add(movie);
             }
@@ -121,6 +123,7 @@ public class MoviesDataSource {
 
     long createMovie(long id, String name, String description, int year, String imageUrl, double rating, String trailerCode, String genre, HashMap<String, String> torrents, HashMap<String, String> hashValues) {
         long resultId = -1;
+        StringBuilder quality = new StringBuilder();
         ContentValues values = new ContentValues();
         values.put(MovieSQLiteHelper.KEY_ID, id);
         values.put(MovieSQLiteHelper.KEY_NAME, name);
@@ -136,6 +139,13 @@ public class MoviesDataSource {
         values.put(MovieSQLiteHelper.KEY_HASH720P, hashValues.get("720p"));
         values.put(MovieSQLiteHelper.KEY_HASH1080P, hashValues.get("1080p"));
         values.put(MovieSQLiteHelper.KEY_HASH3D, hashValues.get("3D"));
+        if (torrents.get("720p") != null)
+            quality.append("720p ");
+        if (torrents.get("1080p") != null)
+            quality.append("1080p ");
+        if (torrents.get("3D") != null)
+            quality.append("3D");
+        values.put(MovieSQLiteHelper.KEY_QUALITY, quality.toString());
         resultId = database.insertWithOnConflict(MovieSQLiteHelper.TABLE_NAME, null, values, SQLiteDatabase.CONFLICT_IGNORE);
 
         return resultId;

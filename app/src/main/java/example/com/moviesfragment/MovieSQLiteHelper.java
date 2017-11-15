@@ -28,6 +28,7 @@ public class MovieSQLiteHelper extends SQLiteOpenHelper {
     public static final String KEY_HASH720P = "hash720p";
     public static final String KEY_HASH1080P = "hash1080p";
     public static final String KEY_HASH3D = "hash3d";
+    public static final String KEY_QUALITY = "quality";
 
 
     private MovieSQLiteHelper(Context context) {
@@ -55,7 +56,8 @@ public class MovieSQLiteHelper extends SQLiteOpenHelper {
             KEY_3D + " TEXT," +
             KEY_HASH720P + " TEXT," +
             KEY_HASH1080P + " TEXT," +
-            KEY_HASH3D + " TEXT" + ")";
+            KEY_HASH3D + " TEXT," +
+            KEY_QUALITY+ " TEXT" + ")";
 
     @Override
     public void onCreate(SQLiteDatabase db) {

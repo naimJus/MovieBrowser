@@ -104,6 +104,8 @@ public class Movie implements Parcelable {
     @Expose
     private Integer dateUploadedUnix;
 
+    private String availableInQuality;
+
     public Movie() {
     }
 
@@ -132,6 +134,7 @@ public class Movie implements Parcelable {
         state = in.readString();
         torrents = in.createTypedArrayList(Torrent.CREATOR);
         dateUploaded = in.readString();
+        availableInQuality = in.readString();
     }
 
     public Integer getId() {
@@ -350,6 +353,14 @@ public class Movie implements Parcelable {
         this.dateUploadedUnix = dateUploadedUnix;
     }
 
+    public String getAvailableInQuality() {
+        return availableInQuality;
+    }
+
+    public void setAvailableInQuality(String availableInQuality) {
+        this.availableInQuality = availableInQuality;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -381,5 +392,6 @@ public class Movie implements Parcelable {
         dest.writeString(state);
         dest.writeTypedList(torrents);
         dest.writeString(dateUploaded);
+        dest.writeString(availableInQuality);
     }
 }
