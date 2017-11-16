@@ -1,7 +1,6 @@
 package example.com.moviesfragment;
 
 import android.os.Bundle;
-import android.text.Layout;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -53,8 +52,10 @@ public class MovieActivity extends YouTubeBaseActivity {
 
         String quality = movie.getAvailableInQuality();
 
-        if (quality.contains("720p"))
+        if (quality.contains("720p")) {
             radioButton720p.setVisibility(View.VISIBLE);
+            radioButton720p.setChecked(true);
+        }
         if (quality.contains("1080p"))
             radioButton1080p.setVisibility(View.VISIBLE);
         if (quality.contains("3D"))
