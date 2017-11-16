@@ -158,22 +158,27 @@
                     android:textColor="@android:color/black"
                     android:textSize="@dimen/font_size_m" />
 
-                <ImageButton
+                <Button
                     android:id="@+id/downloadBtn"
                     android:layout_width="150dp"
                     android:layout_height="48dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginTop="8dp"
                     android:elevation="2dp"
                     android:layout_alignStart="@id/downloadTextView"
                     android:layout_below="@+id/downloadTextView"
                     android:background="@android:color/background_light"
-                    android:src="@drawable/download" />
+                    android:drawableStart="@drawable/download"
+                    android:text="Download"
+                    android:drawablePadding="8dp"/>
                 <!--android:drawableStart="@drawable/magnet"-->
 
-                <ImageButton
+                <Button
                     android:id="@+id/magnetBtn"
                     android:layout_width="150dp"
                     android:elevation="2dp"
                     android:layout_height="48dp"
+                    android:layout_marginTop="8dp"
                     android:layout_alignBottom="@+id/downloadBtn"
                     android:layout_below="@+id/downloadTextView"
                     android:layout_centerHorizontal="true"
@@ -181,7 +186,9 @@
                     android:layout_marginStart="8dp"
                     android:layout_toEndOf="@+id/downloadBtn"
                     android:background="@android:color/background_light"
-                    android:src="@drawable/magnet" />
+                    android:drawableStart="@drawable/magnet"
+                    android:text="Magnet"
+                    android:drawablePadding="8dp"/>
 
 
             </RelativeLayout>
