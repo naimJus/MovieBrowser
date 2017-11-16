@@ -113,6 +113,7 @@
                     android:textSize="@dimen/font_size_m" />
 
                 <RadioGroup
+                    android:id="@+id/radioGroup"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignLeft="@id/quality_TextView"
@@ -147,21 +148,34 @@
                         android:visibility="gone" />
                 </RadioGroup>
 
+                <TextView
+                    android:id="@+id/downloadTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignStart="@+id/radioGroup"
+                    android:layout_below="@+id/radioGroup"
+                    android:text="@string/download"
+                    android:textColor="@android:color/black"
+                    android:textSize="@dimen/font_size_m" />
+
                 <ImageButton
                     android:id="@+id/downloadBtn"
-                    android:layout_width="48dp"
+                    android:layout_width="150dp"
                     android:layout_height="48dp"
-                    android:layout_alignBottom="@+id/movie_image"
-                    android:layout_alignStart="@+id/movie_genre_TV"
+                    android:elevation="2dp"
+                    android:layout_alignStart="@id/downloadTextView"
+                    android:layout_below="@+id/downloadTextView"
                     android:background="@android:color/background_light"
                     android:src="@drawable/download" />
                 <!--android:drawableStart="@drawable/magnet"-->
 
                 <ImageButton
                     android:id="@+id/magnetBtn"
-                    android:layout_width="48dp"
+                    android:layout_width="150dp"
+                    android:elevation="2dp"
                     android:layout_height="48dp"
                     android:layout_alignBottom="@+id/downloadBtn"
+                    android:layout_below="@+id/downloadTextView"
                     android:layout_centerHorizontal="true"
                     android:layout_centerVertical="true"
                     android:layout_marginStart="8dp"
