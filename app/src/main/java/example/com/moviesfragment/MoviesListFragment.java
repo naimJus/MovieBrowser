@@ -48,7 +48,7 @@ public class MoviesListFragment extends Fragment {
         // remote server.
         moviesDataSource = new MoviesDataSource(getActivity().getApplicationContext());
         moviesDataSource.open();
-        getMovies = moviesDataSource.getAllMovies();
+//        getMovies = moviesDataSource.getAllMovies();
     }
 
     @Override
@@ -129,15 +129,15 @@ public class MoviesListFragment extends Fragment {
             scrollPosition = savedInstanceState.getInt(FIRSTITEMID);
             lastItemScrollPosition = savedInstanceState.getInt(ITEMID);
             if (limit > 50) {
-                getMovies = moviesDataSource.sortAndLimit(filter, String.valueOf(limit));
+//                getMovies = moviesDataSource.sortAndLimit(filter, String.valueOf(limit));
                 mRecyclerView.scrollToPosition(lastItemScrollPosition);
             } else {
-                getMovies = moviesDataSource.sortBy(filter);
+//                getMovies = moviesDataSource.sortBy(filter);
                 mRecyclerView.scrollToPosition(scrollPosition);
             }
         } else {
             scrollPosition = mLayoutManager.findFirstVisibleItemPosition();
-            getMovies = moviesDataSource.getAllMovies();
+//            getMovies = moviesDataSource.getAllMovies();
         }
     }
 
@@ -154,6 +154,7 @@ public class MoviesListFragment extends Fragment {
 
     }
 
+/*
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -201,6 +202,7 @@ public class MoviesListFragment extends Fragment {
                 return super.onOptionsItemSelected(item);
         }
     }
+*/
 
     @Override
     public void onPause() {
@@ -228,7 +230,7 @@ public class MoviesListFragment extends Fragment {
     public void loadMoreData() {
         lastItemScrollPosition = mLayoutManager.findLastVisibleItemPosition() - 1;
         limit = limit + 50;
-        getMovies = moviesDataSource.sortAndLimit(filter, String.valueOf(limit));
+//        getMovies = moviesDataSource.sortAndLimit(filter, String.valueOf(limit));
         mRecyclerView.getAdapter().notifyDataSetChanged();
         refreshAdapter();
         flag_loading = false;

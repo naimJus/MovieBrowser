@@ -3,12 +3,9 @@ package example.com.moviesfragment;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
 
 import example.com.moviesfragment.gson.Movie;
 import example.com.moviesfragment.gson.Torrent;
@@ -30,7 +27,7 @@ public class MoviesDataSource {
         dbHelper.close();
     }
 
-    List<Movie> getAllMovies() {
+   /* List<Movie> getAllMovies() {
         Cursor cursor = database.query(MovieSQLiteHelper.TABLE_NAME, null, null, null, null, null, null, "50");
         List<Movie> movies = cursorToList(cursor);
         return movies;
@@ -111,7 +108,7 @@ public class MoviesDataSource {
             }
         }
         return movies;
-    }
+    }*/
 
     int getCount() {
         Cursor mCount = database.rawQuery("select count(*) from movie", null);
@@ -121,7 +118,59 @@ public class MoviesDataSource {
         return count;
     }
 
-    long createMovie(long id, String name, String description, int year, String imageUrl, double rating, String trailerCode, String genre, HashMap<String, String> torrents, HashMap<String, String> hashValues) {
+
+    public long createMovieInfo(Movie movie, long[] movieInfo_ids) {
+        ContentValues values = new ContentValues();
+        values.put(MovieSQLiteHelper.MOVIE_INFO_KEY_ID, movie.getId());
+        values.put(MovieSQLiteHelper.MOVIE_INFO_KEY_NAME, movie.getTitle());
+        values.put(MovieSQLiteHelper.MOVIE_INFO_KEY_TITLE_LONG, movie.getTitleLong());
+        values.put(MovieSQLiteHelper.MOVIE_INFO_KEY_DESCRIPTION, movie.getDescriptionFull());
+        values.put(MovieSQLiteHelper.MOVIE_INFO_KEY_YEAR, movie.getYear());
+        values.put(MovieSQLiteHelper.MOVIE_INFO_KEY_RATING, movie.getRating());
+        values.put(MovieSQLiteHelper.MOVIE_INFO_KEY_TRAILER, movie.getYtTrailerCode());
+        values.put(MovieSQLiteHelper.MOVIE_INFO_KEY_GENRE, movie.getGenres().toString());
+        values.put(MovieSQLiteHelper.MOVIE_INFO_KEY_RUNTIME, movie.getRuntime());
+        values.put(MovieSQLiteHelper.MOVIE_INFO_KEY_MPARATING, movie.getMpaRating());
+        values.put(MovieSQLiteHelper.MOVIE_INFO_KEY_IMDB, movie.getImdbCode());
+
+        long resultId = database.insertOrThrow(MovieSQLiteHelper.TABLE_MOVIE_INFO, null, values);
+
+        // assigning tags to todo
+        for (long movieInfoId : movieInfo_ids) {
+            createMovieTorrent(resultId, movieInfoId);
+        }
+        return resultId;
+    }
+
+
+    public long createMovieTorrent(long movieId, long torrentId) {
+
+        ContentValues values = new ContentValues();
+        values.put(MovieSQLiteHelper.TORRENT_KEY_ID, torrentId);
+        values.put(MovieSQLiteHelper.MOVIE_INFO_KEY_ID, movieId);
+        long id = database.insert(MovieSQLiteHelper.TABLE_MOVIES, null, values);
+        return id;
+    }
+
+    public long createTorrent(Torrent torrent) {
+        ContentValues values = new ContentValues();
+        values.put(MovieSQLiteHelper.TORRENT_KEY_ID, torrent.getId());
+        values.put(MovieSQLiteHelper.TORRENT_KEY_QUALITY, torrent.getQuality());
+        values.put(MovieSQLiteHelper.TORRENT_KEY_HASH, torrent.getHash());
+        values.put(MovieSQLiteHelper.TORRENT_KEY_SIZE, torrent.getSize());
+        values.put(MovieSQLiteHelper.TORRENT_KEY_URL, torrent.getUrl());
+
+        try {
+            long torrentId = database.insertOrThrow(MovieSQLiteHelper.TABLE_TORRENTS, null, values);
+            return torrentId;
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return 0;
+    }
+
+  /*  long createMovie(long id, String name, String description, int year, String imageUrl, double rating, String trailerCode, String genre, HashMap<String, String> torrents, HashMap<String, String> hashValues) {
         long resultId = -1;
         StringBuilder quality = new StringBuilder();
         ContentValues values = new ContentValues();
@@ -149,5 +198,5 @@ public class MoviesDataSource {
         resultId = database.insertWithOnConflict(MovieSQLiteHelper.TABLE_NAME, null, values, SQLiteDatabase.CONFLICT_IGNORE);
 
         return resultId;
-    }
+    }*/
 }

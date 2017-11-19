@@ -58,17 +58,19 @@ public class SearchFragment extends Fragment {
                 String order = orderBySpinner.getSelectedItem().toString();
                 String name = nameET.getText().toString();
 
-                String orderSql = sqlStatements.generateOrderSql(order);
+/*                String orderSql = sqlStatements.generateOrderSql(order);
                 String ratingSql = sqlStatements.generateRatingSql(rating);
                 String genreSql = sqlStatements.generateGenreSql(genre);
                 String qualitySql = sqlStatements.generateQualitySql(quality);
-                String nameSql = sqlStatements.generateNameSql(name);
+                String nameSql = sqlStatements.generateNameSql(name);*/
 
+/*
                 searchParams.put("Search", nameSql);
                 searchParams.put("Quality", qualitySql);
                 searchParams.put("Genre", genreSql);
                 searchParams.put("Rating", ratingSql);
                 searchParams.put("Order", orderSql);
+*/
 
 
                 Intent intent = new Intent(getActivity(), SearchResultsActivity.class);

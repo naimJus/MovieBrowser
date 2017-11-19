@@ -6,8 +6,24 @@ import android.os.Parcelable;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 public class Torrent implements Parcelable {
 
+    static AtomicInteger nextId = new AtomicInteger();
+    private int id;
+
+    public static final Creator<Torrent> CREATOR = new Creator<Torrent>() {
+        @Override
+        public Torrent createFromParcel(Parcel in) {
+            return new Torrent(in);
+        }
+
+        @Override
+        public Torrent[] newArray(int size) {
+            return new Torrent[size];
+        }
+    };
     @SerializedName("url")
     @Expose
     private String url;
@@ -37,9 +53,11 @@ public class Torrent implements Parcelable {
     private Integer dateUploadedUnix;
 
     public Torrent() {
+        id = nextId.incrementAndGet();
     }
 
     public Torrent(Parcel in) {
+        id = in.readInt();
         url = in.readString();
         hash = in.readString();
         quality = in.readString();
@@ -47,17 +65,9 @@ public class Torrent implements Parcelable {
         dateUploaded = in.readString();
     }
 
-    public static final Creator<Torrent> CREATOR = new Creator<Torrent>() {
-        @Override
-        public Torrent createFromParcel(Parcel in) {
-            return new Torrent(in);
-        }
-
-        @Override
-        public Torrent[] newArray(int size) {
-            return new Torrent[size];
-        }
-    };
+    public int getId() {
+        return id;
+    }
 
     public String getUrl() {
         return url;
@@ -138,6 +148,7 @@ public class Torrent implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(id);
         dest.writeString(url);
         dest.writeString(hash);
         dest.writeString(quality);
