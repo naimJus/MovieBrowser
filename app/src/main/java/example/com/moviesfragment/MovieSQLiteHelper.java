@@ -7,17 +7,15 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class MovieSQLiteHelper extends SQLiteOpenHelper {
 
-    static final String KEY_ID = "_id";
     private static final String DATABASE_NAME = "movie.db";
     private static final int DATABASE_VERSION = 1;
 
     // Table names
     static final String TABLE_MOVIE_INFO = "movieInfo";
-    static final String TABLE_MOVIES = "movies";
     static final String TABLE_TORRENTS = "torrent";
     // table movie info fields
     static final String MOVIE_INFO_KEY_ID = "movie_info_id";
-    static final String MOVIE_INFO_KEY_NAME = "name";
+    static final String MOVIE_INFO_KEY_TITLE = "name";
     static final String MOVIE_INFO_KEY_TITLE_LONG = "title_long";
     static final String MOVIE_INFO_KEY_DESCRIPTION = "description";
     static final String MOVIE_INFO_KEY_YEAR = "year";
@@ -41,19 +39,16 @@ public class MovieSQLiteHelper extends SQLiteOpenHelper {
 
     //  SQL command to create tables
     private static final String CREATE_TABLE_TORRENT = "CREATE TABLE " + TABLE_TORRENTS + " (" +
-            TORRENT_KEY_ID + " INTEGER PRIMARY KEY," +
+            TORRENT_KEY_ID + " TEXT PRIMARY KEY," +
+            MOVIE_INFO_KEY_ID + " INTEGER," +
             TORRENT_KEY_QUALITY + " TEXT," +
             TORRENT_KEY_HASH + " TEXT," +
             TORRENT_KEY_URL + " TEXT," +
             TORRENT_KEY_SIZE + " TEXT" + ")";
-    private static final String CREATE_TABLE_MOVIES = "CREATE TABLE " + TABLE_MOVIES + "(" +
-            KEY_ID + " INTEGER PRIMARY KEY," +
-            MOVIE_INFO_KEY_ID + " INTEGER," +
-            TORRENT_KEY_ID + " INTEGER" + ")";
 
     private static final String CREATE_TABLE_INFO = "CREATE TABLE " + TABLE_MOVIE_INFO + "(" +
             MOVIE_INFO_KEY_ID + " INTEGER PRIMARY KEY," +
-            MOVIE_INFO_KEY_NAME + " TEXT," +
+            MOVIE_INFO_KEY_TITLE + " TEXT," +
             MOVIE_INFO_KEY_TITLE_LONG + " TEXT," +
             MOVIE_INFO_KEY_DESCRIPTION + " TEXT," +
             MOVIE_INFO_KEY_YEAR + " INTEGER," +
@@ -87,12 +82,10 @@ public class MovieSQLiteHelper extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_TABLE_INFO);
         db.execSQL(CREATE_TABLE_TORRENT);
-        db.execSQL(CREATE_TABLE_MOVIES);
     }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_MOVIES);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_MOVIE_INFO);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_TORRENTS);
         onCreate(db);
@@ -102,7 +95,6 @@ public class MovieSQLiteHelper extends SQLiteOpenHelper {
     public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         super.onDowngrade(db, oldVersion, newVersion);
         if (oldVersion != newVersion) {
-            db.execSQL("DROP TABLE " + TABLE_MOVIES);
             db.execSQL("DROP TABLE " + TABLE_MOVIE_INFO);
             db.execSQL("DROP TABLE " + TABLE_TORRENTS);
         }

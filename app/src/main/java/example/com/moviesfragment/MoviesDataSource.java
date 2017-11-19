@@ -119,10 +119,10 @@ public class MoviesDataSource {
     }
 
 
-    public long createMovieInfo(Movie movie, long[] movieInfo_ids) {
+    public long createMovieInfo(Movie movie) {
         ContentValues values = new ContentValues();
         values.put(MovieSQLiteHelper.MOVIE_INFO_KEY_ID, movie.getId());
-        values.put(MovieSQLiteHelper.MOVIE_INFO_KEY_NAME, movie.getTitle());
+        values.put(MovieSQLiteHelper.MOVIE_INFO_KEY_TITLE, movie.getTitle());
         values.put(MovieSQLiteHelper.MOVIE_INFO_KEY_TITLE_LONG, movie.getTitleLong());
         values.put(MovieSQLiteHelper.MOVIE_INFO_KEY_DESCRIPTION, movie.getDescriptionFull());
         values.put(MovieSQLiteHelper.MOVIE_INFO_KEY_YEAR, movie.getYear());
@@ -132,40 +132,36 @@ public class MoviesDataSource {
         values.put(MovieSQLiteHelper.MOVIE_INFO_KEY_RUNTIME, movie.getRuntime());
         values.put(MovieSQLiteHelper.MOVIE_INFO_KEY_MPARATING, movie.getMpaRating());
         values.put(MovieSQLiteHelper.MOVIE_INFO_KEY_IMDB, movie.getImdbCode());
+        values.put(MovieSQLiteHelper.MOVIE_INFO_IMAGE_BACKGROUND, movie.getBackgroundImage());
+        values.put(MovieSQLiteHelper.MOVIE_INFO_IMAGE_BACKGROUND_ORIGINAL, movie.getBackgroundImageOriginal());
+        values.put(MovieSQLiteHelper.MOVIE_INFO_IMAGE_SMALL_COVER, movie.getSmallCoverImage());
+        values.put(MovieSQLiteHelper.MOVIE_INFO_IMAGE_MEDIUM_COVER, movie.getMediumCoverImage());
+        values.put(MovieSQLiteHelper.MOVIE_INFO_IMAGE_LARGE_COVER, movie.getLargeCoverImage());
 
-        long resultId = database.insertOrThrow(MovieSQLiteHelper.TABLE_MOVIE_INFO, null, values);
-
-        // assigning tags to todo
-        for (long movieInfoId : movieInfo_ids) {
-            createMovieTorrent(resultId, movieInfoId);
-        }
+        long resultId = database.insertWithOnConflict(MovieSQLiteHelper.TABLE_MOVIE_INFO, null, values, SQLiteDatabase.CONFLICT_IGNORE);
         return resultId;
     }
 
+    public long createTorrent(Movie movie) {
+        ContentValues values;
+        for (Torrent torrent : movie.getTorrents()) {
+            if (torrent != null) {
+                values = new ContentValues();
+                values.put(MovieSQLiteHelper.TORRENT_KEY_ID, movie.getId() + torrent.getHash());
+                values.put(MovieSQLiteHelper.MOVIE_INFO_KEY_ID, movie.getId());
+                values.put(MovieSQLiteHelper.TORRENT_KEY_QUALITY, torrent.getQuality());
+                values.put(MovieSQLiteHelper.TORRENT_KEY_HASH, torrent.getHash());
+                values.put(MovieSQLiteHelper.TORRENT_KEY_SIZE, torrent.getSize());
+                values.put(MovieSQLiteHelper.TORRENT_KEY_URL, torrent.getUrl());
 
-    public long createMovieTorrent(long movieId, long torrentId) {
+                try {
+                    long torrentId = database.insertOrThrow(MovieSQLiteHelper.TABLE_TORRENTS, null, values);
+                    return torrentId;
 
-        ContentValues values = new ContentValues();
-        values.put(MovieSQLiteHelper.TORRENT_KEY_ID, torrentId);
-        values.put(MovieSQLiteHelper.MOVIE_INFO_KEY_ID, movieId);
-        long id = database.insert(MovieSQLiteHelper.TABLE_MOVIES, null, values);
-        return id;
-    }
-
-    public long createTorrent(Torrent torrent) {
-        ContentValues values = new ContentValues();
-        values.put(MovieSQLiteHelper.TORRENT_KEY_ID, torrent.getId());
-        values.put(MovieSQLiteHelper.TORRENT_KEY_QUALITY, torrent.getQuality());
-        values.put(MovieSQLiteHelper.TORRENT_KEY_HASH, torrent.getHash());
-        values.put(MovieSQLiteHelper.TORRENT_KEY_SIZE, torrent.getSize());
-        values.put(MovieSQLiteHelper.TORRENT_KEY_URL, torrent.getUrl());
-
-        try {
-            long torrentId = database.insertOrThrow(MovieSQLiteHelper.TABLE_TORRENTS, null, values);
-            return torrentId;
-
-        } catch (SQLException e) {
-            e.printStackTrace();
+                } catch (SQLException e) {
+                    e.printStackTrace();
+                }
+            }
         }
         return 0;
     }
