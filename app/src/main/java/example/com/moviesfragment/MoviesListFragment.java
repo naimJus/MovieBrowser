@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -48,7 +49,7 @@ public class MoviesListFragment extends Fragment {
         // remote server.
         moviesDataSource = new MoviesDataSource(getActivity().getApplicationContext());
         moviesDataSource.open();
-//        getMovies = moviesDataSource.getAllMovies();
+        getMovies = moviesDataSource.getAllMovies();
     }
 
     @Override
@@ -89,10 +90,8 @@ public class MoviesListFragment extends Fragment {
             public void onClick(View view, final int position) {
                 //Values are passing to activity & to fragment as well
                 Movie movie = getMovies.get(position);
-                Bundle b = new Bundle();
-                b.putParcelable(POSITION, movie);
                 Intent intent = new Intent(getActivity(), MovieActivity.class);
-                intent.putExtra(BUNDLE, b);
+                intent.putExtra(BUNDLE, movie.getId());
                 startActivity(intent);
             }
 
@@ -137,7 +136,7 @@ public class MoviesListFragment extends Fragment {
             }
         } else {
             scrollPosition = mLayoutManager.findFirstVisibleItemPosition();
-//            getMovies = moviesDataSource.getAllMovies();
+            getMovies = moviesDataSource.getAllMovies();
         }
     }
 
@@ -221,6 +220,7 @@ public class MoviesListFragment extends Fragment {
 
     public void refreshAdapter() {
         mAdapter = new MoviesAdapter(getContext(), getMovies);
+        Log.v("LOG", getMovies.size() + " size");
         mRecyclerView.setAdapter(mAdapter);
         if (lastItemScrollPosition != 0) {
             mRecyclerView.scrollToPosition(lastItemScrollPosition);

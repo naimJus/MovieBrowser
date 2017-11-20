@@ -3,9 +3,13 @@ package example.com.moviesfragment;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
-import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
+
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import example.com.moviesfragment.gson.Movie;
 import example.com.moviesfragment.gson.Torrent;
@@ -27,13 +31,15 @@ public class MoviesDataSource {
         dbHelper.close();
     }
 
-   /* List<Movie> getAllMovies() {
-        Cursor cursor = database.query(MovieSQLiteHelper.TABLE_NAME, null, null, null, null, null, null, "50");
+    List<Movie> getAllMovies() {
+        Cursor cursor = database.rawQuery("SELECT * " +
+                "FROM " + MovieSQLiteHelper.TABLE_MOVIE_INFO + " m "
+                + "INNER JOIN " + MovieSQLiteHelper.TABLE_TORRENTS + " t ON m.movie_info_id = t.movie_info_id ORDER BY " + MovieSQLiteHelper.MOVIE_INFO_KEY_ID + " ASC ", null);
         List<Movie> movies = cursorToList(cursor);
         return movies;
-
     }
 
+    /*
     List<Movie> sortBy(String orderBy) {
         Cursor cursor = database.query(MovieSQLiteHelper.TABLE_NAME, null, null, null, null, null, orderBy, "50");
         List<Movie> movies = cursorToList(cursor);
@@ -69,55 +75,44 @@ public class MoviesDataSource {
         List<Movie> movies = cursorToList(cursor);
         return movies;
     }
-
+*/
     private List<Movie> cursorToList(Cursor cursor) {
         List<Movie> movies = new ArrayList<Movie>();
+        Set<Movie> movieSet = new HashSet<>();
         if (cursor.getCount() > 0) {
             while (cursor.moveToNext()) {
                 Movie movie = new Movie();
-                List<Torrent> torrents = new ArrayList<Torrent>(3);
 
+                movie.setId(cursor.getInt(cursor.getColumnIndex(MovieSQLiteHelper.MOVIE_INFO_KEY_ID)));
+                movie.setTitle(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.MOVIE_INFO_KEY_TITLE)));
+                movie.setTitleLong(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.MOVIE_INFO_KEY_TITLE_LONG)));
+                movie.setDescriptionFull(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.MOVIE_INFO_KEY_DESCRIPTION)));
+                movie.setYear(cursor.getInt(cursor.getColumnIndex(MovieSQLiteHelper.MOVIE_INFO_KEY_YEAR)));
+                movie.setRating(cursor.getDouble(cursor.getColumnIndex(MovieSQLiteHelper.MOVIE_INFO_KEY_RATING)));
+                movie.setYtTrailerCode(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.MOVIE_INFO_KEY_TRAILER)));
+                movie.setGenre(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.MOVIE_INFO_KEY_GENRE)));
+                movie.setRuntime(cursor.getInt(cursor.getColumnIndex(MovieSQLiteHelper.MOVIE_INFO_KEY_RUNTIME)));
+                movie.setMpaRating(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.MOVIE_INFO_KEY_MPARATING)));
+                movie.setImdbCode(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.MOVIE_INFO_KEY_IMDB)));
+                movie.setBackgroundImage(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.MOVIE_INFO_IMAGE_BACKGROUND)));
+                movie.setBackgroundImageOriginal(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.MOVIE_INFO_IMAGE_BACKGROUND_ORIGINAL)));
+                movie.setSmallCoverImage(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.MOVIE_INFO_IMAGE_SMALL_COVER)));
+                movie.setMediumCoverImage(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.MOVIE_INFO_IMAGE_MEDIUM_COVER)));
+                movie.setLargeCoverImage(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.MOVIE_INFO_IMAGE_LARGE_COVER)));
 
-                movie.setId(cursor.getInt(cursor.getColumnIndex(MovieSQLiteHelper.KEY_ID)));
-                movie.setTitle(cursor.getString(1));
-                movie.setSummary(cursor.getString(2));
-                movie.setYear(cursor.getInt(3));
-                movie.setMediumCoverImage(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.KEY_IMAGE_URL)));
-                movie.setRating(cursor.getDouble(cursor.getColumnIndex(MovieSQLiteHelper.KEY_RATING)));
-                movie.setYtTrailerCode(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.KEY_TRAILER)));
+                Torrent torrent = new Torrent();
+                torrent.setQuality(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.TORRENT_KEY_QUALITY)));
+                torrent.setHash(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.TORRENT_KEY_HASH)));
+                torrent.setUrl(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.TORRENT_KEY_URL)));
+                torrent.setSize(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.TORRENT_KEY_SIZE)));
 
-                Torrent t = new Torrent();
-                t.setUrl(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.KEY_720P)));
-                t.setHash(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.KEY_HASH720P)));
-                torrents.add(t);
-
-                Torrent t1 = new Torrent();
-                t1.setUrl(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.KEY_1080P)));
-                t1.setHash(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.KEY_HASH1080P)));
-                torrents.add(t1);
-
-                Torrent t2 = new Torrent();
-                t2.setUrl(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.KEY_3D)));
-                t2.setHash(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.KEY_HASH3D)));
-                torrents.add(t2);
-
-                movie.setGenre(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.KEY_GENRE)));
-                movie.setAvailableInQuality(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.KEY_QUALITY)));
-                movie.setTorrents(torrents);
-                movies.add(movie);
+//                movie.setTorrents(torrent);
+                movieSet.add(movie);
             }
         }
+        movies.addAll(movieSet);
         return movies;
-    }*/
-
-    int getCount() {
-        Cursor mCount = database.rawQuery("select count(*) from movie", null);
-        mCount.moveToFirst();
-        int count = mCount.getInt(0);
-        mCount.close();
-        return count;
     }
-
 
     public long createMovieInfo(Movie movie) {
         ContentValues values = new ContentValues();
@@ -128,7 +123,8 @@ public class MoviesDataSource {
         values.put(MovieSQLiteHelper.MOVIE_INFO_KEY_YEAR, movie.getYear());
         values.put(MovieSQLiteHelper.MOVIE_INFO_KEY_RATING, movie.getRating());
         values.put(MovieSQLiteHelper.MOVIE_INFO_KEY_TRAILER, movie.getYtTrailerCode());
-        values.put(MovieSQLiteHelper.MOVIE_INFO_KEY_GENRE, movie.getGenres().toString());
+        if (movie.getGenres() != null)
+            values.put(MovieSQLiteHelper.MOVIE_INFO_KEY_GENRE, movie.getGenres().toString());
         values.put(MovieSQLiteHelper.MOVIE_INFO_KEY_RUNTIME, movie.getRuntime());
         values.put(MovieSQLiteHelper.MOVIE_INFO_KEY_MPARATING, movie.getMpaRating());
         values.put(MovieSQLiteHelper.MOVIE_INFO_KEY_IMDB, movie.getImdbCode());
@@ -144,29 +140,33 @@ public class MoviesDataSource {
 
     public long createTorrent(Movie movie) {
         ContentValues values;
+        long torrentId = -1;
         for (Torrent torrent : movie.getTorrents()) {
-            if (torrent != null) {
-                values = new ContentValues();
-                values.put(MovieSQLiteHelper.TORRENT_KEY_ID, movie.getId() + torrent.getHash());
-                values.put(MovieSQLiteHelper.MOVIE_INFO_KEY_ID, movie.getId());
-                values.put(MovieSQLiteHelper.TORRENT_KEY_QUALITY, torrent.getQuality());
-                values.put(MovieSQLiteHelper.TORRENT_KEY_HASH, torrent.getHash());
-                values.put(MovieSQLiteHelper.TORRENT_KEY_SIZE, torrent.getSize());
-                values.put(MovieSQLiteHelper.TORRENT_KEY_URL, torrent.getUrl());
+            values = new ContentValues();
+            values.put(MovieSQLiteHelper.TORRENT_KEY_ID, movie.getId() + torrent.getHash());
+            values.put(MovieSQLiteHelper.MOVIE_INFO_KEY_ID, movie.getId());
+            values.put(MovieSQLiteHelper.TORRENT_KEY_QUALITY, torrent.getQuality());
+            values.put(MovieSQLiteHelper.TORRENT_KEY_HASH, torrent.getHash());
+            values.put(MovieSQLiteHelper.TORRENT_KEY_SIZE, torrent.getSize());
+            values.put(MovieSQLiteHelper.TORRENT_KEY_URL, torrent.getUrl());
+            torrentId = database.insertWithOnConflict(MovieSQLiteHelper.TABLE_TORRENTS, null, values, SQLiteDatabase.CONFLICT_IGNORE);
 
-                try {
-                    long torrentId = database.insertOrThrow(MovieSQLiteHelper.TABLE_TORRENTS, null, values);
-                    return torrentId;
-
-                } catch (SQLException e) {
-                    e.printStackTrace();
-                }
-            }
         }
-        return 0;
+        return torrentId;
+    }
+/*
+
+    int getCount() {
+        Cursor mCount = database.rawQuery("select count(*) from movie", null);
+        mCount.moveToFirst();
+        int count = mCount.getInt(0);
+        mCount.close();
+        return count;
     }
 
-  /*  long createMovie(long id, String name, String description, int year, String imageUrl, double rating, String trailerCode, String genre, HashMap<String, String> torrents, HashMap<String, String> hashValues) {
+
+
+  long createMovie(long id, String name, String description, int year, String imageUrl, double rating, String trailerCode, String genre, HashMap<String, String> torrents, HashMap<String, String> hashValues) {
         long resultId = -1;
         StringBuilder quality = new StringBuilder();
         ContentValues values = new ContentValues();
@@ -194,5 +194,6 @@ public class MoviesDataSource {
         resultId = database.insertWithOnConflict(MovieSQLiteHelper.TABLE_NAME, null, values, SQLiteDatabase.CONFLICT_IGNORE);
 
         return resultId;
-    }*/
+    }
+*/
 }
