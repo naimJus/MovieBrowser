@@ -190,6 +190,17 @@
                     android:text="Magnet"
                     android:drawablePadding="8dp"/>
 
+                <TextView
+                    android:id="@+id/runtimeTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignStart="@+id/movie_genre_TV"
+                    android:layout_below="@+id/movie_genre_TV"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/runtime"
+                    android:textColor="@android:color/black"
+                    android:textSize="@dimen/font_size_m" />
+
 
             </RelativeLayout>
 

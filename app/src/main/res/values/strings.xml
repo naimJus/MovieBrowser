@@ -89,4 +89,5 @@
     <string name="magnet_Btn">Magnet Link</string>
     <string name="download_Btn">Download</string>
     <string name="download">Download:</string>
+    <string name="runtime">Runtime:</string>
 </resources>

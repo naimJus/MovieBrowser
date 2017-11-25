@@ -1,5 +1,7 @@
 package example.com.moviesfragment;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -14,7 +16,11 @@ import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerView;
 import com.squareup.picasso.Picasso;
 
+import java.util.HashMap;
+import java.util.List;
+
 import example.com.moviesfragment.gson.Movie;
+import example.com.moviesfragment.gson.Torrent;
 
 public class MovieActivity extends YouTubeBaseActivity {
 
@@ -22,7 +28,7 @@ public class MovieActivity extends YouTubeBaseActivity {
     private static final String LOG = MovieActivity.class.getSimpleName();
     private ImageView movieImage;
     private Movie movie;
-    private TextView nameTV, yearTV, ratingTV, genreTV, descriptionTV;
+    private TextView nameTv, yearTv, ratingTv, genreTv, descriptionTv, runtimeTv;
     private RadioButton radioButton720p, radioButton1080p, radioButton3d;
     private Button downloadBtn, magnetBtn;
     private YouTubePlayerView youTubePlayerView;
@@ -35,11 +41,16 @@ public class MovieActivity extends YouTubeBaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie);
 
-        nameTV = (TextView) findViewById(R.id.movie_name_TV);
-        yearTV = (TextView) findViewById(R.id.movie_year_TV);
-        ratingTV = (TextView) findViewById(R.id.movie_rating_TV);
-        genreTV = (TextView) findViewById(R.id.movie_genre_TV);
-        descriptionTV = (TextView) findViewById(R.id.movie_description_TV);
+        MoviesDataSource moviesDataSource = new MoviesDataSource(this);
+        moviesDataSource.open();
+
+
+        nameTv = (TextView) findViewById(R.id.movie_name_TV);
+        yearTv = (TextView) findViewById(R.id.movie_year_TV);
+        ratingTv = (TextView) findViewById(R.id.movie_rating_TV);
+        genreTv = (TextView) findViewById(R.id.movie_genre_TV);
+        descriptionTv = (TextView) findViewById(R.id.movie_description_TV);
+        runtimeTv = (TextView) findViewById(R.id.runtimeTextView);
 
         radioButton720p = (RadioButton) findViewById(R.id.quality720pRadioButton);
         radioButton1080p = (RadioButton) findViewById(R.id.quality1080pRadioButton);
@@ -53,21 +64,28 @@ public class MovieActivity extends YouTubeBaseActivity {
 
         // get the bundle from the intent
         //unwrap the bundle and get the movie;
-        Bundle b = getIntent().getBundleExtra(MoviesListFragment.BUNDLE);
-        movie = b.getParcelable(MoviesListFragment.POSITION);
 
-        String quality = movie.getAvailableInQuality();
 
-        if (quality.contains("720p")) {
+        int b = getIntent().getIntExtra(MoviesListFragment.BUNDLE, 1);
+        List<Movie> movies = moviesDataSource.getMovie(b + "");
+        movie = movies.get(0);
+
+        final HashMap<String, String> moviesMap = new HashMap<>();
+        for (Movie m : movies) {
+            Torrent t = m.getTorrent();
+            moviesMap.put(t.getQuality(), t.getUrl());
+        }
+
+        if (moviesMap.containsKey("720p")) {
             radioButton720p.setVisibility(View.VISIBLE);
             radioButton720p.setChecked(true);
         }
-        if (quality.contains("1080p")) {
+        if (moviesMap.containsKey("1080p")) {
             radioButton1080p.setVisibility(View.VISIBLE);
             if (!radioButton720p.isChecked())
                 radioButton1080p.setChecked(true);
         }
-        if (quality.contains("3D")) {
+        if (moviesMap.containsKey("3D")) {
             radioButton3d.setVisibility(View.VISIBLE);
             if (!radioButton720p.isChecked() && !radioButton1080p.isChecked())
                 radioButton3d.setChecked(true);
@@ -81,17 +99,31 @@ public class MovieActivity extends YouTubeBaseActivity {
                 .fit()
                 .into(movieImage);
 
-        nameTV.setText(movie.getTitle());
-        yearTV.setText(getResources().getString(R.string.year) + " " + movie.getYear());
-        ratingTV.setText(getResources().getString(R.string.rating) + " " + movie.getRating());
-        genreTV.setText(getResources().getString(R.string.genre) + " " + movie.getGenre());
-        descriptionTV.setText(movie.getSummary());
+        nameTv.setText(movie.getTitle());
+        yearTv.setText(getResources().getString(R.string.year) + " " + movie.getYear());
+        ratingTv.setText(getResources().getString(R.string.rating) + " " + movie.getRating());
+        genreTv.setText(getResources().getString(R.string.genre) + " " + movie.getGenre());
+        descriptionTv.setText(movie.getDescriptionFull());
+        runtimeTv.setText(getResources().getString(R.string.runtime) + " " + movie.getRuntime());
 
 
         downloadBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                String url = "";
 
+                if (radioButton720p.isChecked())
+                    url = moviesMap.get("720p");
+                if (radioButton1080p.isChecked())
+                    url = moviesMap.get("1080p");
+                if (radioButton3d.isChecked())
+                    url = moviesMap.get("3D");
+
+                Intent intent = new Intent(Intent.ACTION_VIEW);
+                intent.setData(Uri.parse(url));
+//                intent.setDataAndType(Uri.parse(url), "application/x-bittorrent");
+                intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+                startActivity(intent);
             }
         });
 
@@ -117,11 +149,5 @@ public class MovieActivity extends YouTubeBaseActivity {
             }
         };
         youTubePlayerView.initialize(YOUTUBE_KEY, initializedListener);
-    }
-
-    private String getCheckedRadioBtn(RadioButton r720p, RadioButton r1080p, RadioButton r3D) {
-        String url = null;
-        movie.getTorrents();
-        return url;
     }
 }

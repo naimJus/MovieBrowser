@@ -7,9 +7,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import example.com.moviesfragment.gson.Movie;
 import example.com.moviesfragment.gson.Torrent;
@@ -34,22 +32,31 @@ public class MoviesDataSource {
     List<Movie> getAllMovies() {
         Cursor cursor = database.rawQuery("SELECT * " +
                 "FROM " + MovieSQLiteHelper.TABLE_MOVIE_INFO + " m "
-                + "INNER JOIN " + MovieSQLiteHelper.TABLE_TORRENTS + " t ON m.movie_info_id = t.movie_info_id ORDER BY " + MovieSQLiteHelper.MOVIE_INFO_KEY_ID + " ASC ", null);
+                + "INNER JOIN " + MovieSQLiteHelper.TABLE_TORRENTS + " t ON m.movie_info_id = t.movie_info_id GROUP BY m.name ORDER BY " + MovieSQLiteHelper.MOVIE_INFO_KEY_ID + " ASC", null);
         List<Movie> movies = cursorToList(cursor);
         return movies;
     }
+
+    List<Movie> getMovie(String id) {
+        String[] ids = new String[]{id};
+        Cursor cursor = database.rawQuery("SELECT * FROM "
+                + MovieSQLiteHelper.TABLE_MOVIE_INFO + " m INNER JOIN "
+                + MovieSQLiteHelper.TABLE_TORRENTS + " t ON m.movie_info_id = t.movie_info_id WHERE m.movie_info_id =?", ids);
+        List<Movie> movies = cursorToList(cursor);
+        return movies;
+    }
+
+/*    List<Movie> sortBy(String orderBy) {
+        Cursor cursor = database.query(MovieSQLiteHelper.Ta, null, null, null, null, null, orderBy, "50");
+        List<Movie> movies = cursorToList(cursor);
+        return movies;
+    }*/
 
     /*
-    List<Movie> sortBy(String orderBy) {
-        Cursor cursor = database.query(MovieSQLiteHelper.TABLE_NAME, null, null, null, null, null, orderBy, "50");
-        List<Movie> movies = cursorToList(cursor);
-        return movies;
-    }
-
     List<Movie> sortAndLimit(String orderBy, String limit) {
         Cursor cursor = database.query(MovieSQLiteHelper.TABLE_NAME, null, null, null, null, null, orderBy, limit);
         List<Movie> movies = cursorToList(cursor);
-        return movies;
+        return movies;0
     }
 
     List<Movie> searchMovies(HashMap<String, String> searchParams) {
@@ -78,7 +85,6 @@ public class MoviesDataSource {
 */
     private List<Movie> cursorToList(Cursor cursor) {
         List<Movie> movies = new ArrayList<Movie>();
-        Set<Movie> movieSet = new HashSet<>();
         if (cursor.getCount() > 0) {
             while (cursor.moveToNext()) {
                 Movie movie = new Movie();
@@ -106,11 +112,10 @@ public class MoviesDataSource {
                 torrent.setUrl(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.TORRENT_KEY_URL)));
                 torrent.setSize(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.TORRENT_KEY_SIZE)));
 
-//                movie.setTorrents(torrent);
-                movieSet.add(movie);
+                movie.setTorrent(torrent);
+                movies.add(movie);
             }
         }
-        movies.addAll(movieSet);
         return movies;
     }
 
@@ -123,8 +128,14 @@ public class MoviesDataSource {
         values.put(MovieSQLiteHelper.MOVIE_INFO_KEY_YEAR, movie.getYear());
         values.put(MovieSQLiteHelper.MOVIE_INFO_KEY_RATING, movie.getRating());
         values.put(MovieSQLiteHelper.MOVIE_INFO_KEY_TRAILER, movie.getYtTrailerCode());
-        if (movie.getGenres() != null)
-            values.put(MovieSQLiteHelper.MOVIE_INFO_KEY_GENRE, movie.getGenres().toString());
+        if (movie.getGenres() != null) {
+            StringBuilder sb = new StringBuilder();
+            for (String genre : movie.getGenres()) {
+                sb.append(genre);
+                sb.append(" ");
+            }
+            values.put(MovieSQLiteHelper.MOVIE_INFO_KEY_GENRE, sb.toString());
+        }
         values.put(MovieSQLiteHelper.MOVIE_INFO_KEY_RUNTIME, movie.getRuntime());
         values.put(MovieSQLiteHelper.MOVIE_INFO_KEY_MPARATING, movie.getMpaRating());
         values.put(MovieSQLiteHelper.MOVIE_INFO_KEY_IMDB, movie.getImdbCode());
@@ -162,38 +173,6 @@ public class MoviesDataSource {
         int count = mCount.getInt(0);
         mCount.close();
         return count;
-    }
-
-
-
-  long createMovie(long id, String name, String description, int year, String imageUrl, double rating, String trailerCode, String genre, HashMap<String, String> torrents, HashMap<String, String> hashValues) {
-        long resultId = -1;
-        StringBuilder quality = new StringBuilder();
-        ContentValues values = new ContentValues();
-        values.put(MovieSQLiteHelper.KEY_ID, id);
-        values.put(MovieSQLiteHelper.KEY_NAME, name);
-        values.put(MovieSQLiteHelper.KEY_DESCRIPTION, description);
-        values.put(MovieSQLiteHelper.KEY_YEAR, year);
-        values.put(MovieSQLiteHelper.KEY_IMAGE_URL, imageUrl);
-        values.put(MovieSQLiteHelper.KEY_RATING, rating);
-        values.put(MovieSQLiteHelper.KEY_TRAILER, trailerCode);
-        values.put(MovieSQLiteHelper.KEY_GENRE, genre);
-        values.put(MovieSQLiteHelper.KEY_720P, torrents.get("720p"));
-        values.put(MovieSQLiteHelper.KEY_1080P, torrents.get("1080p"));
-        values.put(MovieSQLiteHelper.KEY_3D, torrents.get("3D"));
-        values.put(MovieSQLiteHelper.KEY_HASH720P, hashValues.get("720p"));
-        values.put(MovieSQLiteHelper.KEY_HASH1080P, hashValues.get("1080p"));
-        values.put(MovieSQLiteHelper.KEY_HASH3D, hashValues.get("3D"));
-        if (torrents.get("720p") != null)
-            quality.append("720p ");
-        if (torrents.get("1080p") != null)
-            quality.append("1080p ");
-        if (torrents.get("3D") != null)
-            quality.append("3D");
-        values.put(MovieSQLiteHelper.KEY_QUALITY, quality.toString());
-        resultId = database.insertWithOnConflict(MovieSQLiteHelper.TABLE_NAME, null, values, SQLiteDatabase.CONFLICT_IGNORE);
-
-        return resultId;
     }
 */
 }
