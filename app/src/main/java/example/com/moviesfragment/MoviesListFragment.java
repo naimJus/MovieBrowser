@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -43,7 +44,7 @@ public class MoviesListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        Log.v(TAG, "MoviesListFragment onCreate");
         // Initialize dataset, this data would usually come from a local content provider or
         // remote server.
         moviesDataSource = new MoviesDataSource(getActivity().getApplicationContext());
@@ -54,6 +55,7 @@ public class MoviesListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        Log.v(TAG, "MoviesListFragment onCreateView");
         View rootView = inflater.inflate(R.layout.fragment_movies_list, container, false);
 
         setHasOptionsMenu(true);
@@ -158,10 +160,10 @@ public class MoviesListFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.sortByName:
-                if (filter.equals(MovieSQLiteHelper.KEY_NAME + " ASC")) {
-                    filter = MovieSQLiteHelper.KEY_NAME + " DESC";
+                if (filter.equals(MovieSQLiteHelper.KEY_TITLE + " ASC")) {
+                    filter = MovieSQLiteHelper.KEY_TITLE + " DESC";
                 } else {
-                    filter = MovieSQLiteHelper.KEY_NAME + " ASC";
+                    filter = MovieSQLiteHelper.KEY_TITLE + " ASC";
                 }
                 lastItemScrollPosition = 0;
                 getMovies = moviesDataSource.sortAndLimit(filter, String.valueOf(limit));

@@ -353,8 +353,17 @@ public class Movie implements Parcelable {
         this.dateUploadedUnix = dateUploadedUnix;
     }
 
+    public String getFromListAvailableInQuality() {
+        StringBuilder sb = new StringBuilder();
+        for (Torrent t : torrents) {
+            sb.append(t.getQuality());
+            sb.append(" ");
+        }
+        return sb.toString();
+    }
+
     public String getAvailableInQuality() {
-        return availableInQuality;
+        return this.availableInQuality;
     }
 
     public void setAvailableInQuality(String availableInQuality) {

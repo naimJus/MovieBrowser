@@ -12,7 +12,7 @@ public class SqlStatements {
         String sql;
         switch (s) {
             case "Alphabetical":
-                sql = MovieSQLiteHelper.KEY_NAME + " ASC";
+                sql = MovieSQLiteHelper.KEY_TITLE + " ASC";
                 break;
             case "Year":
                 sql = MovieSQLiteHelper.KEY_YEAR + " DESC";
@@ -71,9 +71,9 @@ public class SqlStatements {
     public String generateNameSql(String s) {
         String sql;
         if (!s.isEmpty()) {
-            sql = MovieSQLiteHelper.KEY_NAME + " LIKE '% " + s + "%' ";
+            sql = MovieSQLiteHelper.KEY_TITLE + " LIKE '% " + s + "%' ";
         } else {
-            sql = MovieSQLiteHelper.KEY_NAME + " IS NOT NULL";
+            sql = MovieSQLiteHelper.KEY_TITLE + " IS NOT NULL";
         }
         Log.v("SQL ", sql);
         return sql;

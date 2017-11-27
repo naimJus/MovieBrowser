@@ -5,8 +5,10 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
+import android.text.TextUtils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 
@@ -78,35 +80,32 @@ public class MoviesDataSource {
         if (cursor.getCount() > 0) {
             while (cursor.moveToNext()) {
                 Movie movie = new Movie();
-                List<Torrent> torrents = new ArrayList<Torrent>(3);
-
 
                 movie.setId(cursor.getInt(cursor.getColumnIndex(MovieSQLiteHelper.KEY_ID)));
                 movie.setTitle(cursor.getString(1));
                 movie.setSummary(cursor.getString(2));
                 movie.setYear(cursor.getInt(3));
-                movie.setMediumCoverImage(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.KEY_IMAGE_URL)));
+                movie.setMediumCoverImage(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.KEY_BACKGROUND_IMAGE_URL)));
                 movie.setRating(cursor.getDouble(cursor.getColumnIndex(MovieSQLiteHelper.KEY_RATING)));
-                movie.setYtTrailerCode(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.KEY_TRAILER)));
+                movie.setYtTrailerCode(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.KEY_YOUTUBE_TRAILER)));
 
-                Torrent t = new Torrent();
-                t.setUrl(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.KEY_720P)));
-                t.setHash(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.KEY_HASH720P)));
-                torrents.add(t);
-
-                Torrent t1 = new Torrent();
-                t1.setUrl(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.KEY_1080P)));
-                t1.setHash(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.KEY_HASH1080P)));
-                torrents.add(t1);
-
-                Torrent t2 = new Torrent();
-                t2.setUrl(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.KEY_3D)));
-                t2.setHash(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.KEY_HASH3D)));
-                torrents.add(t2);
+                Torrent[] torrents = new Torrent[3];
+                torrents[0] = new Torrent();
+                torrents[0].setUrl(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.KEY_720P)));
+                torrents[0].setHash(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.KEY_HASH720P)));
+                torrents[0].setSize(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.KEY_720P_SIZE)));
+                torrents[1] = new Torrent();
+                torrents[1].setUrl(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.KEY_1080P)));
+                torrents[1].setHash(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.KEY_HASH1080P)));
+                torrents[1].setSize(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.KEY_1080P_SIZE)));
+                torrents[2] = new Torrent();
+                torrents[2].setUrl(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.KEY_3D)));
+                torrents[2].setHash(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.KEY_HASH3D)));
+                torrents[2].setSize(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.KEY_3D_SIZE)));
 
                 movie.setGenre(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.KEY_GENRE)));
                 movie.setAvailableInQuality(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.KEY_QUALITY)));
-                movie.setTorrents(torrents);
+                movie.setTorrents(Arrays.asList(torrents));
                 movies.add(movie);
             }
         }
@@ -121,33 +120,38 @@ public class MoviesDataSource {
         return count;
     }
 
-    long createMovie(long id, String name, String description, int year, String imageUrl, double rating, String trailerCode, String genre, HashMap<String, String> torrents, HashMap<String, String> hashValues) {
+    long createMovie(Movie movie) {
         long resultId = -1;
-        StringBuilder quality = new StringBuilder();
         ContentValues values = new ContentValues();
-        values.put(MovieSQLiteHelper.KEY_ID, id);
-        values.put(MovieSQLiteHelper.KEY_NAME, name);
-        values.put(MovieSQLiteHelper.KEY_DESCRIPTION, description);
-        values.put(MovieSQLiteHelper.KEY_YEAR, year);
-        values.put(MovieSQLiteHelper.KEY_IMAGE_URL, imageUrl);
-        values.put(MovieSQLiteHelper.KEY_RATING, rating);
-        values.put(MovieSQLiteHelper.KEY_TRAILER, trailerCode);
-        values.put(MovieSQLiteHelper.KEY_GENRE, genre);
-        values.put(MovieSQLiteHelper.KEY_720P, torrents.get("720p"));
-        values.put(MovieSQLiteHelper.KEY_1080P, torrents.get("1080p"));
-        values.put(MovieSQLiteHelper.KEY_3D, torrents.get("3D"));
-        values.put(MovieSQLiteHelper.KEY_HASH720P, hashValues.get("720p"));
-        values.put(MovieSQLiteHelper.KEY_HASH1080P, hashValues.get("1080p"));
-        values.put(MovieSQLiteHelper.KEY_HASH3D, hashValues.get("3D"));
-        if (torrents.get("720p") != null)
-            quality.append("720p ");
-        if (torrents.get("1080p") != null)
-            quality.append("1080p ");
-        if (torrents.get("3D") != null)
-            quality.append("3D");
-        values.put(MovieSQLiteHelper.KEY_QUALITY, quality.toString());
+        values.put(MovieSQLiteHelper.KEY_ID, movie.getId());
+        values.put(MovieSQLiteHelper.KEY_TITLE, movie.getTitle());
+        values.put(MovieSQLiteHelper.KEY_DESCRIPTION, movie.getDescriptionFull());
+        values.put(MovieSQLiteHelper.KEY_YEAR, movie.getYear());
+        values.put(MovieSQLiteHelper.KEY_BACKGROUND_IMAGE_URL, movie.getMediumCoverImage());
+        values.put(MovieSQLiteHelper.KEY_RATING, movie.getRating());
+        values.put(MovieSQLiteHelper.KEY_YOUTUBE_TRAILER, movie.getYtTrailerCode());
+        if (movie.getGenres() != null)
+            values.put(MovieSQLiteHelper.KEY_GENRE, TextUtils.join(", ", movie.getGenres()));
+        if (movie.getTorrents() != null)
+            for (Torrent t : movie.getTorrents()) {
+                if (t.getQuality().equals("720p")) {
+                    values.put(MovieSQLiteHelper.KEY_720P, t.getUrl());
+                    values.put(MovieSQLiteHelper.KEY_HASH720P, t.getHash());
+                    values.put(MovieSQLiteHelper.KEY_720P_SIZE, t.getSize());
+                }
+                if (t.getQuality().equals("1080p")) {
+                    values.put(MovieSQLiteHelper.KEY_1080P, t.getUrl());
+                    values.put(MovieSQLiteHelper.KEY_HASH1080P, t.getHash());
+                    values.put(MovieSQLiteHelper.KEY_1080P_SIZE, t.getSize());
+                }
+                if (t.getQuality().equals("3D")) {
+                    values.put(MovieSQLiteHelper.KEY_3D, t.getUrl());
+                    values.put(MovieSQLiteHelper.KEY_HASH3D, t.getHash());
+                    values.put(MovieSQLiteHelper.KEY_3D_SIZE, t.getSize());
+                }
+                values.put(MovieSQLiteHelper.KEY_QUALITY, movie.getFromListAvailableInQuality());
+            }
         resultId = database.insertWithOnConflict(MovieSQLiteHelper.TABLE_NAME, null, values, SQLiteDatabase.CONFLICT_IGNORE);
-
         return resultId;
     }
 }

@@ -119,10 +119,10 @@ public class SearchResultsActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.sortByName:
-                if (sqlParams.get("Order").equals(MovieSQLiteHelper.KEY_NAME + " ASC")) {
-                    sqlParams.put("Order", MovieSQLiteHelper.KEY_NAME + " DESC");
+                if (sqlParams.get("Order").equals(MovieSQLiteHelper.KEY_TITLE + " ASC")) {
+                    sqlParams.put("Order", MovieSQLiteHelper.KEY_TITLE + " DESC");
                 } else {
-                    sqlParams.put("Order", MovieSQLiteHelper.KEY_NAME + " ASC");
+                    sqlParams.put("Order", MovieSQLiteHelper.KEY_TITLE + " ASC");
                 }
                 getMovies = moviesDataSource.searchMovies(sqlParams);
                 refreshAdapter();

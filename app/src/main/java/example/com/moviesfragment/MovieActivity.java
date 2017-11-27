@@ -1,7 +1,6 @@
 package example.com.moviesfragment;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -14,12 +13,18 @@ import com.google.android.youtube.player.YouTubePlayer;
 import com.google.android.youtube.player.YouTubePlayerView;
 import com.squareup.picasso.Picasso;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 import example.com.moviesfragment.gson.Movie;
+import example.com.moviesfragment.gson.Torrent;
 
 public class MovieActivity extends YouTubeBaseActivity {
 
     private static final String YOUTUBE_KEY = "AIzaSyBp9dpHGyl_0MUM8z_SwKPXeWEabVlUSKk";
     private static final String LOG = MovieActivity.class.getSimpleName();
+    private HashMap<Torrent, String> mMap;
     private ImageView movieImage;
     private Movie movie;
     private TextView nameTV, yearTV, ratingTV, genreTV, descriptionTV;
@@ -27,7 +32,6 @@ public class MovieActivity extends YouTubeBaseActivity {
     private Button downloadBtn, magnetBtn;
     private YouTubePlayerView youTubePlayerView;
     private YouTubePlayer.OnInitializedListener initializedListener;
-
 
     @Override
 
@@ -40,14 +44,11 @@ public class MovieActivity extends YouTubeBaseActivity {
         ratingTV = (TextView) findViewById(R.id.movie_rating_TV);
         genreTV = (TextView) findViewById(R.id.movie_genre_TV);
         descriptionTV = (TextView) findViewById(R.id.movie_description_TV);
-
         radioButton720p = (RadioButton) findViewById(R.id.quality720pRadioButton);
         radioButton1080p = (RadioButton) findViewById(R.id.quality1080pRadioButton);
         radioButton3d = (RadioButton) findViewById(R.id.quality3dRadioButton);
-
         downloadBtn = (Button) findViewById(R.id.downloadBtn);
         magnetBtn = (Button) findViewById(R.id.magnetBtn);
-
         movieImage = (ImageView) findViewById(R.id.movie_image);
 
 
@@ -56,25 +57,6 @@ public class MovieActivity extends YouTubeBaseActivity {
         Bundle b = getIntent().getBundleExtra(MoviesListFragment.BUNDLE);
         movie = b.getParcelable(MoviesListFragment.POSITION);
 
-        String quality = movie.getAvailableInQuality();
-
-        if (quality.contains("720p")) {
-            radioButton720p.setVisibility(View.VISIBLE);
-            radioButton720p.setChecked(true);
-        }
-        if (quality.contains("1080p")) {
-            radioButton1080p.setVisibility(View.VISIBLE);
-            if (!radioButton720p.isChecked())
-                radioButton1080p.setChecked(true);
-        }
-        if (quality.contains("3D")) {
-            radioButton3d.setVisibility(View.VISIBLE);
-            if (!radioButton720p.isChecked() && !radioButton1080p.isChecked())
-                radioButton3d.setChecked(true);
-        }
-
-
-        Log.v(LOG, movie.toString());
 
         Picasso.with(this)
                 .load(movie.getMediumCoverImage())
