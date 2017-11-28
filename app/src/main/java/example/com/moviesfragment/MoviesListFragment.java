@@ -220,7 +220,6 @@ public class MoviesListFragment extends Fragment {
 
     public void refreshAdapter() {
         mAdapter = new MoviesAdapter(getContext(), getMovies);
-        Log.v("LOG", getMovies.size() + " size");
         mRecyclerView.setAdapter(mAdapter);
         if (lastItemScrollPosition != 0) {
             mRecyclerView.scrollToPosition(lastItemScrollPosition);

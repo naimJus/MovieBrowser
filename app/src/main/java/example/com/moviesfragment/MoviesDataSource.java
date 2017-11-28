@@ -5,6 +5,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
+import android.text.TextUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -119,7 +120,7 @@ public class MoviesDataSource {
         return movies;
     }
 
-    public long createMovieInfo(Movie movie) {
+    public void createMovieInfo(Movie movie) {
         ContentValues values = new ContentValues();
         values.put(MovieSQLiteHelper.MOVIE_INFO_KEY_ID, movie.getId());
         values.put(MovieSQLiteHelper.MOVIE_INFO_KEY_TITLE, movie.getTitle());
@@ -128,14 +129,8 @@ public class MoviesDataSource {
         values.put(MovieSQLiteHelper.MOVIE_INFO_KEY_YEAR, movie.getYear());
         values.put(MovieSQLiteHelper.MOVIE_INFO_KEY_RATING, movie.getRating());
         values.put(MovieSQLiteHelper.MOVIE_INFO_KEY_TRAILER, movie.getYtTrailerCode());
-        if (movie.getGenres() != null) {
-            StringBuilder sb = new StringBuilder();
-            for (String genre : movie.getGenres()) {
-                sb.append(genre);
-                sb.append(" ");
-            }
-            values.put(MovieSQLiteHelper.MOVIE_INFO_KEY_GENRE, sb.toString());
-        }
+        if (movie.getGenres() != null)
+            values.put(MovieSQLiteHelper.MOVIE_INFO_KEY_GENRE, TextUtils.join(", ", movie.getGenres()));
         values.put(MovieSQLiteHelper.MOVIE_INFO_KEY_RUNTIME, movie.getRuntime());
         values.put(MovieSQLiteHelper.MOVIE_INFO_KEY_MPARATING, movie.getMpaRating());
         values.put(MovieSQLiteHelper.MOVIE_INFO_KEY_IMDB, movie.getImdbCode());
@@ -145,13 +140,13 @@ public class MoviesDataSource {
         values.put(MovieSQLiteHelper.MOVIE_INFO_IMAGE_MEDIUM_COVER, movie.getMediumCoverImage());
         values.put(MovieSQLiteHelper.MOVIE_INFO_IMAGE_LARGE_COVER, movie.getLargeCoverImage());
 
-        long resultId = database.insertWithOnConflict(MovieSQLiteHelper.TABLE_MOVIE_INFO, null, values, SQLiteDatabase.CONFLICT_IGNORE);
-        return resultId;
+        if (movie.getTorrents() != null)
+            createTorrent(movie);
+        database.insertWithOnConflict(MovieSQLiteHelper.TABLE_MOVIE_INFO, null, values, SQLiteDatabase.CONFLICT_IGNORE);
     }
 
-    public long createTorrent(Movie movie) {
+    private void createTorrent(Movie movie) {
         ContentValues values;
-        long torrentId = -1;
         for (Torrent torrent : movie.getTorrents()) {
             values = new ContentValues();
             values.put(MovieSQLiteHelper.TORRENT_KEY_ID, movie.getId() + torrent.getHash());
@@ -160,10 +155,8 @@ public class MoviesDataSource {
             values.put(MovieSQLiteHelper.TORRENT_KEY_HASH, torrent.getHash());
             values.put(MovieSQLiteHelper.TORRENT_KEY_SIZE, torrent.getSize());
             values.put(MovieSQLiteHelper.TORRENT_KEY_URL, torrent.getUrl());
-            torrentId = database.insertWithOnConflict(MovieSQLiteHelper.TABLE_TORRENTS, null, values, SQLiteDatabase.CONFLICT_IGNORE);
-
+            database.insertWithOnConflict(MovieSQLiteHelper.TABLE_TORRENTS, null, values, SQLiteDatabase.CONFLICT_IGNORE);
         }
-        return torrentId;
     }
 /*
 
