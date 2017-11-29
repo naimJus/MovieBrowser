@@ -51,13 +51,13 @@ public class SearchResultsActivity extends AppCompatActivity {
         moviesDataSource.open();
 
 
-        Intent i = getIntent();
+/*        Intent i = getIntent();
         if (i != null) {
             sqlParams = (HashMap<String, String>) i.getSerializableExtra(SearchFragment.SEARCH);
             getMovies = moviesDataSource.searchMovies(sqlParams);
         } else {
             getMovies = moviesDataSource.getAllMovies();
-        }
+        }*/
 
         if (getMovies.size() == 0) {
             TextView textView = new TextView(this);
@@ -115,6 +115,7 @@ public class SearchResultsActivity extends AppCompatActivity {
 //        });
     }
 
+/*
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -152,6 +153,7 @@ public class SearchResultsActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
+*/
 
 
     @Override

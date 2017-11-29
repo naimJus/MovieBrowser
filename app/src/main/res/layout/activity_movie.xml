@@ -158,37 +158,51 @@
                     android:textColor="@android:color/black"
                     android:textSize="@dimen/font_size_m" />
 
-                <Button
-                    android:id="@+id/downloadBtn"
-                    android:layout_width="150dp"
-                    android:layout_height="48dp"
-                    android:layout_marginBottom="8dp"
-                    android:layout_marginTop="8dp"
-                    android:elevation="2dp"
+                <LinearLayout
+                    style="?android:attr/buttonBarStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
                     android:layout_alignStart="@id/downloadTextView"
                     android:layout_below="@+id/downloadTextView"
-                    android:background="@android:color/background_light"
-                    android:drawableStart="@drawable/download"
-                    android:text="Download"
-                    android:drawablePadding="8dp"/>
+                    android:orientation="horizontal">
+
+                    <Button
+                        android:id="@+id/downloadBtn"
+                        style="?android:attr/buttonBarButtonStyle"
+                        android:layout_width="150dp"
+                        android:layout_height="48dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_weight="1"
+                        android:elevation="2dp"
+                        android:drawableStart="@drawable/download"
+                        android:text="@string/download_Btn" />
+
+                    <Button
+                        android:id="@+id/magnetBtn"
+                        style="?android:attr/buttonBarButtonStyle"
+                        android:layout_width="150dp"
+                        android:layout_height="48dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_weight="1"
+                        android:elevation="2dp"
+                        android:drawableStart="@drawable/magnet"
+                        android:text="@string/magnet_Btn" />
+                </LinearLayout>
+
                 <!--android:drawableStart="@drawable/magnet"-->
 
-                <Button
-                    android:id="@+id/magnetBtn"
-                    android:layout_width="150dp"
-                    android:elevation="2dp"
-                    android:layout_height="48dp"
+                <TextView
+                    android:id="@+id/runtimeTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignStart="@+id/movie_genre_TV"
+                    android:layout_below="@+id/movie_genre_TV"
                     android:layout_marginTop="8dp"
-                    android:layout_alignBottom="@+id/downloadBtn"
-                    android:layout_below="@+id/downloadTextView"
-                    android:layout_centerHorizontal="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginStart="8dp"
-                    android:layout_toEndOf="@+id/downloadBtn"
-                    android:background="@android:color/background_light"
-                    android:drawableStart="@drawable/magnet"
-                    android:text="Magnet"
-                    android:drawablePadding="8dp"/>
+                    android:text="@string/runtime"
+                    android:textColor="@android:color/black"
+                    android:textSize="@dimen/font_size_m" />
 
 
             </RelativeLayout>

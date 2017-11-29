@@ -8,7 +8,7 @@ import android.util.Log;
 
 public class SqlStatements {
 
-    public String generateOrderSql(String s) {
+/*    public String generateOrderSql(String s) {
         String sql;
         switch (s) {
             case "Alphabetical":
@@ -77,5 +77,5 @@ public class SqlStatements {
         }
         Log.v("SQL ", sql);
         return sql;
-    }
+    }*/
 }
