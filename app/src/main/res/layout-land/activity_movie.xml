@@ -4,7 +4,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@android:color/background_light">
 
     <com.google.android.youtube.player.YouTubePlayerView
         android:id="@+id/playerYouTube"
@@ -35,6 +36,16 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
+            <ImageView
+                android:id="@+id/movie_image"
+                android:layout_width="120dp"
+                android:layout_height="180dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:src="@mipmap/ic_launcher"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
             <TextView
                 android:id="@+id/movie_name_TV"
                 android:layout_width="0dp"
@@ -55,21 +66,12 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
-                android:text="TextView"
+                android:text="@string/year"
                 android:textColor="@android:color/black"
                 android:textSize="@dimen/font_size_m"
                 app:layout_constraintStart_toEndOf="@+id/movie_image"
                 app:layout_constraintTop_toBottomOf="@+id/movie_name_TV" />
 
-            <ImageView
-                android:id="@+id/movie_image"
-                android:layout_width="100dp"
-                android:layout_height="150dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:src="@mipmap/ic_launcher"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/movie_rating_TV"
@@ -77,7 +79,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
-                android:text="TextView"
+                android:text="@string/rating"
                 android:textColor="@android:color/black"
                 android:textSize="@dimen/font_size_m"
                 app:layout_constraintStart_toEndOf="@+id/movie_year_TV"
@@ -87,13 +89,12 @@
                 android:id="@+id/movie_genre_TV"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
-                android:text="TextView"
+                android:text="@string/genre"
                 android:textColor="@android:color/black"
                 android:textSize="@dimen/font_size_m"
-                app:layout_constraintStart_toEndOf="@+id/movie_rating_TV"
-                app:layout_constraintTop_toBottomOf="@+id/movie_name_TV" />
+                app:layout_constraintStart_toStartOf="@+id/movie_year_TV"
+                app:layout_constraintTop_toBottomOf="@+id/movie_year_TV" />
 
             <TextView
                 android:id="@+id/description"
@@ -108,7 +109,20 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/movie_image" />
+                app:layout_constraintTop_toBottomOf="@+id/Buttons_Bar_Linear_Layout" />
+
+            <TextView
+                android:id="@+id/runtimeTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="8dp"
+                android:text="@string/runtime"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/font_size_m"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/movie_rating_TV"
+                app:layout_constraintTop_toBottomOf="@+id/movie_name_TV" />
 
             <TextView
                 android:id="@+id/movie_description_TV"
@@ -126,44 +140,109 @@
                 app:layout_constraintTop_toBottomOf="@+id/description" />
 
 
-            <Button
-                android:id="@+id/quality_720p"
+            <RadioGroup
+                android:id="@+id/radioGroup2"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="16dp"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toBottomOf="@+id/availableInQuality"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.43"
+                app:layout_constraintStart_toEndOf="@+id/availableInQuality"
+                app:layout_constraintTop_toTopOf="@+id/availableInQuality">
+
+                <RadioButton
+                    android:id="@+id/quality720pRadioButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/quality_1080p"
+                    android:visibility="gone" />
+
+                <RadioButton
+                    android:id="@+id/quality1080pRadioButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/quality_1080p"
+                    android:visibility="gone" />
+
+                <RadioButton
+                    android:id="@+id/quality3dRadioButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/quality_3d"
+                    android:visibility="gone" />
+            </RadioGroup>
+
+            <TextView
+                android:id="@+id/availableInQuality"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
+                android:layout_marginEnd="8dp"
                 android:layout_marginTop="8dp"
-                android:text="@string/quality_720p"
-                android:theme="@style/PrimaryFlatButton"
-                app:layout_constraintStart_toEndOf="@+id/movie_image"
+                android:text="@string/quality"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/font_size_m"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="@+id/movie_year_TV"
                 app:layout_constraintTop_toBottomOf="@+id/movie_genre_TV" />
 
-            <Button
-                android:id="@+id/quality_1080p"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
+            <LinearLayout
+                android:id="@+id/Buttons_Bar_Linear_Layout"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                android:text="@string/quality_1080p"
-                android:theme="@style/PrimaryFlatButton"
-                app:layout_constraintBottom_toBottomOf="@+id/quality_720p"
-                app:layout_constraintStart_toEndOf="@+id/quality_720p"
-                app:layout_constraintTop_toTopOf="@+id/quality_720p"
-                app:layout_constraintVertical_bias="1.0" />
+                android:orientation="horizontal"
+                app:layout_constraintEnd_toEndOf="@+id/radioGroup2"
+                app:layout_constraintStart_toEndOf="@+id/downloadTextView"
+                app:layout_constraintTop_toBottomOf="@+id/radioGroup2">
 
-            <Button
-                android:id="@+id/quality_3d"
+                <Button
+                    android:id="@+id/downloadBtn"
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_weight="1"
+                    android:drawableStart="@drawable/download"
+                    android:elevation="2dp"
+                    android:text="@string/download_Btn" />
+
+                <Button
+                    android:id="@+id/magnetBtn"
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="48dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_weight="1"
+                    android:drawableStart="@drawable/magnet"
+                    android:elevation="2dp"
+                    android:text="@string/magnet_Btn" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/downloadTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginStart="4dp"
-                android:text="@string/quality_3d"
-                android:theme="@style/PrimaryFlatButton"
-                app:layout_constraintBottom_toBottomOf="@+id/quality_1080p"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/quality_1080p"
-                app:layout_constraintTop_toTopOf="@+id/quality_1080p"
-                app:layout_constraintVertical_bias="0.0" />
+                android:layout_marginTop="8dp"
+                android:text="@string/download"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/font_size_m"
+                app:layout_constraintBottom_toBottomOf="@+id/Buttons_Bar_Linear_Layout"
+                app:layout_constraintStart_toStartOf="@+id/availableInQuality"
+                app:layout_constraintTop_toTopOf="@+id/Buttons_Bar_Linear_Layout" />
+
         </android.support.constraint.ConstraintLayout>
 
     </ScrollView>
