@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -89,10 +90,8 @@ public class MoviesListFragment extends Fragment {
             public void onClick(View view, final int position) {
                 //Values are passing to activity & to fragment as well
                 Movie movie = getMovies.get(position);
-                Bundle b = new Bundle();
-                b.putParcelable(POSITION, movie);
                 Intent intent = new Intent(getActivity(), MovieActivity.class);
-                intent.putExtra(BUNDLE, b);
+                intent.putExtra(BUNDLE, movie.getId());
                 startActivity(intent);
             }
 
@@ -129,10 +128,10 @@ public class MoviesListFragment extends Fragment {
             scrollPosition = savedInstanceState.getInt(FIRSTITEMID);
             lastItemScrollPosition = savedInstanceState.getInt(ITEMID);
             if (limit > 50) {
-                getMovies = moviesDataSource.sortAndLimit(filter, String.valueOf(limit));
+//                getMovies = moviesDataSource.sortAndLimit(filter, String.valueOf(limit));
                 mRecyclerView.scrollToPosition(lastItemScrollPosition);
             } else {
-                getMovies = moviesDataSource.sortBy(filter);
+//                getMovies = moviesDataSource.sortBy(filter);
                 mRecyclerView.scrollToPosition(scrollPosition);
             }
         } else {
@@ -154,6 +153,7 @@ public class MoviesListFragment extends Fragment {
 
     }
 
+/*
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -201,6 +201,7 @@ public class MoviesListFragment extends Fragment {
                 return super.onOptionsItemSelected(item);
         }
     }
+*/
 
     @Override
     public void onPause() {
@@ -228,7 +229,7 @@ public class MoviesListFragment extends Fragment {
     public void loadMoreData() {
         lastItemScrollPosition = mLayoutManager.findLastVisibleItemPosition() - 1;
         limit = limit + 50;
-        getMovies = moviesDataSource.sortAndLimit(filter, String.valueOf(limit));
+//        getMovies = moviesDataSource.sortAndLimit(filter, String.valueOf(limit));
         mRecyclerView.getAdapter().notifyDataSetChanged();
         refreshAdapter();
         flag_loading = false;

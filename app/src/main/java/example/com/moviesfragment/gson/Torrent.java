@@ -8,6 +8,18 @@ import com.google.gson.annotations.SerializedName;
 
 public class Torrent implements Parcelable {
 
+
+    public static final Creator<Torrent> CREATOR = new Creator<Torrent>() {
+        @Override
+        public Torrent createFromParcel(Parcel in) {
+            return new Torrent(in);
+        }
+
+        @Override
+        public Torrent[] newArray(int size) {
+            return new Torrent[size];
+        }
+    };
     @SerializedName("url")
     @Expose
     private String url;
@@ -46,18 +58,6 @@ public class Torrent implements Parcelable {
         size = in.readString();
         dateUploaded = in.readString();
     }
-
-    public static final Creator<Torrent> CREATOR = new Creator<Torrent>() {
-        @Override
-        public Torrent createFromParcel(Parcel in) {
-            return new Torrent(in);
-        }
-
-        @Override
-        public Torrent[] newArray(int size) {
-            return new Torrent[size];
-        }
-    };
 
     public String getUrl() {
         return url;
