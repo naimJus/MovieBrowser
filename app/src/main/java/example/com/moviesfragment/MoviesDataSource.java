@@ -33,7 +33,7 @@ public class MoviesDataSource {
     List<Movie> getAllMovies() {
         Cursor cursor = database.rawQuery("SELECT * " +
                 "FROM " + MovieSQLiteHelper.TABLE_MOVIE_INFO + " m "
-                + "INNER JOIN " + MovieSQLiteHelper.TABLE_TORRENTS + " t ON m.movie_info_id = t.movie_info_id GROUP BY m.name ORDER BY " + MovieSQLiteHelper.MOVIE_INFO_KEY_ID + " ASC", null);
+                + "INNER JOIN " + MovieSQLiteHelper.TABLE_TORRENTS + " t ON m.movie_info_id = t.movie_info_id ORDER BY " + MovieSQLiteHelper.MOVIE_INFO_KEY_ID + " ASC", null);
         List<Movie> movies = cursorToList(cursor);
         return movies;
     }

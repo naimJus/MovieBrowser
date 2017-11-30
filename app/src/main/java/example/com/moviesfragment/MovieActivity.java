@@ -29,13 +29,8 @@ public class MovieActivity extends YouTubeBaseActivity {
 
     private static final String YOUTUBE_KEY = "AIzaSyBp9dpHGyl_0MUM8z_SwKPXeWEabVlUSKk";
     private static final String LOG = MovieActivity.class.getSimpleName();
-    private HashMap<Torrent, String> mMap;
-    private ImageView movieImage;
-    private Movie movie;
-    private TextView nameTv, yearTv, ratingTv, genreTv, descriptionTv, runtimeTv;
+    final HashMap<String, Torrent> mMap = new HashMap<>();
     private RadioButton radioButton720p, radioButton1080p, radioButton3d;
-    private Button downloadBtn, magnetBtn;
-    private YouTubePlayerView youTubePlayerView;
     private YouTubePlayer.OnInitializedListener initializedListener;
 
     @Override
@@ -44,17 +39,14 @@ public class MovieActivity extends YouTubeBaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie);
 
+        TextView nameTv, yearTv, ratingTv, genreTv, descriptionTv, runtimeTv;
+        ImageView movieImage;
+        Movie movie;
+        Button downloadBtn, magnetBtn;
+        YouTubePlayerView youTubePlayerView;
 
         MoviesDataSource moviesDataSource = new MoviesDataSource(this);
         moviesDataSource.open();
-
-
-        radioButton720p = (RadioButton) findViewById(R.id.quality720pRadioButton);
-        radioButton1080p = (RadioButton) findViewById(R.id.quality1080pRadioButton);
-        radioButton3d = (RadioButton) findViewById(R.id.quality3dRadioButton);
-        downloadBtn = (Button) findViewById(R.id.downloadBtn);
-        magnetBtn = (Button) findViewById(R.id.magnetBtn);
-        movieImage = (ImageView) findViewById(R.id.movie_image);
 
 
 //      The getMovie(String id) method returns List of Movies
@@ -63,28 +55,42 @@ public class MovieActivity extends YouTubeBaseActivity {
         List<Movie> movies = moviesDataSource.getMovie(b + "");
         movie = movies.get(0);
 
+        nameTv = (TextView) findViewById(R.id.movie_name_TV);
+        yearTv = (TextView) findViewById(R.id.movie_year_TV);
+        ratingTv = (TextView) findViewById(R.id.movie_rating_TV);
+        genreTv = (TextView) findViewById(R.id.movie_genre_TV);
+        descriptionTv = (TextView) findViewById(R.id.movie_description_TV);
+        runtimeTv = (TextView) findViewById(R.id.movie_runtime_TV);
+        movieImage = (ImageView) findViewById(R.id.movie_image);
+        downloadBtn = (Button) findViewById(R.id.downloadBtn);
+        magnetBtn = (Button) findViewById(R.id.magnetBtn);
+        youTubePlayerView = (YouTubePlayerView) findViewById(R.id.playerYouTube);
 
-        final HashMap<String, Torrent> moviesMap = new HashMap<>();
+        radioButton720p = (RadioButton) findViewById(R.id.quality720pRadioButton);
+        radioButton1080p = (RadioButton) findViewById(R.id.quality1080pRadioButton);
+        radioButton3d = (RadioButton) findViewById(R.id.quality3dRadioButton);
+
 
         for (Movie m : movies) {
             Torrent t = m.getTorrent();
-            moviesMap.put(t.getQuality(), t);
+            mMap.put(t.getQuality(), t);
         }
 
-        if (moviesMap.containsKey("720p")) {
+        if (mMap.containsKey("720p")) {
             radioButton720p.setVisibility(View.VISIBLE);
             radioButton720p.setChecked(true);
         }
-        if (moviesMap.containsKey("1080p")) {
+        if (mMap.containsKey("1080p")) {
             radioButton1080p.setVisibility(View.VISIBLE);
             if (!radioButton720p.isChecked())
                 radioButton1080p.setChecked(true);
         }
-        if (moviesMap.containsKey("3D")) {
+        if (mMap.containsKey("3D")) {
             radioButton3d.setVisibility(View.VISIBLE);
             if (!radioButton720p.isChecked() && !radioButton1080p.isChecked())
                 radioButton3d.setChecked(true);
         }
+
 
         Picasso.with(this)
                 .load(movie.getMediumCoverImage())
@@ -102,7 +108,7 @@ public class MovieActivity extends YouTubeBaseActivity {
         downloadBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String url = getUrlIfChecked(moviesMap);
+                String url = getUrlIfChecked(mMap);
                 Intent intent = new Intent(Intent.ACTION_VIEW);
                 intent.setData(Uri.parse(url));
                 intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
@@ -132,7 +138,6 @@ public class MovieActivity extends YouTubeBaseActivity {
         });
 
 
-        youTubePlayerView = (YouTubePlayerView) findViewById(R.id.playerYouTube);
         initializedListener = new YouTubePlayer.OnInitializedListener() {
             @Override
             public void onInitializationSuccess(YouTubePlayer.Provider provider, YouTubePlayer youTubePlayer, boolean b) {
