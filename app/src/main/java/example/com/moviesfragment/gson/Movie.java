@@ -36,15 +36,9 @@ public class Movie implements Parcelable {
     @SerializedName("title")
     @Expose
     private String title;
-    @SerializedName("title_english")
-    @Expose
-    private String titleEnglish;
     @SerializedName("title_long")
     @Expose
     private String titleLong;
-    @SerializedName("slug")
-    @Expose
-    private String slug;
     @SerializedName("year")
     @Expose
     private Integer year;
@@ -58,54 +52,24 @@ public class Movie implements Parcelable {
     @Expose
     private List<String> genres = null;
     private String genre;
-    @SerializedName("summary")
-    @Expose
-    private String summary;
     @SerializedName("description_full")
     @Expose
     private String descriptionFull;
-    @SerializedName("synopsis")
-    @Expose
-    private String synopsis;
     @SerializedName("yt_trailer_code")
     @Expose
     private String ytTrailerCode;
-    @SerializedName("language")
-    @Expose
-    private String language;
     @SerializedName("mpa_rating")
     @Expose
     private String mpaRating;
-    @SerializedName("background_image")
-    @Expose
-    private String backgroundImage;
-    @SerializedName("background_image_original")
-    @Expose
-    private String backgroundImageOriginal;
-    @SerializedName("small_cover_image")
-    @Expose
-    private String smallCoverImage;
     @SerializedName("medium_cover_image")
     @Expose
     private String mediumCoverImage;
     @SerializedName("large_cover_image")
     @Expose
     private String largeCoverImage;
-    @SerializedName("state")
-    @Expose
-    private String state;
     @SerializedName("torrents")
     @Expose
     private List<Torrent> torrents = null;
-    @SerializedName("date_uploaded")
-    @Expose
-    private String dateUploaded;
-    @SerializedName("date_uploaded_unix")
-    @Expose
-    private Integer dateUploadedUnix;
-
-    private String availableInQuality;
-
     private Torrent torrent;
 
     public Movie() {
@@ -115,28 +79,17 @@ public class Movie implements Parcelable {
         url = in.readString();
         imdbCode = in.readString();
         title = in.readString();
-        titleEnglish = in.readString();
         titleLong = in.readString();
-        slug = in.readString();
         year = in.readInt();
         rating = in.readDouble();
         genres = in.createStringArrayList();
         genre = in.readString();
-        summary = in.readString();
         descriptionFull = in.readString();
-        synopsis = in.readString();
         ytTrailerCode = in.readString();
-        language = in.readString();
         mpaRating = in.readString();
-        backgroundImage = in.readString();
-        backgroundImageOriginal = in.readString();
-        smallCoverImage = in.readString();
         mediumCoverImage = in.readString();
         largeCoverImage = in.readString();
-        state = in.readString();
         torrents = in.createTypedArrayList(Torrent.CREATOR);
-        dateUploaded = in.readString();
-        availableInQuality = in.readString();
         torrent = in.readParcelable(Torrent.class.getClassLoader());
     }
 
@@ -172,28 +125,12 @@ public class Movie implements Parcelable {
         this.title = title;
     }
 
-    public String getTitleEnglish() {
-        return titleEnglish;
-    }
-
-    public void setTitleEnglish(String titleEnglish) {
-        this.titleEnglish = titleEnglish;
-    }
-
     public String getTitleLong() {
         return titleLong;
     }
 
     public void setTitleLong(String titleLong) {
         this.titleLong = titleLong;
-    }
-
-    public String getSlug() {
-        return slug;
-    }
-
-    public void setSlug(String slug) {
-        this.slug = slug;
     }
 
     public Integer getYear() {
@@ -236,28 +173,12 @@ public class Movie implements Parcelable {
         this.genre = genre;
     }
 
-    public String getSummary() {
-        return summary;
-    }
-
-    public void setSummary(String summary) {
-        this.summary = summary;
-    }
-
     public String getDescriptionFull() {
         return descriptionFull;
     }
 
     public void setDescriptionFull(String descriptionFull) {
         this.descriptionFull = descriptionFull;
-    }
-
-    public String getSynopsis() {
-        return synopsis;
-    }
-
-    public void setSynopsis(String synopsis) {
-        this.synopsis = synopsis;
     }
 
     public String getYtTrailerCode() {
@@ -268,13 +189,6 @@ public class Movie implements Parcelable {
         this.ytTrailerCode = ytTrailerCode;
     }
 
-    public String getLanguage() {
-        return language;
-    }
-
-    public void setLanguage(String language) {
-        this.language = language;
-    }
 
     public String getMpaRating() {
         return mpaRating;
@@ -282,30 +196,6 @@ public class Movie implements Parcelable {
 
     public void setMpaRating(String mpaRating) {
         this.mpaRating = mpaRating;
-    }
-
-    public String getBackgroundImage() {
-        return backgroundImage;
-    }
-
-    public void setBackgroundImage(String backgroundImage) {
-        this.backgroundImage = backgroundImage;
-    }
-
-    public String getBackgroundImageOriginal() {
-        return backgroundImageOriginal;
-    }
-
-    public void setBackgroundImageOriginal(String backgroundImageOriginal) {
-        this.backgroundImageOriginal = backgroundImageOriginal;
-    }
-
-    public String getSmallCoverImage() {
-        return smallCoverImage;
-    }
-
-    public void setSmallCoverImage(String smallCoverImage) {
-        this.smallCoverImage = smallCoverImage;
     }
 
     public String getMediumCoverImage() {
@@ -324,53 +214,12 @@ public class Movie implements Parcelable {
         this.largeCoverImage = largeCoverImage;
     }
 
-    public String getState() {
-        return state;
-    }
-
-    public void setState(String state) {
-        this.state = state;
-    }
-
     public List<Torrent> getTorrents() {
         return torrents;
     }
 
     public void setTorrents(List<Torrent> torrents) {
         this.torrents = torrents;
-    }
-
-    public String getDateUploaded() {
-        return dateUploaded;
-    }
-
-    public void setDateUploaded(String dateUploaded) {
-        this.dateUploaded = dateUploaded;
-    }
-
-    public Integer getDateUploadedUnix() {
-        return dateUploadedUnix;
-    }
-
-    public void setDateUploadedUnix(Integer dateUploadedUnix) {
-        this.dateUploadedUnix = dateUploadedUnix;
-    }
-
-    public String getFromListAvailableInQuality() {
-        StringBuilder sb = new StringBuilder();
-        for (Torrent t : torrents) {
-            sb.append(t.getQuality());
-            sb.append(" ");
-        }
-        return sb.toString();
-    }
-
-    public String getAvailableInQuality() {
-        return this.availableInQuality;
-    }
-
-    public void setAvailableInQuality(String availableInQuality) {
-        this.availableInQuality = availableInQuality;
     }
 
     public Torrent getTorrent() {
@@ -391,28 +240,17 @@ public class Movie implements Parcelable {
         dest.writeString(url);
         dest.writeString(imdbCode);
         dest.writeString(title);
-        dest.writeString(titleEnglish);
         dest.writeString(titleLong);
-        dest.writeString(slug);
         dest.writeInt(year);
         dest.writeDouble(rating);
         dest.writeStringList(genres);
         dest.writeString(genre);
-        dest.writeString(summary);
         dest.writeString(descriptionFull);
-        dest.writeString(synopsis);
         dest.writeString(ytTrailerCode);
-        dest.writeString(language);
         dest.writeString(mpaRating);
-        dest.writeString(backgroundImage);
-        dest.writeString(backgroundImageOriginal);
-        dest.writeString(smallCoverImage);
         dest.writeString(mediumCoverImage);
         dest.writeString(largeCoverImage);
-        dest.writeString(state);
         dest.writeTypedList(torrents);
-        dest.writeString(dateUploaded);
-        dest.writeString(availableInQuality);
         dest.writeParcelable(torrent, 0);
     }
 }

@@ -13,7 +13,7 @@ public class MovieSQLiteHelper extends SQLiteOpenHelper {
     static final String TABLE_TORRENTS = "torrent";
     // table movie info fields
     static final String MOVIE_INFO_KEY_ID = "movie_info_id";
-    static final String MOVIE_INFO_KEY_TITLE = "name";
+    static final String MOVIE_INFO_KEY_TITLE = "title";
     static final String MOVIE_INFO_KEY_TITLE_LONG = "title_long";
     static final String MOVIE_INFO_KEY_DESCRIPTION = "description";
     static final String MOVIE_INFO_KEY_YEAR = "year";
@@ -23,9 +23,6 @@ public class MovieSQLiteHelper extends SQLiteOpenHelper {
     static final String MOVIE_INFO_KEY_RUNTIME = "runtime";
     static final String MOVIE_INFO_KEY_MPARATING = "mpa_rating";
     static final String MOVIE_INFO_KEY_IMDB = "imdb_code";
-    static final String MOVIE_INFO_IMAGE_BACKGROUND = "background_image";
-    static final String MOVIE_INFO_IMAGE_BACKGROUND_ORIGINAL = "background_image_original";
-    static final String MOVIE_INFO_IMAGE_SMALL_COVER = "small_cover_image";
     static final String MOVIE_INFO_IMAGE_MEDIUM_COVER = "medium_cover_image";
     static final String MOVIE_INFO_IMAGE_LARGE_COVER = "large_cover_image";
     //    table Torrent fields
@@ -57,9 +54,6 @@ public class MovieSQLiteHelper extends SQLiteOpenHelper {
             MOVIE_INFO_KEY_RUNTIME + " INTEGER," +
             MOVIE_INFO_KEY_MPARATING + " TEXT," +
             MOVIE_INFO_KEY_IMDB + " TEXT," +
-            MOVIE_INFO_IMAGE_BACKGROUND + " TEXT," +
-            MOVIE_INFO_IMAGE_BACKGROUND_ORIGINAL + " TEXT," +
-            MOVIE_INFO_IMAGE_SMALL_COVER + " TEXT," +
             MOVIE_INFO_IMAGE_MEDIUM_COVER + " TEXT," +
             MOVIE_INFO_IMAGE_LARGE_COVER + " TEXT" + ")";
 

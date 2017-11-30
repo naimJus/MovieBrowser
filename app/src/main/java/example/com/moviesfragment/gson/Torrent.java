@@ -38,15 +38,6 @@ public class Torrent implements Parcelable {
     @SerializedName("size")
     @Expose
     private String size;
-    @SerializedName("size_bytes")
-    @Expose
-    private Float sizeBytes;
-    @SerializedName("date_uploaded")
-    @Expose
-    private String dateUploaded;
-    @SerializedName("date_uploaded_unix")
-    @Expose
-    private Integer dateUploadedUnix;
 
     public Torrent() {
     }
@@ -56,7 +47,6 @@ public class Torrent implements Parcelable {
         hash = in.readString();
         quality = in.readString();
         size = in.readString();
-        dateUploaded = in.readString();
     }
 
     public String getUrl() {
@@ -107,29 +97,6 @@ public class Torrent implements Parcelable {
         this.size = size;
     }
 
-    public Float getSizeBytes() {
-        return sizeBytes;
-    }
-
-    public void setSizeBytes(Float sizeBytes) {
-        this.sizeBytes = sizeBytes;
-    }
-
-    public String getDateUploaded() {
-        return dateUploaded;
-    }
-
-    public void setDateUploaded(String dateUploaded) {
-        this.dateUploaded = dateUploaded;
-    }
-
-    public Integer getDateUploadedUnix() {
-        return dateUploadedUnix;
-    }
-
-    public void setDateUploadedUnix(Integer dateUploadedUnix) {
-        this.dateUploadedUnix = dateUploadedUnix;
-    }
 
     @Override
     public int describeContents() {
@@ -142,6 +109,5 @@ public class Torrent implements Parcelable {
         dest.writeString(hash);
         dest.writeString(quality);
         dest.writeString(size);
-        dest.writeString(dateUploaded);
     }
 }
