@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -54,6 +55,8 @@ public class MoviesListFragment extends Fragment {
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.my_recycler_view);
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
+        DividerItemDecoration itemDecor = new DividerItemDecoration(mRecyclerView.getContext(), mLayoutManager.getOrientation());
+        mRecyclerView.addItemDecoration(itemDecor);
         mAdapter = new MoviesAdapter(this.getActivity(), mMovieList);
 
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
