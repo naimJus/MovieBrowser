@@ -12,7 +12,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class ApiClient {
 
     private static Retrofit retrofit = null;
-    private static String BASE_URL = "https://yts.ag/api/v2/";
+    private static final String BASE_URL = "https://yts.ag/api/v2/";
 
     public static Retrofit getClient() {
         if (retrofit == null) {

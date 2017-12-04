@@ -54,9 +54,9 @@ public class SearchResultsActivity extends AppCompatActivity {
 /*        Intent i = getIntent();
         if (i != null) {
             sqlParams = (HashMap<String, String>) i.getSerializableExtra(SearchFragment.SEARCH);
-            getMovies = moviesDataSource.searchMovies(sqlParams);
+            limitMovies = moviesDataSource.searchMovies(sqlParams);
         } else {
-            getMovies = moviesDataSource.getAllMovies();
+            limitMovies = moviesDataSource.getAllMoviesFromDb();
         }*/
 
         if (getMovies.size() == 0) {
@@ -80,7 +80,7 @@ public class SearchResultsActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                //create a new movie from the getMovies List (which comes from the database)
+                //create a new movie from the limitMovies List (which comes from the database)
                 //wrap the movie in a Bundle
                 //put the bundle in a Intent
                 //Start the new Activity
@@ -125,7 +125,7 @@ public class SearchResultsActivity extends AppCompatActivity {
                 } else {
                     sqlParams.put("Order", MovieSQLiteHelper.KEY_TITLE + " ASC");
                 }
-                getMovies = moviesDataSource.searchMovies(sqlParams);
+                limitMovies = moviesDataSource.searchMovies(sqlParams);
                 refreshAdapter();
                 return true;
             case R.id.sortByRating:
@@ -134,7 +134,7 @@ public class SearchResultsActivity extends AppCompatActivity {
                 } else {
                     sqlParams.put("Order", MovieSQLiteHelper.KEY_RATING + " ASC");
                 }
-                getMovies = moviesDataSource.searchMovies(sqlParams);
+                limitMovies = moviesDataSource.searchMovies(sqlParams);
                 refreshAdapter();
                 return true;
             case R.id.sortByYear:
@@ -143,7 +143,7 @@ public class SearchResultsActivity extends AppCompatActivity {
                 } else {
                     sqlParams.put("Order", MovieSQLiteHelper.KEY_YEAR + " ASC");
                 }
-                getMovies = moviesDataSource.searchMovies(sqlParams);
+                limitMovies = moviesDataSource.searchMovies(sqlParams);
                 refreshAdapter();
                 return true;
             case android.R.id.home:
@@ -177,7 +177,7 @@ public class SearchResultsActivity extends AppCompatActivity {
     }
 
     public void refreshAdapter() {
-//        MoviesAdapter moviesAdapter = new MoviesAdapter(this, getMovies);
+//        MoviesAdapter moviesAdapter = new MoviesAdapter(this, limitMovies);
 //        listView.setAdapter(moviesAdapter);
         if (firstItemId != 0)
             listView.setSelectionFromTop(firstItemId, 0);

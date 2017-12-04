@@ -6,7 +6,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -22,8 +21,6 @@ import example.com.moviesfragment.gson.Movie;
 
 public class MoviesListFragment extends Fragment {
 
-    public static final String TAG = MoviesListFragment.class.getSimpleName();
-    public static final String POSITION = ".Model.Movie";
     public static final String BUNDLE = "bundle";
     private static final String FIRSTITEMID = "firstItemId";
     private static final String SORTED = "filter";
@@ -31,12 +28,11 @@ public class MoviesListFragment extends Fragment {
     private static final int VISIBLEITEMS = 4;
     static int limit = 50;
     protected LinearLayoutManager mLayoutManager;
-    MoviesDataSource moviesDataSource;
-    List<Movie> getMovies;
-    String filter = "_id";
     int scrollPosition = 0;
     int lastItemScrollPosition;
-
+    private MoviesDataSource mMoviesDataSource;
+    private String mFilter = MovieSQLiteHelper.MOVIE_INFO_KEY_ID;
+    private List<Movie> mMovieList;
     private RecyclerView mRecyclerView;
     private MoviesAdapter mAdapter;
     private boolean flag_loading;
@@ -44,29 +40,21 @@ public class MoviesListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.v(TAG, "MoviesListFragment onCreate");
-        // Initialize dataset, this data would usually come from a local content provider or
-        // remote server.
-        moviesDataSource = new MoviesDataSource(getActivity().getApplicationContext());
-        moviesDataSource.open();
-        getMovies = moviesDataSource.getAllMovies();
+
+        mMoviesDataSource = new MoviesDataSource(getActivity().getApplicationContext());
+        mMoviesDataSource.open();
+        mMovieList = mMoviesDataSource.limitMovies(limit);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        Log.v(TAG, "MoviesListFragment onCreateView");
-        View rootView = inflater.inflate(R.layout.fragment_movies_list, container, false);
-
         setHasOptionsMenu(true);
+        View rootView = inflater.inflate(R.layout.fragment_movies_list, container, false);
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.my_recycler_view);
-        // LinearLayoutManager is used here, this will layout the elements in a similar fashion
-        // to the way ListView would layout elements. The RecyclerView.LayoutManager defines how
-        // elements are laid out.
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
-
-        mAdapter = new MoviesAdapter(this.getActivity(), getMovies);
+        mAdapter = new MoviesAdapter(this.getActivity(), mMovieList);
 
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -90,7 +78,7 @@ public class MoviesListFragment extends Fragment {
             @Override
             public void onClick(View view, final int position) {
                 //Values are passing to activity & to fragment as well
-                Movie movie = getMovies.get(position);
+                Movie movie = mMovieList.get(position);
                 Intent intent = new Intent(getActivity(), MovieActivity.class);
                 intent.putExtra(BUNDLE, movie.getId());
                 startActivity(intent);
@@ -107,39 +95,32 @@ public class MoviesListFragment extends Fragment {
     }
 
     @Override
-    public void onSaveInstanceState(Bundle savedInstanceState) {
-        // Save currently selected layout manager.
-        savedInstanceState.putString(SORTED, filter);
-        savedInstanceState.putInt(FIRSTITEMID, scrollPosition);
-        savedInstanceState.putInt(ITEMID, lastItemScrollPosition);
-        super.onSaveInstanceState(savedInstanceState);
-    }
-
-    /**
-     * Generates Strings for RecyclerView's adapter. This data would usually come
-     * from a local content provider or remote server.
-     */
-
-
-    @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         if (savedInstanceState != null) {
-            filter = savedInstanceState.getString(SORTED);
+            mFilter = savedInstanceState.getString(SORTED);
             scrollPosition = savedInstanceState.getInt(FIRSTITEMID);
             lastItemScrollPosition = savedInstanceState.getInt(ITEMID);
             if (limit > 50) {
-//                getMovies = moviesDataSource.sortAndLimit(filter, String.valueOf(limit));
-                mRecyclerView.scrollToPosition(lastItemScrollPosition);
+                mMovieList = mMoviesDataSource.sortAndLimit(mFilter, limit);
             } else {
-//                getMovies = moviesDataSource.sortBy(filter);
+                mMovieList = mMoviesDataSource.limitMovies(limit);
                 mRecyclerView.scrollToPosition(scrollPosition);
             }
         } else {
             scrollPosition = mLayoutManager.findFirstVisibleItemPosition();
-            getMovies = moviesDataSource.getAllMovies();
+            mMovieList = mMoviesDataSource.sortAndLimit(mFilter, limit);
         }
     }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        super.onSaveInstanceState(savedInstanceState);
+        savedInstanceState.putString(SORTED, mFilter);
+        savedInstanceState.putInt(FIRSTITEMID, scrollPosition);
+        savedInstanceState.putInt(ITEMID, lastItemScrollPosition);
+    }
+
 
     @Override
     public void onViewStateRestored(Bundle savedInstanceState) {
@@ -154,55 +135,53 @@ public class MoviesListFragment extends Fragment {
 
     }
 
-/*
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.sortByName:
-                if (filter.equals(MovieSQLiteHelper.KEY_TITLE + " ASC")) {
-                    filter = MovieSQLiteHelper.KEY_TITLE + " DESC";
+                if (mFilter.equals(MovieSQLiteHelper.MOVIE_INFO_KEY_TITLE + " ASC")) {
+                    mFilter = MovieSQLiteHelper.MOVIE_INFO_KEY_TITLE + " DESC";
                 } else {
-                    filter = MovieSQLiteHelper.KEY_TITLE + " ASC";
+                    mFilter = MovieSQLiteHelper.MOVIE_INFO_KEY_TITLE + " ASC";
                 }
                 lastItemScrollPosition = 0;
-                getMovies = moviesDataSource.sortAndLimit(filter, String.valueOf(limit));
+                mMovieList = mMoviesDataSource.sortAndLimit(mFilter, limit);
                 refreshAdapter();
                 return true;
             case R.id.sortByRating:
-                if (filter.equals(MovieSQLiteHelper.KEY_RATING + " ASC")) {
-                    filter = MovieSQLiteHelper.KEY_RATING + " DESC";
+                if (mFilter.equals(MovieSQLiteHelper.MOVIE_INFO_KEY_RATING + " ASC")) {
+                    mFilter = MovieSQLiteHelper.MOVIE_INFO_KEY_RATING + " DESC";
                 } else {
-                    filter = MovieSQLiteHelper.KEY_RATING + " ASC";
+                    mFilter = MovieSQLiteHelper.MOVIE_INFO_KEY_RATING + " ASC";
                 }
                 lastItemScrollPosition = 0;
-                getMovies = moviesDataSource.sortAndLimit(filter, String.valueOf(limit));
+                mMovieList = mMoviesDataSource.sortAndLimit(mFilter, limit);
                 refreshAdapter();
                 return true;
             case R.id.sortByYear:
-                if (filter.equals(MovieSQLiteHelper.KEY_YEAR + " ASC")) {
-                    filter = MovieSQLiteHelper.KEY_YEAR + " DESC";
+                if (mFilter.equals(MovieSQLiteHelper.MOVIE_INFO_KEY_YEAR + " ASC")) {
+                    mFilter = MovieSQLiteHelper.MOVIE_INFO_KEY_YEAR + " DESC";
                 } else {
-                    filter = MovieSQLiteHelper.KEY_YEAR + " ASC";
+                    mFilter = MovieSQLiteHelper.MOVIE_INFO_KEY_YEAR + " ASC";
                 }
                 lastItemScrollPosition = 0;
-                getMovies = moviesDataSource.sortAndLimit(filter, String.valueOf(limit));
+                mMovieList = mMoviesDataSource.sortAndLimit(mFilter, limit);
                 refreshAdapter();
                 return true;
             case R.id.sortByRecent:
-                if (filter.equals(MovieSQLiteHelper.KEY_ID + " ASC")) {
-                    filter = MovieSQLiteHelper.KEY_ID + " DESC";
+                if (mFilter.equals(MovieSQLiteHelper.MOVIE_INFO_KEY_ID + " ASC")) {
+                    mFilter = MovieSQLiteHelper.MOVIE_INFO_KEY_ID + " DESC";
                 } else {
-                    filter = MovieSQLiteHelper.KEY_ID + " ASC";
+                    mFilter = MovieSQLiteHelper.MOVIE_INFO_KEY_ID + " ASC";
                 }
                 lastItemScrollPosition = 0;
-                getMovies = moviesDataSource.sortAndLimit(filter, String.valueOf(limit));
+                mMovieList = mMoviesDataSource.sortAndLimit(mFilter, limit);
                 refreshAdapter();
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
-*/
 
     @Override
     public void onPause() {
@@ -220,7 +199,7 @@ public class MoviesListFragment extends Fragment {
     }
 
     public void refreshAdapter() {
-        mAdapter = new MoviesAdapter(getContext(), getMovies);
+        mAdapter = new MoviesAdapter(getContext(), mMovieList);
         mRecyclerView.setAdapter(mAdapter);
         if (lastItemScrollPosition != 0) {
             mRecyclerView.scrollToPosition(lastItemScrollPosition);
@@ -228,13 +207,12 @@ public class MoviesListFragment extends Fragment {
     }
 
     public void loadMoreData() {
-        lastItemScrollPosition = mLayoutManager.findLastVisibleItemPosition() - 1;
         limit = limit + 50;
-//        getMovies = moviesDataSource.sortAndLimit(filter, String.valueOf(limit));
-        mRecyclerView.getAdapter().notifyDataSetChanged();
+        mMovieList = mMoviesDataSource.sortAndLimit(mFilter, limit);
+        lastItemScrollPosition = mLayoutManager.findLastVisibleItemPosition() - 1;
         refreshAdapter();
+        mRecyclerView.scrollToPosition(lastItemScrollPosition);
         flag_loading = false;
-
     }
 }
 
