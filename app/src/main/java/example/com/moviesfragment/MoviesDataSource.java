@@ -3,9 +3,11 @@ package example.com.moviesfragment;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.text.TextUtils;
+import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -120,6 +122,7 @@ public class MoviesDataSource {
     }
 
     public void createMovieInfo(Movie movie) {
+        long newId;
         ContentValues values = new ContentValues();
         values.put(MovieSQLiteHelper.MOVIE_INFO_KEY_ID, movie.getId());
         values.put(MovieSQLiteHelper.MOVIE_INFO_KEY_TITLE, movie.getTitle());
@@ -138,7 +141,12 @@ public class MoviesDataSource {
 
         if (movie.getTorrents() != null)
             createTorrent(movie);
-        database.insertWithOnConflict(MovieSQLiteHelper.TABLE_MOVIE_INFO, null, values, SQLiteDatabase.CONFLICT_IGNORE);
+        try {
+            newId = database.insertOrThrow(MovieSQLiteHelper.TABLE_MOVIE_INFO, null, values);
+            Log.v(LOG, newId + " was added in database");
+        } catch (SQLException es) {
+            Log.v(LOG, "movie with id " + movie.getId() + " was already in database");
+        }
     }
 
     private void createTorrent(Movie movie) {
