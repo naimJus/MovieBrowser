@@ -26,11 +26,11 @@ public class MoviesListFragment extends Fragment {
     private static final String FIRSTITEMID = "firstItemId";
     private static final String SORTED = "filter";
     private static final String ITEMID = "itemId";
-    private static final int VISIBLEITEMS = 4;
     static int limit = 50;
-    protected LinearLayoutManager mLayoutManager;
     int scrollPosition = 0;
     int lastItemScrollPosition;
+    private static final int VISIBLEITEMS = 4;
+    protected LinearLayoutManager mLayoutManager;
     private MoviesDataSource mMoviesDataSource;
     private String mFilter = MovieSQLiteHelper.MOVIE_INFO_KEY_ID;
     private List<Movie> mMovieList;

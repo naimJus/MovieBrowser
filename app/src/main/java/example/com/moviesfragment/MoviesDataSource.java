@@ -18,6 +18,8 @@ import example.com.moviesfragment.gson.Torrent;
 
 public class MoviesDataSource {
     private static final String LOG = MoviesDataSource.class.getSimpleName();
+    private static final String MY_QUERY = "SELECT * FROM " + MovieSQLiteHelper.TABLE_MOVIE_INFO + " m INNER JOIN " + MovieSQLiteHelper.TABLE_TORRENTS
+            + " t ON m.movie_info_id = t.movie_info_id GROUP BY m.title";
     private SQLiteDatabase database;
     private MovieSQLiteHelper dbHelper;
 
@@ -37,9 +39,8 @@ public class MoviesDataSource {
     List<Movie> limitMovies(int limit) {
         if (limit < 50)
             limit = 50;
-        Cursor cursor = database.rawQuery("SELECT * " +
-                "FROM " + MovieSQLiteHelper.TABLE_MOVIE_INFO + " m "
-                + "INNER JOIN " + MovieSQLiteHelper.TABLE_TORRENTS + " t ON m.movie_info_id = t.movie_info_id GROUP BY m.title ORDER BY " + MovieSQLiteHelper.MOVIE_INFO_KEY_ID + " DESC LIMIT " + limit, null);
+
+        Cursor cursor = database.rawQuery(MY_QUERY + " ORDER BY " + MovieSQLiteHelper.MOVIE_INFO_KEY_ID + " DESC LIMIT " + limit, null);
         List<Movie> movies = cursorToList(cursor);
         return movies;
     }
@@ -47,17 +48,13 @@ public class MoviesDataSource {
 
     List<Movie> getMovie(String id) {
         String[] ids = new String[]{id};
-        Cursor cursor = database.rawQuery("SELECT * FROM "
-                + MovieSQLiteHelper.TABLE_MOVIE_INFO + " m INNER JOIN "
-                + MovieSQLiteHelper.TABLE_TORRENTS + " t ON m.movie_info_id = t.movie_info_id WHERE m.movie_info_id =?", ids);
+        Cursor cursor = database.rawQuery(MY_QUERY + " ORDER BY " + MovieSQLiteHelper.MOVIE_INFO_KEY_ID + " DESC WHERE m.movie_info_id =?", ids);
         List<Movie> movies = cursorToList(cursor);
         return movies;
     }
 
     List<Movie> sortAndLimit(String orderBy, int limit) {
-        Cursor cursor = database.rawQuery("SELECT * " +
-                "FROM " + MovieSQLiteHelper.TABLE_MOVIE_INFO + " m "
-                + "INNER JOIN " + MovieSQLiteHelper.TABLE_TORRENTS + " t ON m.movie_info_id = t.movie_info_id GROUP BY m.title ORDER BY " + orderBy + " LIMIT " + limit, null);
+        Cursor cursor = database.rawQuery(MY_QUERY + " ORDER BY " + orderBy + " LIMIT " + limit, null);
         List<Movie> movies = cursorToList(cursor);
         return movies;
     }
@@ -68,21 +65,25 @@ public class MoviesDataSource {
         String quality = searchParams.get("Quality");
         String genre = searchParams.get("Genre");
         String rating = searchParams.get("Rating");
-        String order = searchParams.get("Order");
         String search = searchParams.get("Search");
+        String order = searchParams.get("Order");
 
 
-        Cursor cursor = database.query(MovieSQLiteHelper.MOVIE_INFO_KEY_ID,
-                null,
-                quality + " AND " +
-                        genre + " AND " +
-                        rating + " AND " +
-                        search,
-                null,
-                null,
-                null,
-                order);
+        String[] selection = {
+                quality,
+                genre,
+                rating,
+                search};
 
+        String query = "SELECT * FROM " + MovieSQLiteHelper.TABLE_MOVIE_INFO + " m INNER JOIN " + MovieSQLiteHelper.TABLE_TORRENTS
+                + " t ON m.movie_info_id = t.movie_info_id WHERE "
+                + MovieSQLiteHelper.TORRENT_KEY_QUALITY + selection[0]
+                + " AND " + MovieSQLiteHelper.MOVIE_INFO_KEY_GENRE + selection[1]
+                + " AND " + MovieSQLiteHelper.MOVIE_INFO_KEY_RATING + selection[2]
+                + " AND " + MovieSQLiteHelper.MOVIE_INFO_KEY_TITLE + selection[3]
+                + " GROUP BY m." + MovieSQLiteHelper.MOVIE_INFO_KEY_TITLE
+                + " ORDER BY m.movie_info_id" + order;
+        Cursor cursor = database.rawQuery(query, null);
         List<Movie> movies = cursorToList(cursor);
         return movies;
     }

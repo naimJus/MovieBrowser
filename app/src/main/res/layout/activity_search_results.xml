@@ -1,9 +1,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/search_results"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:id="@+id/search_results">
+    android:orientation="vertical">
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/searchResultToolbar"
@@ -13,8 +13,8 @@
         app:layout_scrollFlags="scroll|enterAlways"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
 
-    <ListView
-        android:id="@+id/list_results"
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/search_activity_recycler_view"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"></ListView>
+        android:layout_height="match_parent" />
 </LinearLayout>

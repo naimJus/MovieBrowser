@@ -34,7 +34,7 @@
     <string-array name="quality_filter">
         <item>All</item>
         <item>720p</item>
-        <item>1800p</item>
+        <item>1080p</item>
         <item>3D</item>
     </string-array>
     <string-array name="order_filter">

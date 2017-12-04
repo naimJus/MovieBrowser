@@ -40,44 +40,32 @@ public class SearchFragment extends Fragment {
         searchBtn = (Button) view.findViewById(R.id.searchBtn);
         nameET = (EditText) view.findViewById(R.id.nameET);
 
-        searchBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                StringBuilder sb = new StringBuilder("'% ");
-//                sb.append(searchET.getText().toString());
-//                sb.append(" %'");
-//                String[] searchParameters = {
-//                        sb.toString(),
-//                        qualitySpinner.getSelectedItem().toString(),
-//                        genreSpinner.getSelectedItem().toString(),
-//                        ratingSpinner.getSelectedItem().toString()};
+        searchBtn.setOnClickListener(v -> {
 
-                String quality = qualitySpinner.getSelectedItem().toString();
-                String genre = genreSpinner.getSelectedItem().toString();
-                String rating = ratingSpinner.getSelectedItem().toString();
-                String order = orderBySpinner.getSelectedItem().toString();
-                String name = nameET.getText().toString();
+            String quality = qualitySpinner.getSelectedItem().toString();
+            String genre = genreSpinner.getSelectedItem().toString();
+            String rating = ratingSpinner.getSelectedItem().toString();
+            String order = orderBySpinner.getSelectedItem().toString();
+            String name = nameET.getText().toString();
 
-/*                String orderSql = sqlStatements.generateOrderSql(order);
-                String ratingSql = sqlStatements.generateRatingSql(rating);
-                String genreSql = sqlStatements.generateGenreSql(genre);
-                String qualitySql = sqlStatements.generateQualitySql(quality);
-                String nameSql = sqlStatements.generateNameSql(name);*/
-
-/*
-                searchParams.put("Search", nameSql);
-                searchParams.put("Quality", qualitySql);
-                searchParams.put("Genre", genreSql);
-                searchParams.put("Rating", ratingSql);
-                searchParams.put("Order", orderSql);
-*/
+            String orderSql = sqlStatements.generateOrderSql(order);
+            String ratingSql = sqlStatements.generateRatingSql(rating);
+            String genreSql = sqlStatements.generateGenreSql(genre);
+            String qualitySql = sqlStatements.generateQualitySql(quality);
+            String nameSql = sqlStatements.generateNameSql(name);
 
 
-                Intent intent = new Intent(getActivity(), SearchResultsActivity.class);
-                intent.putExtra(SEARCH, searchParams);
-                startActivity(intent);
+            searchParams.put("Search", nameSql);
+            searchParams.put("Quality", qualitySql);
+            searchParams.put("Genre", genreSql);
+            searchParams.put("Rating", ratingSql);
+            searchParams.put("Order", orderSql);
 
-            }
+
+            Intent intent = new Intent(getActivity(), SearchResultsActivity.class);
+            intent.putExtra(SEARCH, searchParams);
+            startActivity(intent);
+
         });
         return view;
     }
