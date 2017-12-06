@@ -4,8 +4,12 @@ import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -41,11 +45,13 @@ public class MovieActivity extends YouTubeBaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie);
 
+
         TextView nameTv, yearTv, ratingTv, genreTv, descriptionTv, runtimeTv;
         ImageView movieImage;
         Movie movie;
         Button downloadBtn, magnetBtn;
         YouTubePlayerView youTubePlayerView;
+        Toolbar toolbar;
 
         MoviesDataSource moviesDataSource = new MoviesDataSource(this);
         moviesDataSource.open();
@@ -56,6 +62,7 @@ public class MovieActivity extends YouTubeBaseActivity {
         int b = getIntent().getIntExtra(MoviesListFragment.BUNDLE, 1);
         List<Movie> movies = moviesDataSource.getMovie(b + "");
         movie = movies.get(0);
+
 
         nameTv = (TextView) findViewById(R.id.movie_name_TV);
         yearTv = (TextView) findViewById(R.id.movie_year_TV);
@@ -105,6 +112,13 @@ public class MovieActivity extends YouTubeBaseActivity {
         genreTv.setText(getResources().getString(R.string.genre) + " " + movie.getGenre());
         descriptionTv.setText(movie.getDescriptionFull());
         runtimeTv.setText(getResources().getString(R.string.runtime) + " " + movie.getRuntime());
+
+        toolbar = (Toolbar) findViewById(R.id.movie_activity_toolbar);
+        toolbar.setTitle(movie.getTitle());
+        toolbar.setTitleTextColor(Color.WHITE);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            toolbar.setElevation(2);
+        }
 
 
         downloadBtn.setOnClickListener(new View.OnClickListener() {

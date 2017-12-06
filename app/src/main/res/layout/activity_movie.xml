@@ -7,6 +7,16 @@
     android:layout_height="match_parent"
     android:background="@android:color/background_light">
 
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/movie_activity_toolbar"
+        android:layout_width="0dp"
+        android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_scrollFlags="scroll|enterAlways"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light" />
+
     <com.google.android.youtube.player.YouTubePlayerView
         android:id="@+id/playerYouTube"
         android:layout_width="0dp"
@@ -14,8 +24,9 @@
         android:layout_marginBottom="8dp"
         app:layout_constraintBottom_toTopOf="@+id/scrollView2"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/movie_activity_toolbar"
         app:layout_constraintVertical_bias="0.0"
         app:layout_constraintVertical_weight="1" />
 
@@ -174,8 +185,8 @@
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="8dp"
                         android:layout_weight="1"
-                        android:elevation="2dp"
                         android:drawableStart="@drawable/download"
+                        android:elevation="2dp"
                         android:text="@string/download_Btn" />
 
                     <Button
@@ -186,8 +197,8 @@
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="8dp"
                         android:layout_weight="1"
-                        android:elevation="2dp"
                         android:drawableStart="@drawable/magnet"
+                        android:elevation="2dp"
                         android:text="@string/magnet_Btn" />
                 </LinearLayout>
 

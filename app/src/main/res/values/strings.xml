@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">YIFI Browser</string>
+    <string name="app_name">Movie Browser</string>
     <string name="sortByName">Sort By Name</string>
     <string name="sortByRating">Sort By Rating</string>
     <string name="sortByYear">Sort By Year</string>
