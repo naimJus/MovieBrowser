@@ -8,7 +8,6 @@ import android.graphics.Color;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.support.annotation.RequiresApi;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.Button;
@@ -73,6 +72,7 @@ public class MovieActivity extends YouTubeBaseActivity {
         movieImage = (ImageView) findViewById(R.id.movie_image);
         downloadBtn = (Button) findViewById(R.id.downloadBtn);
         magnetBtn = (Button) findViewById(R.id.magnetBtn);
+        toolbar = (Toolbar) findViewById(R.id.movie_activity_toolbar);
         youTubePlayerView = (YouTubePlayerView) findViewById(R.id.playerYouTube);
 
         radioButton720p = (RadioButton) findViewById(R.id.quality720pRadioButton);
@@ -113,12 +113,12 @@ public class MovieActivity extends YouTubeBaseActivity {
         descriptionTv.setText(movie.getDescriptionFull());
         runtimeTv.setText(getResources().getString(R.string.runtime) + " " + movie.getRuntime());
 
-        toolbar = (Toolbar) findViewById(R.id.movie_activity_toolbar);
         toolbar.setTitle(movie.getTitle());
         toolbar.setTitleTextColor(Color.WHITE);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             toolbar.setElevation(2);
         }
+
 
 
         downloadBtn.setOnClickListener(new View.OnClickListener() {

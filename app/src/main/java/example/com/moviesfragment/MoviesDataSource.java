@@ -49,7 +49,7 @@ public class MoviesDataSource {
     List<Movie> getMovie(String id) {
         String[] ids = new String[]{id};
         Cursor cursor = database.rawQuery("SELECT * FROM " + MovieSQLiteHelper.TABLE_MOVIE_INFO + " m INNER JOIN " + MovieSQLiteHelper.TABLE_TORRENTS
-                + " t ON m." + MovieSQLiteHelper.MOVIE_INFO_KEY_ID + " = t." + MovieSQLiteHelper.MOVIE_INFO_KEY_ID + " WHERE m." + MovieSQLiteHelper.MOVIE_INFO_KEY_ID + " =? GROUP BY m.title", ids);
+                + " t ON m." + MovieSQLiteHelper.MOVIE_INFO_KEY_ID + " = t." + MovieSQLiteHelper.MOVIE_INFO_KEY_ID + " WHERE m." + MovieSQLiteHelper.MOVIE_INFO_KEY_ID + " =?", ids);
 
         List<Movie> movies = cursorToList(cursor);
         return movies;
