@@ -1,15 +1,17 @@
 package example.com.moviesfragment;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.youtube.player.YouTubeBaseActivity;
 import com.google.android.youtube.player.YouTubeInitializationResult;
@@ -123,16 +125,24 @@ public class MovieActivity extends YouTubeBaseActivity {
                 try {
                     url = constructMagnetLink(movie);
                 } catch (UnsupportedEncodingException e) {
-                    e.printStackTrace();
+                    Toast.makeText(getApplication(), "Please try downloading using Download. Thanks", Toast.LENGTH_SHORT).show();
                 }
-
                 Intent torrentIntent = new Intent(Intent.ACTION_VIEW);
                 torrentIntent.setData(Uri.parse(url));
                 PackageManager packageManager = getPackageManager();
                 if (torrentIntent.resolveActivity(packageManager) != null) {
                     startActivity(torrentIntent);
                 } else {
-                    Log.d(LOG, "Cannot handle this intent");
+                    AlertDialog alertDialog = new AlertDialog.Builder(MovieActivity.this).create();
+                    alertDialog.setTitle("Missing Torrent app");
+                    alertDialog.setMessage("In order to download movies using Torrents you must have a Torrenting App installed on your device");
+                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Download App",
+                            (dialog, which) -> {
+                                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + "com.utorrent.client&hl=en")));
+                                dialog.dismiss();
+                            });
+                    alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel", (dialog, which) -> dialog.dismiss());
+                    alertDialog.show();
                 }
             }
         });
