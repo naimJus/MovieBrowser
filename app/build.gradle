@@ -16,6 +16,9 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+        buildTypes.each {
+            it.buildConfigField "String", "YOUTUBE_API_KEY", '"AIzaSyBp9dpHGyl_0MUM8z_SwKPXeWEabVlUSKk"'
+        }
     }
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8

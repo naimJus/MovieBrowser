@@ -32,8 +32,6 @@ import example.com.moviesfragment.gson.Torrent;
 
 public class MovieActivity extends YouTubeBaseActivity {
 
-    private static final String YOUTUBE_KEY = "AIzaSyBp9dpHGyl_0MUM8z_SwKPXeWEabVlUSKk";
-    private static final String LOG = MovieActivity.class.getSimpleName();
     final HashMap<String, Torrent> mMap = new HashMap<>();
     private RadioButton radioButton720p, radioButton1080p, radioButton3d;
     private YouTubePlayer.OnInitializedListener initializedListener;
@@ -120,44 +118,37 @@ public class MovieActivity extends YouTubeBaseActivity {
         }
 
 
-
-        downloadBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String url = getUrlIfChecked(mMap);
-                Intent intent = new Intent(Intent.ACTION_VIEW);
-                intent.setData(Uri.parse(url));
-                intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
-                startActivity(intent);
-            }
+        downloadBtn.setOnClickListener(v -> {
+            String url = getUrlIfChecked(mMap);
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setData(Uri.parse(url));
+            intent.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+            startActivity(intent);
         });
 
-        magnetBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String url = null;
-                try {
-                    url = constructMagnetLink(movie);
-                } catch (UnsupportedEncodingException e) {
-                    Toast.makeText(getApplication(), "Please try downloading using Download. Thanks", Toast.LENGTH_SHORT).show();
-                }
-                Intent torrentIntent = new Intent(Intent.ACTION_VIEW);
-                torrentIntent.setData(Uri.parse(url));
-                PackageManager packageManager = getPackageManager();
-                if (torrentIntent.resolveActivity(packageManager) != null) {
-                    startActivity(torrentIntent);
-                } else {
-                    AlertDialog alertDialog = new AlertDialog.Builder(MovieActivity.this).create();
-                    alertDialog.setTitle("Missing Torrent app");
-                    alertDialog.setMessage("In order to download movies using Torrents you must have a Torrenting App installed on your device");
-                    alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Download App",
-                            (dialog, which) -> {
-                                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + "com.utorrent.client&hl=en")));
-                                dialog.dismiss();
-                            });
-                    alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel", (dialog, which) -> dialog.dismiss());
-                    alertDialog.show();
-                }
+        magnetBtn.setOnClickListener(v -> {
+            String url = null;
+            try {
+                url = constructMagnetLink(movie);
+            } catch (UnsupportedEncodingException e) {
+                Toast.makeText(getApplication(), "Please try downloading using Download. Thanks", Toast.LENGTH_SHORT).show();
+            }
+            Intent torrentIntent = new Intent(Intent.ACTION_VIEW);
+            torrentIntent.setData(Uri.parse(url));
+            PackageManager packageManager = getPackageManager();
+            if (torrentIntent.resolveActivity(packageManager) != null) {
+                startActivity(torrentIntent);
+            } else {
+                AlertDialog alertDialog = new AlertDialog.Builder(MovieActivity.this).create();
+                alertDialog.setTitle("Missing Torrent app");
+                alertDialog.setMessage("In order to download movies using Torrents you must have a Torrenting App installed on your device");
+                alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Download App",
+                        (dialog, which) -> {
+                            startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + "com.utorrent.client&hl=en")));
+                            dialog.dismiss();
+                        });
+                alertDialog.setButton(DialogInterface.BUTTON_NEGATIVE, "Cancel", (dialog, which) -> dialog.dismiss());
+                alertDialog.show();
             }
         });
 
@@ -174,7 +165,7 @@ public class MovieActivity extends YouTubeBaseActivity {
 
             }
         };
-        youTubePlayerView.initialize(YOUTUBE_KEY, initializedListener);
+        youTubePlayerView.initialize(BuildConfig.YOUTUBE_API_KEY, initializedListener);
     }
 
     public String getUrlIfChecked(HashMap<String, Torrent> map) {
