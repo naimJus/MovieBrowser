@@ -48,7 +48,9 @@ public class MoviesDataSource {
 
     List<Movie> getMovie(String id) {
         String[] ids = new String[]{id};
-        Cursor cursor = database.rawQuery(MY_QUERY + " ORDER BY " + MovieSQLiteHelper.MOVIE_INFO_KEY_ID + " DESC WHERE m.movie_info_id =?", ids);
+        Cursor cursor = database.rawQuery("SELECT * FROM " + MovieSQLiteHelper.TABLE_MOVIE_INFO + " m INNER JOIN " + MovieSQLiteHelper.TABLE_TORRENTS
+                + " t ON m." + MovieSQLiteHelper.MOVIE_INFO_KEY_ID + " = t." + MovieSQLiteHelper.MOVIE_INFO_KEY_ID + " WHERE m." + MovieSQLiteHelper.MOVIE_INFO_KEY_ID + " =? GROUP BY m.title", ids);
+
         List<Movie> movies = cursorToList(cursor);
         return movies;
     }
@@ -82,7 +84,7 @@ public class MoviesDataSource {
                 + " AND " + MovieSQLiteHelper.MOVIE_INFO_KEY_RATING + selection[2]
                 + " AND " + MovieSQLiteHelper.MOVIE_INFO_KEY_TITLE + selection[3]
                 + " GROUP BY m." + MovieSQLiteHelper.MOVIE_INFO_KEY_TITLE
-                + " ORDER BY m.movie_info_id" + order;
+                + " ORDER BY " + order;
         Cursor cursor = database.rawQuery(query, null);
         List<Movie> movies = cursorToList(cursor);
         return movies;

@@ -13,7 +13,7 @@
         android:layout_marginEnd="20dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
-        android:hint="@string/search"
+        android:hint="@string/searchName"
         android:singleLine="true"
         android:textAppearance="?android:attr/textAppearance" />
 
@@ -31,7 +31,8 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/quality"
-            android:textAppearance="?android:attr/textAppearance" />
+            android:textAppearance="?android:attr/textAppearance"
+            android:textSize="@dimen/font_size_m" />
 
         <Spinner
             android:id="@+id/qualitySpinner"
@@ -40,7 +41,8 @@
             android:layout_marginStart="20dp"
             android:layout_weight="2"
             android:entries="@array/quality_filter"
-            android:prompt="@string/prompt" />
+            android:prompt="@string/prompt"
+            android:textSize="@dimen/font_size_m" />
     </LinearLayout>
 
     <LinearLayout
@@ -58,17 +60,21 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/genre"
-            android:textAppearance="?android:attr/textAppearance" />
+            android:textAppearance="?android:attr/textAppearance"
+
+            android:textSize="@dimen/font_size_m" />
 
         <Spinner
             android:id="@+id/genreSpinner"
-
             android:layout_width="0px"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_weight="2"
+            android:dropDownWidth="wrap_content"
+
             android:entries="@array/genre_filter"
-            android:prompt="@string/prompt" />
+            android:prompt="@string/prompt"
+            android:textSize="@dimen/font_size_m" />
     </LinearLayout>
 
     <LinearLayout
@@ -85,7 +91,9 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/rating"
-            android:textAppearance="?android:attr/textAppearance" />
+
+            android:textAppearance="?android:attr/textAppearance"
+            android:textSize="@dimen/font_size_m" />
 
         <Spinner
             android:id="@+id/ratingSpinner"
@@ -94,7 +102,9 @@
             android:layout_marginStart="20dp"
             android:layout_weight="2"
             android:entries="@array/rating_filter"
-            android:prompt="@string/prompt" />
+
+            android:prompt="@string/prompt"
+            android:textSize="@dimen/font_size_m" />
     </LinearLayout>
 
     <LinearLayout
@@ -111,7 +121,9 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/order"
-            android:textAppearance="?android:attr/textAppearance" />
+
+            android:textAppearance="?android:attr/textAppearance"
+            android:textSize="@dimen/font_size_m" />
 
         <Spinner
             android:id="@+id/orderBySpinner"
@@ -119,8 +131,11 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_weight="2"
+            android:dropDownWidth="wrap_content"
+
             android:entries="@array/order_filter"
-            android:prompt="@string/prompt" />
+            android:prompt="@string/prompt"
+            android:textSize="@dimen/font_size_m" />
     </LinearLayout>
 
     <Button
@@ -130,6 +145,10 @@
         android:layout_marginEnd="20dp"
         android:layout_marginStart="20dp"
         android:layout_marginTop="20dp"
-        android:text="@string/search" />
+
+        android:background="@color/colorPrimaryDark"
+        android:text="@string/search"
+        android:textColor="@android:color/white"
+        android:textSize="@dimen/font_size_m" />
 
 </LinearLayout>

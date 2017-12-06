@@ -12,19 +12,19 @@ public class SqlStatements {
         String sql;
         switch (s) {
             case "Alphabetical":
-                sql = " ASC";
+                sql = MovieSQLiteHelper.MOVIE_INFO_KEY_TITLE + " DESC";
                 break;
             case "Year":
-                sql = " DESC";
+                sql = MovieSQLiteHelper.MOVIE_INFO_KEY_YEAR + " DESC";
                 break;
             case "Rating":
-                sql = " DESC";
+                sql = MovieSQLiteHelper.MOVIE_INFO_KEY_RATING + " DESC";
                 break;
             case "Latest":
-                sql = " DESC";
+                sql = MovieSQLiteHelper.MOVIE_INFO_KEY_ID + " DESC";
                 break;
             default:
-                sql = " DESC";
+                sql = MovieSQLiteHelper.MOVIE_INFO_KEY_ID + " DESC";
         }
         return sql;
     }

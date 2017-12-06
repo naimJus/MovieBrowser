@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import java.lang.reflect.Field;
 import java.util.HashMap;
 
 public class SearchFragment extends Fragment {
@@ -39,6 +40,17 @@ public class SearchFragment extends Fragment {
         orderBySpinner = (Spinner) view.findViewById(R.id.orderBySpinner);
         searchBtn = (Button) view.findViewById(R.id.searchBtn);
         nameET = (EditText) view.findViewById(R.id.nameET);
+        try {
+            Field popup = Spinner.class.getDeclaredField("mPopup");
+            popup.setAccessible(true);
+
+            android.widget.ListPopupWindow popupWindowGenre = (android.widget.ListPopupWindow) popup.get(genreSpinner);
+            android.widget.ListPopupWindow popupWindowRating = (android.widget.ListPopupWindow) popup.get(ratingSpinner);
+            popupWindowGenre.setHeight(800);
+            popupWindowRating.setHeight(800);
+        } catch (NoClassDefFoundError | ClassCastException | NoSuchFieldException | IllegalAccessException e) {
+            // silently fail...
+        }
 
         searchBtn.setOnClickListener(v -> {
 

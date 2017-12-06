@@ -9,6 +9,7 @@
     <string name="genre">Genre:</string>
     <string name="prompt">All</string>
     <string name="search">Search</string>
+    <string name="searchName">Enter movie name: </string>
     <string name="browse">Browse Movies</string>
     <string name="recent">Recent Movies</string>
     <string name="top">Top Rated Movies</string>
