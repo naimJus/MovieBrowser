@@ -74,7 +74,7 @@
                     android:layout_marginRight="8dp"
                     android:text="TextView"
                     android:textColor="@color/colorPrimaryDark"
-                    android:textSize="@dimen/font_size_l" />
+                    android:textSize="@dimen/font_size_xm" />
 
                 <TextView
                     android:id="@+id/movie_year_TV"
