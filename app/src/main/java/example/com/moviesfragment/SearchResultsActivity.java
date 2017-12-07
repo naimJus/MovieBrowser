@@ -2,19 +2,18 @@ package example.com.moviesfragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.DividerItemDecoration;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.HashMap;
 import java.util.List;
@@ -25,12 +24,17 @@ public class SearchResultsActivity extends AppCompatActivity {
     public static final String POSITION = ".Model.Movie";
     public static final String BUNDLE = "bundle";
     private static final String FIRSTITEMID = "firstItemId";
-    ListView listView;
-    MoviesDataSource moviesDataSource;
-    List<Movie> getMovies;
+    private static final int VISIBLEITEMS = 4;
+    protected LinearLayoutManager mLayoutManager;
     HashMap<String, String> sqlParams;
     int firstItemId;
-
+    int lastItemScrollPosition;
+    int scrollPosition = 0;
+    private MoviesDataSource mMoviesDataSource;
+    private String mFilter = MovieSQLiteHelper.MOVIE_INFO_KEY_ID;
+    private List<Movie> mMovieList;
+    private RecyclerView mRecyclerView;
+    private MoviesAdapter mAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,28 +45,43 @@ public class SearchResultsActivity extends AppCompatActivity {
             firstItemId = savedInstanceState.getInt(FIRSTITEMID);
         }
 
-        Toolbar myToolbar = (Toolbar) findViewById(R.id.searchResultToolbar);
-        setSupportActionBar(myToolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        mMoviesDataSource = new MoviesDataSource(this);
+        mMoviesDataSource.open();
 
-        listView = (ListView) findViewById(R.id.list_results);
-        moviesDataSource = new MoviesDataSource(this);
-        moviesDataSource.open();
+        mRecyclerView = (RecyclerView) findViewById(R.id.search_activity_recycler_view);
+        mLayoutManager = new LinearLayoutManager(this);
+        mRecyclerView.setLayoutManager(mLayoutManager);
+        DividerItemDecoration itemDecor = new DividerItemDecoration(mRecyclerView.getContext(), mLayoutManager.getOrientation());
+        mRecyclerView.addItemDecoration(itemDecor);
+        mRecyclerView.addOnItemTouchListener(new RecyclerTouchListener(this, mRecyclerView, new MainActivity.ClickListener() {
+            @Override
+            public void onClick(View view, final int position) {
+                //Values are passing to activity & to fragment as well
+                Movie movie = mMovieList.get(position);
+                Intent intent = new Intent(SearchResultsActivity.this, MovieActivity.class);
+                intent.putExtra(BUNDLE, movie.getId());
+                startActivity(intent);
+            }
 
-
-/*        Intent i = getIntent();
+            @Override
+            public void onLongClick(View view, int position) {
+                Toast.makeText(SearchResultsActivity.this, "Long press on position :" + position,
+                        Toast.LENGTH_LONG).show();
+            }
+        }));
+        mAdapter = new MoviesAdapter(this, mMovieList);
+        mRecyclerView.setAdapter(mAdapter);
+        Intent i = getIntent();
         if (i != null) {
             sqlParams = (HashMap<String, String>) i.getSerializableExtra(SearchFragment.SEARCH);
-            getMovies = moviesDataSource.searchMovies(sqlParams);
+            mMovieList = mMoviesDataSource.searchMovies(sqlParams);
         } else {
-            getMovies = moviesDataSource.getAllMovies();
-        }*/
+            mMovieList = mMoviesDataSource.limitMovies(50);
+        }
 
-        if (getMovies.size() == 0) {
+        if (mMovieList.size() == 0) {
             TextView textView = new TextView(this);
             textView.setText(R.string.nothing_found);
-            listView.setVisibility(View.GONE);
             LinearLayout linearLayout = (LinearLayout) findViewById(R.id.search_results);
             linearLayout.addView(textView);
             textView.setTextSize(20);
@@ -70,116 +89,33 @@ public class SearchResultsActivity extends AppCompatActivity {
             textView.setGravity(Gravity.CENTER_HORIZONTAL);
             textView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT));
 
-
-//            textView.setGravity();
-
         }
+        mAdapter = new MoviesAdapter(this, mMovieList);
+        mRecyclerView.setAdapter(mAdapter);
         refreshAdapter();
         Log.v("SearchResultActivity", sqlParams.toString());
-        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                //create a new movie from the getMovies List (which comes from the database)
-                //wrap the movie in a Bundle
-                //put the bundle in a Intent
-                //Start the new Activity
-                Movie movie = getMovies.get(position);
-                Bundle b = new Bundle();
-                b.putParcelable(POSITION, movie);
-                Intent intent = new Intent(SearchResultsActivity.this, MovieActivity.class);
-                intent.putExtra(BUNDLE, b);
-                startActivity(intent);
-            }
-        });
-
-//        listView.setOnScrollListener(new AbsListView.OnScrollListener() {
-//
-//            public void onScrollStateChanged(AbsListView view, int scrollState) {
-//
-//
-//            }
-//
-//            public void onScroll(AbsListView view, int firstVisibleItem,
-//                                 int visibleItemCount, int totalItemCount) {
-//
-//                if(firstVisibleItem+visibleItemCount == totalItemCount && totalItemCount!=0)
-//                {
-//                    if(flag_loading == false)
-//                    {
-//                        flag_loading = true;
-//                        additems();
-//                    }
-//                }
-//            }
-//        });
-    }
-
-/*
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.sortByName:
-                if (sqlParams.get("Order").equals(MovieSQLiteHelper.KEY_TITLE + " ASC")) {
-                    sqlParams.put("Order", MovieSQLiteHelper.KEY_TITLE + " DESC");
-                } else {
-                    sqlParams.put("Order", MovieSQLiteHelper.KEY_TITLE + " ASC");
-                }
-                getMovies = moviesDataSource.searchMovies(sqlParams);
-                refreshAdapter();
-                return true;
-            case R.id.sortByRating:
-                if (sqlParams.get("Order").equals(MovieSQLiteHelper.KEY_RATING + " ASC")) {
-                    sqlParams.put("Order", MovieSQLiteHelper.KEY_RATING + " DESC");
-                } else {
-                    sqlParams.put("Order", MovieSQLiteHelper.KEY_RATING + " ASC");
-                }
-                getMovies = moviesDataSource.searchMovies(sqlParams);
-                refreshAdapter();
-                return true;
-            case R.id.sortByYear:
-                if (sqlParams.get("Order").equals(MovieSQLiteHelper.KEY_YEAR + " ASC")) {
-                    sqlParams.put("Order", MovieSQLiteHelper.KEY_YEAR + " DESC");
-                } else {
-                    sqlParams.put("Order", MovieSQLiteHelper.KEY_YEAR + " ASC");
-                }
-                getMovies = moviesDataSource.searchMovies(sqlParams);
-                refreshAdapter();
-                return true;
-            case android.R.id.home:
-                NavUtils.navigateUpFromSameTask(this);
-                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-*/
-
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater menuInflater = getMenuInflater();
-        menuInflater.inflate(R.menu.menu, menu);
-        return super.onCreateOptionsMenu(menu);
     }
 
     @Override
-    protected void onPause() {
+    public void onPause() {
         super.onPause();
-        firstItemId = listView.getFirstVisiblePosition();
+        scrollPosition = ((LinearLayoutManager) mRecyclerView.getLayoutManager())
+                .findFirstCompletelyVisibleItemPosition();
+
     }
 
     @Override
-    protected void onResume() {
+    public void onResume() {
         super.onResume();
-        moviesDataSource.open();
         refreshAdapter();
+        mRecyclerView.scrollToPosition(scrollPosition);
     }
 
     public void refreshAdapter() {
-//        MoviesAdapter moviesAdapter = new MoviesAdapter(this, getMovies);
-//        listView.setAdapter(moviesAdapter);
-        if (firstItemId != 0)
-            listView.setSelectionFromTop(firstItemId, 0);
+        mAdapter = new MoviesAdapter(SearchResultsActivity.this, mMovieList);
+        mRecyclerView.setAdapter(mAdapter);
+        if (lastItemScrollPosition != 0) {
+            mRecyclerView.scrollToPosition(lastItemScrollPosition);
+        }
     }
 }

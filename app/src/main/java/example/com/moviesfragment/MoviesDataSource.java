@@ -3,18 +3,21 @@ package example.com.moviesfragment;
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.text.TextUtils;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import example.com.moviesfragment.gson.Movie;
 import example.com.moviesfragment.gson.Torrent;
 
 public class MoviesDataSource {
-    private static final String LOG = MoviesDataSource.class.getSimpleName();
+    private static final String MY_QUERY = "SELECT * FROM " + MovieSQLiteHelper.TABLE_MOVIE_INFO + " m INNER JOIN " + MovieSQLiteHelper.TABLE_TORRENTS
+            + " t ON m.movie_info_id = t.movie_info_id GROUP BY m.title";
     private SQLiteDatabase database;
     private MovieSQLiteHelper dbHelper;
 
@@ -30,65 +33,67 @@ public class MoviesDataSource {
         dbHelper.close();
     }
 
-    List<Movie> getAllMovies() {
-        Cursor cursor = database.rawQuery("SELECT * " +
-                "FROM " + MovieSQLiteHelper.TABLE_MOVIE_INFO + " m "
-                + "INNER JOIN " + MovieSQLiteHelper.TABLE_TORRENTS + " t ON m.movie_info_id = t.movie_info_id GROUP BY m.name ORDER BY " + MovieSQLiteHelper.MOVIE_INFO_KEY_ID + " ASC", null);
+
+    List<Movie> limitMovies(int limit) {
+        if (limit < 50)
+            limit = 50;
+
+        Cursor cursor = database.rawQuery(MY_QUERY + " ORDER BY " + MovieSQLiteHelper.MOVIE_INFO_KEY_ID + " DESC LIMIT " + limit, null);
         List<Movie> movies = cursorToList(cursor);
         return movies;
     }
+
 
     List<Movie> getMovie(String id) {
         String[] ids = new String[]{id};
-        Cursor cursor = database.rawQuery("SELECT * FROM "
-                + MovieSQLiteHelper.TABLE_MOVIE_INFO + " m INNER JOIN "
-                + MovieSQLiteHelper.TABLE_TORRENTS + " t ON m.movie_info_id = t.movie_info_id WHERE m.movie_info_id =?", ids);
+        Cursor cursor = database.rawQuery("SELECT * FROM " + MovieSQLiteHelper.TABLE_MOVIE_INFO + " m INNER JOIN " + MovieSQLiteHelper.TABLE_TORRENTS
+                + " t ON m." + MovieSQLiteHelper.MOVIE_INFO_KEY_ID + " = t." + MovieSQLiteHelper.MOVIE_INFO_KEY_ID + " WHERE m." + MovieSQLiteHelper.MOVIE_INFO_KEY_ID + " =?", ids);
+
         List<Movie> movies = cursorToList(cursor);
         return movies;
     }
 
-/*    List<Movie> sortBy(String orderBy) {
-        Cursor cursor = database.query(MovieSQLiteHelper.Ta, null, null, null, null, null, orderBy, "50");
+    List<Movie> sortAndLimit(String orderBy, int limit) {
+        Cursor cursor = database.rawQuery(MY_QUERY + " ORDER BY " + orderBy + " LIMIT " + limit, null);
         List<Movie> movies = cursorToList(cursor);
         return movies;
-    }*/
-
-    /*
-    List<Movie> sortAndLimit(String orderBy, String limit) {
-        Cursor cursor = database.query(MovieSQLiteHelper.TABLE_NAME, null, null, null, null, null, orderBy, limit);
-        List<Movie> movies = cursorToList(cursor);
-        return movies;0
     }
+
 
     List<Movie> searchMovies(HashMap<String, String> searchParams) {
 
         String quality = searchParams.get("Quality");
         String genre = searchParams.get("Genre");
         String rating = searchParams.get("Rating");
-        String order = searchParams.get("Order");
         String search = searchParams.get("Search");
+        String order = searchParams.get("Order");
 
 
-        Cursor cursor = database.query(MovieSQLiteHelper.TABLE_NAME,
-                null,
-                quality + " AND " +
-                        genre + " AND " +
-                        rating + " AND " +
-                        search,
-                null,
-                null,
-                null,
-                order);
+        String[] selection = {
+                quality,
+                genre,
+                rating,
+                search};
 
+        String query = "SELECT * FROM " + MovieSQLiteHelper.TABLE_MOVIE_INFO + " m INNER JOIN " + MovieSQLiteHelper.TABLE_TORRENTS
+                + " t ON m.movie_info_id = t.movie_info_id WHERE "
+                + MovieSQLiteHelper.TORRENT_KEY_QUALITY + selection[0]
+                + " AND " + MovieSQLiteHelper.MOVIE_INFO_KEY_GENRE + selection[1]
+                + " AND " + MovieSQLiteHelper.MOVIE_INFO_KEY_RATING + selection[2]
+                + " AND " + MovieSQLiteHelper.MOVIE_INFO_KEY_TITLE + selection[3]
+                + " GROUP BY m." + MovieSQLiteHelper.MOVIE_INFO_KEY_TITLE
+                + " ORDER BY " + order;
+        Cursor cursor = database.rawQuery(query, null);
         List<Movie> movies = cursorToList(cursor);
         return movies;
     }
-*/
+
     private List<Movie> cursorToList(Cursor cursor) {
-        List<Movie> movies = new ArrayList<Movie>();
+        List<Movie> movies = new ArrayList<>(cursor.getCount());
+        Movie movie;
         if (cursor.getCount() > 0) {
             while (cursor.moveToNext()) {
-                Movie movie = new Movie();
+                movie = new Movie();
 
                 movie.setId(cursor.getInt(cursor.getColumnIndex(MovieSQLiteHelper.MOVIE_INFO_KEY_ID)));
                 movie.setTitle(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.MOVIE_INFO_KEY_TITLE)));
@@ -101,9 +106,6 @@ public class MoviesDataSource {
                 movie.setRuntime(cursor.getInt(cursor.getColumnIndex(MovieSQLiteHelper.MOVIE_INFO_KEY_RUNTIME)));
                 movie.setMpaRating(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.MOVIE_INFO_KEY_MPARATING)));
                 movie.setImdbCode(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.MOVIE_INFO_KEY_IMDB)));
-                movie.setBackgroundImage(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.MOVIE_INFO_IMAGE_BACKGROUND)));
-                movie.setBackgroundImageOriginal(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.MOVIE_INFO_IMAGE_BACKGROUND_ORIGINAL)));
-                movie.setSmallCoverImage(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.MOVIE_INFO_IMAGE_SMALL_COVER)));
                 movie.setMediumCoverImage(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.MOVIE_INFO_IMAGE_MEDIUM_COVER)));
                 movie.setLargeCoverImage(cursor.getString(cursor.getColumnIndex(MovieSQLiteHelper.MOVIE_INFO_IMAGE_LARGE_COVER)));
 
@@ -121,6 +123,7 @@ public class MoviesDataSource {
     }
 
     public void createMovieInfo(Movie movie) {
+        long newId;
         ContentValues values = new ContentValues();
         values.put(MovieSQLiteHelper.MOVIE_INFO_KEY_ID, movie.getId());
         values.put(MovieSQLiteHelper.MOVIE_INFO_KEY_TITLE, movie.getTitle());
@@ -134,15 +137,15 @@ public class MoviesDataSource {
         values.put(MovieSQLiteHelper.MOVIE_INFO_KEY_RUNTIME, movie.getRuntime());
         values.put(MovieSQLiteHelper.MOVIE_INFO_KEY_MPARATING, movie.getMpaRating());
         values.put(MovieSQLiteHelper.MOVIE_INFO_KEY_IMDB, movie.getImdbCode());
-        values.put(MovieSQLiteHelper.MOVIE_INFO_IMAGE_BACKGROUND, movie.getBackgroundImage());
-        values.put(MovieSQLiteHelper.MOVIE_INFO_IMAGE_BACKGROUND_ORIGINAL, movie.getBackgroundImageOriginal());
-        values.put(MovieSQLiteHelper.MOVIE_INFO_IMAGE_SMALL_COVER, movie.getSmallCoverImage());
         values.put(MovieSQLiteHelper.MOVIE_INFO_IMAGE_MEDIUM_COVER, movie.getMediumCoverImage());
         values.put(MovieSQLiteHelper.MOVIE_INFO_IMAGE_LARGE_COVER, movie.getLargeCoverImage());
 
         if (movie.getTorrents() != null)
             createTorrent(movie);
-        database.insertWithOnConflict(MovieSQLiteHelper.TABLE_MOVIE_INFO, null, values, SQLiteDatabase.CONFLICT_IGNORE);
+        try {
+            newId = database.insertOrThrow(MovieSQLiteHelper.TABLE_MOVIE_INFO, null, values);
+        } catch (SQLException es) {
+        }
     }
 
     private void createTorrent(Movie movie) {
@@ -158,13 +161,13 @@ public class MoviesDataSource {
             database.insertWithOnConflict(MovieSQLiteHelper.TABLE_TORRENTS, null, values, SQLiteDatabase.CONFLICT_IGNORE);
         }
     }
+
+
+    int getCount() {
+        Cursor cursor = database.rawQuery("SELECT * FROM " + MovieSQLiteHelper.TABLE_MOVIE_INFO, null);
+        int count = cursor.getCount();
+        cursor.close();
+        return count;
+
+    }
 }
-//    int getCount() {
-//        Cursor mCount = database.rawQuery("select count(*) from movie", null);
-//        mCount.moveToFirst();
-//        int count = mCount.getInt(0);
-//        mCount.close();
-//        return count;
-//    }
-
-

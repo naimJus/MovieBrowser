@@ -45,6 +45,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder
         holder.tvName.setText(movie.getTitle());
         holder.tvYear.setText(movie.getYear().toString());
         holder.tvRating.setText(movie.getRating().toString());
+        holder.tvGenres.setText(movie.getGenre());
         Picasso.with(context)
                 .load(movie.getMediumCoverImage())
                 .placeholder(R.drawable.welcome)
@@ -67,6 +68,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder
         TextView tvName;
         TextView tvYear;
         TextView tvRating;
+        TextView tvGenres;
         ImageView imageView;
 
         public ViewHolder(View itemView) {
@@ -75,6 +77,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder
             tvYear = (TextView) itemView.findViewById(R.id.list_item_year);
             tvRating = (TextView) itemView.findViewById(R.id.list_item_rating);
             imageView = (ImageView) itemView.findViewById(R.id.list_item_image);
+            tvGenres = (TextView) itemView.findViewById(R.id.list_item_genres);
         }
     }
 

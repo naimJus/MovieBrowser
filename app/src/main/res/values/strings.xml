@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">YIFI Browser</string>
+    <string name="app_name">Movie Browser</string>
     <string name="sortByName">Sort By Name</string>
     <string name="sortByRating">Sort By Rating</string>
     <string name="sortByYear">Sort By Year</string>
@@ -9,11 +9,13 @@
     <string name="genre">Genre:</string>
     <string name="prompt">All</string>
     <string name="search">Search</string>
+    <string name="searchName">Enter movie name: </string>
     <string name="browse">Browse Movies</string>
     <string name="recent">Recent Movies</string>
     <string name="top">Top Rated Movies</string>
     <string name="load_more_button">Load More</string>
-    <string name="loading">Loading...</string>
+    <string name="loading">Connecting</string>
+    <string name="gathering_data">Your app to the latest movies</string>
     <string name="order">Order By:</string>
     <string name="AvailableIn">Available in:</string>
     <string name="element_text">Element</string>
@@ -33,7 +35,7 @@
     <string-array name="quality_filter">
         <item>All</item>
         <item>720p</item>
-        <item>1800p</item>
+        <item>1080p</item>
         <item>3D</item>
     </string-array>
     <string-array name="order_filter">

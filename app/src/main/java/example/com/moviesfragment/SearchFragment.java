@@ -11,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 
+import java.lang.reflect.Field;
 import java.util.HashMap;
 
 public class SearchFragment extends Fragment {
@@ -39,45 +40,44 @@ public class SearchFragment extends Fragment {
         orderBySpinner = (Spinner) view.findViewById(R.id.orderBySpinner);
         searchBtn = (Button) view.findViewById(R.id.searchBtn);
         nameET = (EditText) view.findViewById(R.id.nameET);
+        try {
+            Field popup = Spinner.class.getDeclaredField("mPopup");
+            popup.setAccessible(true);
 
-        searchBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-//                StringBuilder sb = new StringBuilder("'% ");
-//                sb.append(searchET.getText().toString());
-//                sb.append(" %'");
-//                String[] searchParameters = {
-//                        sb.toString(),
-//                        qualitySpinner.getSelectedItem().toString(),
-//                        genreSpinner.getSelectedItem().toString(),
-//                        ratingSpinner.getSelectedItem().toString()};
+            android.widget.ListPopupWindow popupWindowGenre = (android.widget.ListPopupWindow) popup.get(genreSpinner);
+            android.widget.ListPopupWindow popupWindowRating = (android.widget.ListPopupWindow) popup.get(ratingSpinner);
+            popupWindowGenre.setHeight(800);
+            popupWindowRating.setHeight(800);
+        } catch (NoClassDefFoundError | ClassCastException | NoSuchFieldException | IllegalAccessException e) {
+            // silently fail...
+        }
 
-                String quality = qualitySpinner.getSelectedItem().toString();
-                String genre = genreSpinner.getSelectedItem().toString();
-                String rating = ratingSpinner.getSelectedItem().toString();
-                String order = orderBySpinner.getSelectedItem().toString();
-                String name = nameET.getText().toString();
+        searchBtn.setOnClickListener(v -> {
 
-/*                String orderSql = sqlStatements.generateOrderSql(order);
-                String ratingSql = sqlStatements.generateRatingSql(rating);
-                String genreSql = sqlStatements.generateGenreSql(genre);
-                String qualitySql = sqlStatements.generateQualitySql(quality);
-                String nameSql = sqlStatements.generateNameSql(name);*/
+            String quality = qualitySpinner.getSelectedItem().toString();
+            String genre = genreSpinner.getSelectedItem().toString();
+            String rating = ratingSpinner.getSelectedItem().toString();
+            String order = orderBySpinner.getSelectedItem().toString();
+            String name = nameET.getText().toString();
 
-/*
-                searchParams.put("Search", nameSql);
-                searchParams.put("Quality", qualitySql);
-                searchParams.put("Genre", genreSql);
-                searchParams.put("Rating", ratingSql);
-                searchParams.put("Order", orderSql);
-*/
+            String orderSql = sqlStatements.generateOrderSql(order);
+            String ratingSql = sqlStatements.generateRatingSql(rating);
+            String genreSql = sqlStatements.generateGenreSql(genre);
+            String qualitySql = sqlStatements.generateQualitySql(quality);
+            String nameSql = sqlStatements.generateNameSql(name);
 
 
-                Intent intent = new Intent(getActivity(), SearchResultsActivity.class);
-                intent.putExtra(SEARCH, searchParams);
-                startActivity(intent);
+            searchParams.put("Search", nameSql);
+            searchParams.put("Quality", qualitySql);
+            searchParams.put("Genre", genreSql);
+            searchParams.put("Rating", ratingSql);
+            searchParams.put("Order", orderSql);
 
-            }
+
+            Intent intent = new Intent(getActivity(), SearchResultsActivity.class);
+            intent.putExtra(SEARCH, searchParams);
+            startActivity(intent);
+
         });
         return view;
     }
