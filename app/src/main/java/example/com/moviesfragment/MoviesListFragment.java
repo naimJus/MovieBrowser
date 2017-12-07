@@ -92,8 +92,6 @@ public class MoviesListFragment extends Fragment {
 
             @Override
             public void onLongClick(View view, int position) {
-                Toast.makeText(getActivity(), "Long press on position :" + position,
-                        Toast.LENGTH_LONG).show();
             }
         }));
         mRecyclerView.setAdapter(mAdapter);
