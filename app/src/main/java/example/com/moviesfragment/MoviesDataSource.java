@@ -7,7 +7,6 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteException;
 import android.text.TextUtils;
-import android.util.Log;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -17,7 +16,6 @@ import example.com.moviesfragment.gson.Movie;
 import example.com.moviesfragment.gson.Torrent;
 
 public class MoviesDataSource {
-    private static final String LOG = MoviesDataSource.class.getSimpleName();
     private static final String MY_QUERY = "SELECT * FROM " + MovieSQLiteHelper.TABLE_MOVIE_INFO + " m INNER JOIN " + MovieSQLiteHelper.TABLE_TORRENTS
             + " t ON m.movie_info_id = t.movie_info_id GROUP BY m.title";
     private SQLiteDatabase database;
@@ -146,9 +144,7 @@ public class MoviesDataSource {
             createTorrent(movie);
         try {
             newId = database.insertOrThrow(MovieSQLiteHelper.TABLE_MOVIE_INFO, null, values);
-            Log.v(LOG, newId + " was added in database");
         } catch (SQLException es) {
-            Log.v(LOG, "movie with id " + movie.getId() + " was already in database");
         }
     }
 

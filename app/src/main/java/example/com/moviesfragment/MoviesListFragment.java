@@ -26,17 +26,19 @@ public class MoviesListFragment extends Fragment {
     private static final String FIRSTITEMID = "firstItemId";
     private static final String SORTED = "filter";
     private static final String ITEMID = "itemId";
-    static int limit = 50;
-    int scrollPosition = 0;
-    int lastItemScrollPosition;
     private static final int VISIBLEITEMS = 4;
-    protected LinearLayoutManager mLayoutManager;
+
+    private LinearLayoutManager mLayoutManager;
     private MoviesDataSource mMoviesDataSource;
-    private String mFilter = MovieSQLiteHelper.MOVIE_INFO_KEY_ID;
     private List<Movie> mMovieList;
     private RecyclerView mRecyclerView;
     private MoviesAdapter mAdapter;
-    private boolean flag_loading;
+
+    static int limit = 50;
+    int scrollPosition = 0;
+    int lastItemScrollPosition;
+    private String mFilter = MovieSQLiteHelper.MOVIE_INFO_KEY_ID + " DESC";
+    private boolean mFlagLoading;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -50,8 +52,9 @@ public class MoviesListFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        setHasOptionsMenu(true);
         View rootView = inflater.inflate(R.layout.fragment_movies_list, container, false);
+        setHasOptionsMenu(true);
+
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.my_recycler_view);
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
@@ -69,8 +72,8 @@ public class MoviesListFragment extends Fragment {
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 if (mLayoutManager.getItemCount() - VISIBLEITEMS == mLayoutManager.findLastVisibleItemPosition()) {
-                    if (!flag_loading) {
-                        flag_loading = true;
+                    if (!mFlagLoading) {
+                        mFlagLoading = true;
                         loadMoreData();
                     }
                 }
@@ -152,30 +155,30 @@ public class MoviesListFragment extends Fragment {
                 refreshAdapter();
                 return true;
             case R.id.sortByRating:
-                if (mFilter.equals(MovieSQLiteHelper.MOVIE_INFO_KEY_RATING + " ASC")) {
-                    mFilter = MovieSQLiteHelper.MOVIE_INFO_KEY_RATING + " DESC";
-                } else {
+                if (mFilter.equals(MovieSQLiteHelper.MOVIE_INFO_KEY_RATING + " DESC")) {
                     mFilter = MovieSQLiteHelper.MOVIE_INFO_KEY_RATING + " ASC";
+                } else {
+                    mFilter = MovieSQLiteHelper.MOVIE_INFO_KEY_RATING + " DESC";
                 }
                 lastItemScrollPosition = 0;
                 mMovieList = mMoviesDataSource.sortAndLimit(mFilter, limit);
                 refreshAdapter();
                 return true;
             case R.id.sortByYear:
-                if (mFilter.equals(MovieSQLiteHelper.MOVIE_INFO_KEY_YEAR + " ASC")) {
-                    mFilter = MovieSQLiteHelper.MOVIE_INFO_KEY_YEAR + " DESC";
-                } else {
+                if (mFilter.equals(MovieSQLiteHelper.MOVIE_INFO_KEY_YEAR + " DESC")) {
                     mFilter = MovieSQLiteHelper.MOVIE_INFO_KEY_YEAR + " ASC";
+                } else {
+                    mFilter = MovieSQLiteHelper.MOVIE_INFO_KEY_YEAR + " DESC";
                 }
                 lastItemScrollPosition = 0;
                 mMovieList = mMoviesDataSource.sortAndLimit(mFilter, limit);
                 refreshAdapter();
                 return true;
             case R.id.sortByRecent:
-                if (mFilter.equals(MovieSQLiteHelper.MOVIE_INFO_KEY_ID + " ASC")) {
-                    mFilter = MovieSQLiteHelper.MOVIE_INFO_KEY_ID + " DESC";
-                } else {
+                if (mFilter.equals(MovieSQLiteHelper.MOVIE_INFO_KEY_ID + " DESC")) {
                     mFilter = MovieSQLiteHelper.MOVIE_INFO_KEY_ID + " ASC";
+                } else {
+                    mFilter = MovieSQLiteHelper.MOVIE_INFO_KEY_ID + " DESC";
                 }
                 lastItemScrollPosition = 0;
                 mMovieList = mMoviesDataSource.sortAndLimit(mFilter, limit);
@@ -215,7 +218,7 @@ public class MoviesListFragment extends Fragment {
         lastItemScrollPosition = mLayoutManager.findLastVisibleItemPosition() - 1;
         refreshAdapter();
         mRecyclerView.scrollToPosition(lastItemScrollPosition);
-        flag_loading = false;
+        mFlagLoading = false;
     }
 }
 
