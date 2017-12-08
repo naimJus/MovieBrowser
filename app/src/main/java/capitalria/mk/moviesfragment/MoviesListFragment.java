@@ -25,13 +25,13 @@ public class MoviesListFragment extends Fragment {
     private static final String FIRSTITEMID = "firstItemId";
     private static final String SORTED = "filter";
     private static final String ITEMID = "itemId";
+    private static final int VISIBLEITEMS = 4;
     static int limit = 50;
+    protected LinearLayoutManager mLayoutManager;
     int scrollPosition = 0;
     int lastItemScrollPosition;
-    private static final int VISIBLEITEMS = 4;
-    protected LinearLayoutManager mLayoutManager;
     private MoviesDataSource mMoviesDataSource;
-    private String mFilter = MovieSQLiteHelper.MOVIE_INFO_KEY_ID;
+    private String mFilter = MovieSQLiteHelper.MOVIE_INFO_KEY_ID + " DESC";
     private List<Movie> mMovieList;
     private RecyclerView mRecyclerView;
     private MoviesAdapter mAdapter;
@@ -138,7 +138,7 @@ public class MoviesListFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case capitalria.mk.moviesfragment.R.id.sortByName:
+            case R.id.sortByName:
                 if (mFilter.equals(MovieSQLiteHelper.MOVIE_INFO_KEY_TITLE + " ASC")) {
                     mFilter = MovieSQLiteHelper.MOVIE_INFO_KEY_TITLE + " DESC";
                 } else {
@@ -148,31 +148,31 @@ public class MoviesListFragment extends Fragment {
                 mMovieList = mMoviesDataSource.sortAndLimit(mFilter, limit);
                 refreshAdapter();
                 return true;
-            case capitalria.mk.moviesfragment.R.id.sortByRating:
-                if (mFilter.equals(MovieSQLiteHelper.MOVIE_INFO_KEY_RATING + " ASC")) {
-                    mFilter = MovieSQLiteHelper.MOVIE_INFO_KEY_RATING + " DESC";
-                } else {
+            case R.id.sortByRating:
+                if (mFilter.equals(MovieSQLiteHelper.MOVIE_INFO_KEY_RATING + " DESC")) {
                     mFilter = MovieSQLiteHelper.MOVIE_INFO_KEY_RATING + " ASC";
+                } else {
+                    mFilter = MovieSQLiteHelper.MOVIE_INFO_KEY_RATING + " DESC";
                 }
                 lastItemScrollPosition = 0;
                 mMovieList = mMoviesDataSource.sortAndLimit(mFilter, limit);
                 refreshAdapter();
                 return true;
-            case capitalria.mk.moviesfragment.R.id.sortByYear:
-                if (mFilter.equals(MovieSQLiteHelper.MOVIE_INFO_KEY_YEAR + " ASC")) {
-                    mFilter = MovieSQLiteHelper.MOVIE_INFO_KEY_YEAR + " DESC";
-                } else {
+            case R.id.sortByYear:
+                if (mFilter.equals(MovieSQLiteHelper.MOVIE_INFO_KEY_YEAR + " DESC")) {
                     mFilter = MovieSQLiteHelper.MOVIE_INFO_KEY_YEAR + " ASC";
+                } else {
+                    mFilter = MovieSQLiteHelper.MOVIE_INFO_KEY_YEAR + " DESC";
                 }
                 lastItemScrollPosition = 0;
                 mMovieList = mMoviesDataSource.sortAndLimit(mFilter, limit);
                 refreshAdapter();
                 return true;
-            case capitalria.mk.moviesfragment.R.id.sortByRecent:
-                if (mFilter.equals(MovieSQLiteHelper.MOVIE_INFO_KEY_ID + " ASC")) {
-                    mFilter = MovieSQLiteHelper.MOVIE_INFO_KEY_ID + " DESC";
-                } else {
+            case R.id.sortByRecent:
+                if (mFilter.equals(MovieSQLiteHelper.MOVIE_INFO_KEY_ID + " DESC")) {
                     mFilter = MovieSQLiteHelper.MOVIE_INFO_KEY_ID + " ASC";
+                } else {
+                    mFilter = MovieSQLiteHelper.MOVIE_INFO_KEY_ID + " DESC";
                 }
                 lastItemScrollPosition = 0;
                 mMovieList = mMoviesDataSource.sortAndLimit(mFilter, limit);
