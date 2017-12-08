@@ -41,7 +41,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/playerYouTube"
-        tools:context="example.com.moviesfragment.MovieActivity">
+        tools:context="capitalria.mk.moviesfragment.capitalria.com.moviesfragment.MovieActivity">
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"

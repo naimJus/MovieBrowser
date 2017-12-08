@@ -41,7 +41,7 @@
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/playerYouTube"
-        tools:context="example.com.moviesfragment.MovieActivity">
+        tools:context="capitalria.mk.moviesfragment.capitalria.com.moviesfragment.MovieActivity">
 
 
         <LinearLayout
