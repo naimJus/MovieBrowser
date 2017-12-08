@@ -12,7 +12,7 @@ public class SqlStatements {
         String sql;
         switch (s) {
             case "Alphabetical":
-                sql = MovieSQLiteHelper.MOVIE_INFO_KEY_TITLE + " ASC";
+                sql = MovieSQLiteHelper.MOVIE_INFO_KEY_TITLE + " DESC";
                 break;
             case "Year":
                 sql = MovieSQLiteHelper.MOVIE_INFO_KEY_YEAR + " DESC";
