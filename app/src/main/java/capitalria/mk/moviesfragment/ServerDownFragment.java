@@ -18,13 +18,11 @@ public class ServerDownFragment extends DialogFragment {
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         // Use the Builder class for convenient dialog construction
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle(capitalria.mk.moviesfragment.R.string.dialog_internet_missing)
-                .setMessage(capitalria.mk.moviesfragment.R.string.server_down)
-                .setNegativeButton(capitalria.mk.moviesfragment.R.string.cancel, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int id) {
-                        getActivity().finish();
-                        System.exit(0);
-                    }
+        builder.setTitle(R.string.dialog_internet_missing)
+                .setMessage(R.string.server_down)
+                .setNegativeButton(R.string.cancel, (dialog, id) -> {
+                    getActivity().finish();
+                    System.exit(0);
                 });
         // Create the AlertDialog object and return it
         return builder.create();

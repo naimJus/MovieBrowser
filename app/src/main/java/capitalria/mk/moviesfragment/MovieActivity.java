@@ -40,7 +40,7 @@ public class MovieActivity extends YouTubeBaseActivity {
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(capitalria.mk.moviesfragment.R.layout.activity_movie);
+        setContentView(R.layout.activity_movie);
 
 
         TextView nameTv, yearTv, ratingTv, genreTv, descriptionTv, runtimeTv;
@@ -61,21 +61,21 @@ public class MovieActivity extends YouTubeBaseActivity {
         movie = movies.get(0);
 
 
-        nameTv = (TextView) findViewById(capitalria.mk.moviesfragment.R.id.movie_name_TV);
-        yearTv = (TextView) findViewById(capitalria.mk.moviesfragment.R.id.movie_year_TV);
-        ratingTv = (TextView) findViewById(capitalria.mk.moviesfragment.R.id.movie_rating_TV);
-        genreTv = (TextView) findViewById(capitalria.mk.moviesfragment.R.id.movie_genre_TV);
-        descriptionTv = (TextView) findViewById(capitalria.mk.moviesfragment.R.id.movie_description_TV);
-        runtimeTv = (TextView) findViewById(capitalria.mk.moviesfragment.R.id.movie_runtime_TV);
-        movieImage = (ImageView) findViewById(capitalria.mk.moviesfragment.R.id.movie_image);
-        downloadBtn = (Button) findViewById(capitalria.mk.moviesfragment.R.id.downloadBtn);
-        magnetBtn = (Button) findViewById(capitalria.mk.moviesfragment.R.id.magnetBtn);
-        toolbar = (Toolbar) findViewById(capitalria.mk.moviesfragment.R.id.movie_activity_toolbar);
-        youTubePlayerView = (YouTubePlayerView) findViewById(capitalria.mk.moviesfragment.R.id.playerYouTube);
+        nameTv = (TextView) findViewById(R.id.movie_name_TV);
+        yearTv = (TextView) findViewById(R.id.movie_year_TV);
+        ratingTv = (TextView) findViewById(R.id.movie_rating_TV);
+        genreTv = (TextView) findViewById(R.id.movie_genre_TV);
+        descriptionTv = (TextView) findViewById(R.id.movie_description_TV);
+        runtimeTv = (TextView) findViewById(R.id.movie_runtime_TV);
+        movieImage = (ImageView) findViewById(R.id.movie_image);
+        downloadBtn = (Button) findViewById(R.id.downloadBtn);
+        magnetBtn = (Button) findViewById(R.id.magnetBtn);
+        toolbar = (Toolbar) findViewById(R.id.movie_activity_toolbar);
+        youTubePlayerView = (YouTubePlayerView) findViewById(R.id.playerYouTube);
 
-        radioButton720p = (RadioButton) findViewById(capitalria.mk.moviesfragment.R.id.quality720pRadioButton);
-        radioButton1080p = (RadioButton) findViewById(capitalria.mk.moviesfragment.R.id.quality1080pRadioButton);
-        radioButton3d = (RadioButton) findViewById(capitalria.mk.moviesfragment.R.id.quality3dRadioButton);
+        radioButton720p = (RadioButton) findViewById(R.id.quality720pRadioButton);
+        radioButton1080p = (RadioButton) findViewById(R.id.quality1080pRadioButton);
+        radioButton3d = (RadioButton) findViewById(R.id.quality3dRadioButton);
 
 
         for (Movie m : movies) {
@@ -105,11 +105,11 @@ public class MovieActivity extends YouTubeBaseActivity {
                 .into(movieImage);
 
         nameTv.setText(movie.getTitle());
-        yearTv.setText(getResources().getString(capitalria.mk.moviesfragment.R.string.year) + " " + movie.getYear());
-        ratingTv.setText(getResources().getString(capitalria.mk.moviesfragment.R.string.rating) + " " + movie.getRating());
-        genreTv.setText(getResources().getString(capitalria.mk.moviesfragment.R.string.genre) + " " + movie.getGenre());
+        yearTv.setText(getResources().getString(R.string.year) + " " + movie.getYear());
+        ratingTv.setText(getResources().getString(R.string.rating) + " " + movie.getRating());
+        genreTv.setText(getResources().getString(R.string.genre) + " " + movie.getGenre());
         descriptionTv.setText(movie.getDescriptionFull());
-        runtimeTv.setText(getResources().getString(capitalria.mk.moviesfragment.R.string.runtime) + " " + movie.getRuntime());
+        runtimeTv.setText(getResources().getString(R.string.runtime) + " " + movie.getRuntime());
 
         toolbar.setTitle(movie.getTitle());
         toolbar.setTitleTextColor(Color.WHITE);

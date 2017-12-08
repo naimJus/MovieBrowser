@@ -33,7 +33,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder
                                                        int viewType) {
         // create a new view
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(capitalria.mk.moviesfragment.R.layout.list_item, parent, false);
+                .inflate(R.layout.list_item, parent, false);
 
         return new ViewHolder(itemView);
     }
@@ -48,7 +48,7 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder
         holder.tvGenres.setText(movie.getGenre());
         Picasso.with(context)
                 .load(movie.getMediumCoverImage())
-                .placeholder(capitalria.mk.moviesfragment.R.drawable.welcome)
+                .placeholder(R.drawable.welcome)
                 .fit()
                 .into(holder.imageView);
 
@@ -73,11 +73,11 @@ public class MoviesAdapter extends RecyclerView.Adapter<MoviesAdapter.ViewHolder
 
         public ViewHolder(View itemView) {
             super(itemView);
-            tvName = (TextView) itemView.findViewById(capitalria.mk.moviesfragment.R.id.list_item_name);
-            tvYear = (TextView) itemView.findViewById(capitalria.mk.moviesfragment.R.id.list_item_year);
-            tvRating = (TextView) itemView.findViewById(capitalria.mk.moviesfragment.R.id.list_item_rating);
-            imageView = (ImageView) itemView.findViewById(capitalria.mk.moviesfragment.R.id.list_item_image);
-            tvGenres = (TextView) itemView.findViewById(capitalria.mk.moviesfragment.R.id.list_item_genres);
+            tvName = (TextView) itemView.findViewById(R.id.list_item_name);
+            tvYear = (TextView) itemView.findViewById(R.id.list_item_year);
+            tvRating = (TextView) itemView.findViewById(R.id.list_item_rating);
+            imageView = (ImageView) itemView.findViewById(R.id.list_item_image);
+            tvGenres = (TextView) itemView.findViewById(R.id.list_item_genres);
         }
     }
 

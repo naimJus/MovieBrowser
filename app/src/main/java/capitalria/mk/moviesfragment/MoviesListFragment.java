@@ -50,8 +50,8 @@ public class MoviesListFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         setHasOptionsMenu(true);
-        View rootView = inflater.inflate(capitalria.mk.moviesfragment.R.layout.fragment_movies_list, container, false);
-        mRecyclerView = (RecyclerView) rootView.findViewById(capitalria.mk.moviesfragment.R.id.my_recycler_view);
+        View rootView = inflater.inflate(R.layout.fragment_movies_list, container, false);
+        mRecyclerView = (RecyclerView) rootView.findViewById(R.id.my_recycler_view);
         mLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLayoutManager);
         DividerItemDecoration itemDecor = new DividerItemDecoration(mRecyclerView.getContext(), mLayoutManager.getOrientation());
@@ -131,7 +131,7 @@ public class MoviesListFragment extends Fragment {
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
-        inflater.inflate(capitalria.mk.moviesfragment.R.menu.menu, menu);
+        inflater.inflate(R.menu.menu, menu);
 
     }
 

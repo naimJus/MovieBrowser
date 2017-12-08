@@ -29,17 +29,17 @@ public class SearchFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(capitalria.mk.moviesfragment.R.layout.fragment_search, container, false);
+        View view = inflater.inflate(R.layout.fragment_search, container, false);
         moviesDataSource = new MoviesDataSource(getActivity().getApplicationContext());
         moviesDataSource.open();
         sqlStatements = new SqlStatements();
 
-        qualitySpinner = (Spinner) view.findViewById(capitalria.mk.moviesfragment.R.id.qualitySpinner);
-        genreSpinner = (Spinner) view.findViewById(capitalria.mk.moviesfragment.R.id.genreSpinner);
-        ratingSpinner = (Spinner) view.findViewById(capitalria.mk.moviesfragment.R.id.ratingSpinner);
-        orderBySpinner = (Spinner) view.findViewById(capitalria.mk.moviesfragment.R.id.orderBySpinner);
-        searchBtn = (Button) view.findViewById(capitalria.mk.moviesfragment.R.id.searchBtn);
-        nameET = (EditText) view.findViewById(capitalria.mk.moviesfragment.R.id.nameET);
+        qualitySpinner = (Spinner) view.findViewById(R.id.qualitySpinner);
+        genreSpinner = (Spinner) view.findViewById(R.id.genreSpinner);
+        ratingSpinner = (Spinner) view.findViewById(R.id.ratingSpinner);
+        orderBySpinner = (Spinner) view.findViewById(R.id.orderBySpinner);
+        searchBtn = (Button) view.findViewById(R.id.searchBtn);
+        nameET = (EditText) view.findViewById(R.id.nameET);
         try {
             Field popup = Spinner.class.getDeclaredField("mPopup");
             popup.setAccessible(true);
